@@ -7,6 +7,7 @@
         .../map/?lang=en    영어
         .../map/#haeparang-1  (코스 링크 — 열면 그 코스가 바로 보인다)
         .../map/?min=15&max=25 (거리 조건 — 화면의 거리 칸에 입력해도 주소에 반영된다)
+        .../map/?type=bike     자전거길 지도 (데이터: bike-courses.js, bike-text.js, GPX: ../gpx-bike/)
   로컬: serve.cmd 실행 → http://localhost:8000/map/ (카카오맵은 등록한 주소에서만 열린다)
 -->
 <html lang="ko">
@@ -82,6 +83,7 @@
       <h1 id="t-title"></h1>
       <a class="lang" id="lang-link" href="#"></a>
     </div>
+    <p class="sub"><a id="mode-link" href="#"></a></p>
     <p class="sub" id="t-sub"></p>
 
     <fieldset class="recs"><legend id="t-recs"></legend><ul class="list" id="rec-list"></ul></fieldset>
@@ -96,7 +98,8 @@
       <div class="range"><span id="t-range"></span>
         <input type="number" id="f-min" min="0" step="1" inputmode="numeric" aria-label="min km"> ~
         <input type="number" id="f-max" min="0" step="1" inputmode="numeric" aria-label="max km"> km</div>
-      <label><input type="checkbox" id="f-coast"> <span id="t-coast"></span></label>
+      <label id="row-coast"><input type="checkbox" id="f-coast"> <span id="t-coast"></span></label>
+      <label><input type="checkbox" id="f-bike"> <span id="t-bike"></span></label>
       <label><input type="checkbox" id="f-terrain"> <span id="t-terrain"></span></label>
     </fieldset>
 
@@ -110,21 +113,37 @@
   <div id="map"></div>
 </div>
 
-<script src="courses.js"></script>
-<script src="courses-text.js"></script>
-<script src="kakao-key.js"></script>
+<script>
+// 지도 종류: 걷기(기본) / 자전거(?type=bike). 종류마다 데이터 파일이 다르다.
+const MODE = new URLSearchParams(location.search).get("type") === "bike" ? "bike" : "walk";
+(MODE === "bike" ? ["bike-courses.js", "bike-text.js"] : ["courses.js", "courses-text.js"])
+  .concat("kakao-key.js").forEach((f) => document.write(`<script src="${f}"><\/script>`));
+</script>
 <script>
 const LANG = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "ko";
-const COLORS = { "해파랑길": "#e4572e", "남파랑길": "#1d7fd1", "갈맷길": "#7b4fd6", "해안누리길": "#1aa66c" };
-// 호스트 추천 코스 (2026-11-02 사용자 지정, 이 순서대로 보여 준다)
-const RECS = ["해파랑길 1코스", "해파랑길 3코스", "남파랑길 2코스", "갈맷길 1-2코스", "갈맷길 5-2코스",
-  "해안누리길 해운대삼포길", "해안누리길 절영해안산책로", "해안누리길 기장 해안산책로", "갈맷길 4-1코스"];
+const CFG = {
+  walk: {
+    colors: { "해파랑길": "#e4572e", "남파랑길": "#1d7fd1", "갈맷길": "#7b4fd6", "해안누리길": "#1aa66c" },
+    // 호스트 추천 코스 (2026-11-02 사용자 지정, 이 순서대로 보여 준다)
+    recs: ["해파랑길 1코스", "해파랑길 3코스", "남파랑길 2코스", "갈맷길 1-2코스", "갈맷길 5-2코스",
+      "해안누리길 해운대삼포길", "해안누리길 절영해안산책로", "해안누리길 기장 해안산책로", "갈맷길 4-1코스"],
+    course1: true, coastFilter: true, bikeLanes: false, gpxDir: "../gpx/",
+  },
+  bike: {
+    colors: { "부산": "#1d7fd1", "낙동강 종주": "#e4572e", "부산 근교": "#7b4fd6" },
+    recs: [], course1: false, coastFilter: false, bikeLanes: true, gpxDir: "../gpx-bike/",
+  },
+}[MODE];
+const COLORS = CFG.colors;
+const RECS = CFG.recs;
 const COURSE1 = ["갈맷길 2-2코스", "갈맷길 2-1코스"];
 const COURSE1_SLUG = "host-walk";
 
 const T = {
   ko: {
     title: "부산 해안 걷기 코스 지도", sub: "호스트 추천 코스 · 두루누비 공식 GPX 22개 코스", lang: "English",
+    bikeTitle: "부산 자전거길 지도", bikeSub: "두루누비 공식 GPX · 부산과 근교 자전거길",
+    toBike: "🚴 자전거길 지도 보기 →", toWalk: "🥾 걷기 코스 지도 보기 →", bikeLanes: "카카오 자전거길 겹쳐 보기",
     recs: "호스트 추천 코스", trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
@@ -148,6 +167,8 @@ const T = {
   },
   en: {
     title: "Busan Coastal Walks", sub: "Host's picks · official GPS tracks from Korea Tourism Organization (Durunubi)", lang: "한국어",
+    bikeTitle: "Busan Cycling Routes", bikeSub: "Official GPS tracks (Durunubi) · Busan and nearby",
+    toBike: "🚴 See the cycling map →", toWalk: "🥾 See the walking map →", bikeLanes: "Show Kakao bike lanes",
     recs: "Host's picks", trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
@@ -156,7 +177,8 @@ const T = {
     eleSrc: "Elevation", maxEle: "highest point about", start: "Start", end: "End", level: "Level",
     durunubi: "Durunubi page ↗", gpx: "Download GPX", copy: "Copy link", copied: "Copied",
     eleGpx: "GPS track", eleDem: "terrain data (Open-Meteo)",
-    trailName: (t) => ({ "해파랑길": "Haeparang Trail", "남파랑길": "Namparang Trail", "갈맷길": "Galmaetgil", "해안누리길": "Coastal Nuri-gil" })[t] || t,
+    trailName: (t) => ({ "해파랑길": "Haeparang Trail", "남파랑길": "Namparang Trail", "갈맷길": "Galmaetgil", "해안누리길": "Coastal Nuri-gil",
+      "부산": "Busan", "낙동강 종주": "Nakdong River (cross-country)", "부산 근교": "Near Busan" })[t] || t,
     footer: `Distances are calculated from the GPS tracks (official distance in brackets).<br>
       Total climb uses the track's own elevation (Haeparang / Namparang) or terrain data (Open-Meteo, 90 m grid) for the others — approximate.<br>
       Route data: Korea Tourism Organization, Durunubi · Map: Kakao Map (map labels are in Korean; switch Map / Skyview at the top right)`,
@@ -179,16 +201,33 @@ const descOf = (c) => LANG === "en" ? (text(c).desc || "") : c.desc;
 const levelOf = (c) => LANG === "en" ? (LEVEL_EN[c.level] || c.level || "") : (c.level || "");
 const fmtTime = (m) => m ? T.time(m) : "—";
 const isRec = (c) => RECS.includes(c.name);
-const linkFor = (slug) => location.origin + location.pathname + (LANG === "en" ? "?lang=en" : "") + "#" + slug;
+const linkFor = (slug) => {
+  const q = new URLSearchParams();
+  if (MODE === "bike") q.set("type", "bike");
+  if (LANG === "en") q.set("lang", "en");
+  return location.origin + location.pathname + (q.toString() ? "?" + q : "") + "#" + slug;
+};
 
 // 화면 글자
+const TITLE = MODE === "bike" ? T.bikeTitle : T.title;
 document.documentElement.lang = LANG;
-document.title = T.title;
+document.title = TITLE;
 const setText = (id, v, html) => { const el = document.getElementById(id); html ? (el.innerHTML = v) : (el.textContent = v); };
-[["t-title", T.title], ["t-sub", T.sub], ["t-recs", T.recs], ["t-trails", T.trails], ["t-filters", T.filters],
- ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-terrain", T.terrain],
+[["t-title", TITLE], ["t-sub", MODE === "bike" ? T.bikeSub : T.sub], ["t-recs", T.recs], ["t-trails", T.trails], ["t-filters", T.filters],
+ ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-bike", T.bikeLanes], ["t-terrain", T.terrain],
  ["course1", T.course1], ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);
+// 종류에 없는 칸은 숨긴다
+if (!RECS.length) { document.querySelector("fieldset.recs").style.display = "none"; document.getElementById("f-rec").closest("label").style.display = "none"; }
+if (!CFG.course1) document.getElementById("course1").style.display = "none";
+if (!CFG.coastFilter) document.getElementById("row-coast").style.display = "none";
+// 걷기 ↔ 자전거 지도 바꾸기 (언어는 유지)
+const modeLink = document.getElementById("mode-link");
+const mq = new URLSearchParams();
+if (MODE === "walk") mq.set("type", "bike");
+if (LANG === "en") mq.set("lang", "en");
+modeLink.href = location.pathname + (mq.toString() ? "?" + mq : "");
+modeLink.textContent = MODE === "bike" ? T.toWalk : T.toBike;
 const langLink = document.getElementById("lang-link");
 const updateLangLink = () => {
   const q = new URLSearchParams(location.search);
@@ -223,7 +262,7 @@ function init() {
 
   // 거리 조건: 주소 파라미터 ?min=15&max=25 로도 받는다 (빈칸 = 제한 없음)
   const numParam = (k) => { const v = parseFloat(new URLSearchParams(location.search).get(k)); return Number.isFinite(v) ? v : null; };
-  const state = { trails: new Set(Object.keys(COLORS)), recOnly: true, min: numParam("min"), max: numParam("max"), coast: false, selected: new Set(), course1: false };
+  const state = { trails: new Set(Object.keys(COLORS)), recOnly: RECS.length > 0, min: numParam("min"), max: numParam("max"), coast: false, selected: new Set(), course1: false };
   const lines = {};
   const halos = {}; // 위성 사진 위에서도 선이 보이도록 코스 선 아래에 까는 흰 테두리
   let pins = [];
@@ -259,7 +298,7 @@ function init() {
     if (state.selected.has(c.name) && !state.course1) li.className = "sel";
     li.innerHTML = `<span class="dot" style="background:${COLORS[c.trail]}"></span>
       <div><div class="name">${nameOf(c)}${c.kind === "mixed" ? `<span class="tag">${T.mixed}</span>` : ""}</div>
-      <div class="meta">${c.gpxKm}km (${c.officialKm}) · ${fmtTime(c.minutes)} · ${T.climbShort} ${c.gainM ?? "—"}m · ${levelOf(c)}</div></div>`;
+      <div class="meta">${c.gpxKm}km (${c.officialKm ?? "—"}) · ${fmtTime(c.minutes)} · ${T.climbShort} ${c.gainM ?? "—"}m · ${levelOf(c)}</div></div>`;
     li.onclick = () => select([c.name]);
     return li;
   }
@@ -373,7 +412,7 @@ function init() {
       box.innerHTML = `<h2>${nameOf(c)}${isRec(c) ? `<span class="tag rec">${T.rec}</span>` : ""}${c.kind === "mixed" ? `<span class="tag">${T.mixed}</span>` : ""}</h2>
         <div class="note">${T.trailName(c.trail)} · ${T.level} ${levelOf(c) || "—"}</div>
         <div class="stats">
-          <div class="stat"><b>${c.gpxKm}km</b><span>${T.official} ${c.officialKm}km</span></div>
+          <div class="stat"><b>${c.gpxKm}km</b><span>${T.official} ${c.officialKm != null ? c.officialKm + "km" : "—"}</span></div>
           <div class="stat"><b>${fmtTime(c.minutes)}</b><span>${T.officialTime}</span></div>
           <div class="stat"><b>${c.gainM ?? "—"}m</b><span>${T.climb}</span></div>
         </div>
@@ -381,7 +420,7 @@ function init() {
         <div class="note">${T.eleSrc}: ${c.eleSource === "GPX" ? T.eleGpx : T.eleDem}${c.maxEle != null ? " · " + T.maxEle + " " + c.maxEle + "m" : ""}</div>
         ${addr}
         <p class="desc">${descOf(c)}</p>
-        <div class="links"><a href="${c.durunubi}" target="_blank" rel="noopener">${T.durunubi}</a><a href="../gpx/${encodeURIComponent(c.gpx)}" download>${T.gpx}</a>${slugOf(c) ? copyBtn(slugOf(c)) : ""}</div>`;
+        <div class="links"><a href="${c.durunubi}" target="_blank" rel="noopener">${T.durunubi}</a><a href="${CFG.gpxDir}${encodeURIComponent(c.gpx)}" download>${T.gpx}</a>${slugOf(c) ? copyBtn(slugOf(c)) : ""}</div>`;
     }
     box.querySelectorAll(".linkbtn").forEach((b) => b.onclick = async () => {
       try { await navigator.clipboard.writeText(linkFor(b.dataset.slug)); b.textContent = T.copied; }
@@ -412,6 +451,11 @@ function init() {
   };
   fMin.oninput = onRange; fMax.oninput = onRange;
   document.getElementById("f-coast").onchange = (e) => { state.coast = e.target.checked; render(); };
+  const fBike = document.getElementById("f-bike");
+  const setBikeLanes = (on) => on ? map.addOverlayMapTypeId(K.MapTypeId.BICYCLE) : map.removeOverlayMapTypeId(K.MapTypeId.BICYCLE);
+  fBike.checked = CFG.bikeLanes;
+  setBikeLanes(fBike.checked);
+  fBike.onchange = (e) => setBikeLanes(e.target.checked);
   document.getElementById("f-terrain").onchange = (e) => {
     e.target.checked ? map.addOverlayMapTypeId(K.MapTypeId.TERRAIN) : map.removeOverlayMapTypeId(K.MapTypeId.TERRAIN);
   };

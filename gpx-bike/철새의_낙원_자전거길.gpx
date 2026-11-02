@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPS Visualizer Sandbox http://www.gpsvisualizer.com/draw/" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+	<wpt lat="35.0776571" lon="128.9517651">
+		<name>길건너 왼쪽으로</name>
+	</wpt>
+	<trk>
+		<name>kvelo철새낙원자전거길 2</name>
+		<desc>Length: 182.7 m (599.4 ft)</desc>
+		<trkseg>
+			<trkpt lat="35.1088282" lon="128.947535"></trkpt>
+			<trkpt lat="35.1090368" lon="128.9474297"></trkpt>
+			<trkpt lat="35.1091382" lon="128.9474866"></trkpt>
+			<trkpt lat="35.1093376" lon="128.9474724"></trkpt>
+			<trkpt lat="35.1095105" lon="128.9475825"></trkpt>
+			<trkpt lat="35.1098248" lon="128.9476166"></trkpt>
+			<trkpt lat="35.110409" lon="128.9477457"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 3</name>
+		<desc>Length: 0.304 km (0.189 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.1104054" lon="128.9477364"></trkpt>
+			<trkpt lat="35.1104758" lon="128.9477491"></trkpt>
+			<trkpt lat="35.1106646" lon="128.9478212"></trkpt>
+			<trkpt lat="35.1107457" lon="128.9477677"></trkpt>
+			<trkpt lat="35.1114818" lon="128.947941"></trkpt>
+			<trkpt lat="35.1115495" lon="128.9478226"></trkpt>
+			<trkpt lat="35.1116766" lon="128.9470941"></trkpt>
+			<trkpt lat="35.1116371" lon="128.9469732"></trkpt>
+			<trkpt lat="35.1115363" lon="128.9469099"></trkpt>
+			<trkpt lat="35.1109345" lon="128.946782"></trkpt>
+			<trkpt lat="35.110931" lon="128.9468535"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 4</name>
+		<desc>Length: 0.217 km (0.135 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.110931" lon="128.9468535"></trkpt>
+			<trkpt lat="35.110816" lon="128.9468365"></trkpt>
+			<trkpt lat="35.1108543" lon="128.9469445"></trkpt>
+			<trkpt lat="35.1106826" lon="128.9479029"></trkpt>
+			<trkpt lat="35.1105962" lon="128.9485696"></trkpt>
+			<trkpt lat="35.1105476" lon="128.9490298"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 5</name>
+		<desc>Length: 2.031 km (1.262 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.1105354" lon="128.9490285"></trkpt>
+			<trkpt lat="35.1074223" lon="128.9483594"></trkpt>
+			<trkpt lat="35.1068216" lon="128.9481047"></trkpt>
+			<trkpt lat="35.1066749" lon="128.9479252"></trkpt>
+			<trkpt lat="35.1065815" lon="128.9476815"></trkpt>
+			<trkpt lat="35.1065836" lon="128.9474393"></trkpt>
+			<trkpt lat="35.1066772" lon="128.9472145"></trkpt>
+			<trkpt lat="35.1068448" lon="128.9470475"></trkpt>
+			<trkpt lat="35.107075" lon="128.9469679"></trkpt>
+			<trkpt lat="35.1072738" lon="128.9469653"></trkpt>
+			<trkpt lat="35.1075576" lon="128.9471077"></trkpt>
+			<trkpt lat="35.1076781" lon="128.9473036"></trkpt>
+			<trkpt lat="35.1076863" lon="128.9474232"></trkpt>
+			<trkpt lat="35.1075898" lon="128.9479563"></trkpt>
+			<trkpt lat="35.1074243" lon="128.9495515"></trkpt>
+			<trkpt lat="35.1073367" lon="128.9497632"></trkpt>
+			<trkpt lat="35.1064673" lon="128.9559462"></trkpt>
+			<trkpt lat="35.1063063" lon="128.9564566"></trkpt>
+			<trkpt lat="35.1061293" lon="128.9565838"></trkpt>
+			<trkpt lat="35.1059198" lon="128.9565999"></trkpt>
+			<trkpt lat="35.1054075" lon="128.9564993"></trkpt>
+			<trkpt lat="35.1018531" lon="128.9560674"></trkpt>
+			<trkpt lat="35.101541" lon="128.956025"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 6</name>
+		<desc>Length: 0.618 km (0.384 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.101536" lon="128.9560221"></trkpt>
+			<trkpt lat="35.1014566" lon="128.9560041"></trkpt>
+			<trkpt lat="35.1013583" lon="128.9560031"></trkpt>
+			<trkpt lat="35.1009249" lon="128.955937"></trkpt>
+			<trkpt lat="35.1005114" lon="128.9558736"></trkpt>
+			<trkpt lat="35.100312" lon="128.955908"></trkpt>
+			<trkpt lat="35.0983502" lon="128.9556674"></trkpt>
+			<trkpt lat="35.0963971" lon="128.955443"></trkpt>
+			<trkpt lat="35.0963244" lon="128.9555277"></trkpt>
+			<trkpt lat="35.0963026" lon="128.9556397"></trkpt>
+			<trkpt lat="35.096336" lon="128.9558659"></trkpt>
+			<trkpt lat="35.096336" lon="128.9558659"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 7</name>
+		<desc>Length: 1.969 km (1.223 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.096336" lon="128.9558659"></trkpt>
+			<trkpt lat="35.0961805" lon="128.9557951"></trkpt>
+			<trkpt lat="35.0949222" lon="128.9556483"></trkpt>
+			<trkpt lat="35.0933608" lon="128.9553599"></trkpt>
+			<trkpt lat="35.0923279" lon="128.9550709"></trkpt>
+			<trkpt lat="35.0918579" lon="128.9548658"></trkpt>
+			<trkpt lat="35.0907136" lon="128.9545496"></trkpt>
+			<trkpt lat="35.0888203" lon="128.9537778"></trkpt>
+			<trkpt lat="35.0886968" lon="128.9536923"></trkpt>
+			<trkpt lat="35.0884022" lon="128.9536213"></trkpt>
+			<trkpt lat="35.0876047" lon="128.953195"></trkpt>
+			<trkpt lat="35.0873857" lon="128.9532384"></trkpt>
+			<trkpt lat="35.0873955" lon="128.9532086"></trkpt>
+			<trkpt lat="35.0872894" lon="128.9531369"></trkpt>
+			<trkpt lat="35.0868179" lon="128.9534599"></trkpt>
+			<trkpt lat="35.0867224" lon="128.9534358"></trkpt>
+			<trkpt lat="35.0865325" lon="128.9532773"></trkpt>
+			<trkpt lat="35.086393" lon="128.9530461"></trkpt>
+			<trkpt lat="35.0864513" lon="128.9526496"></trkpt>
+			<trkpt lat="35.0863007" lon="128.9523976"></trkpt>
+			<trkpt lat="35.0856978" lon="128.951901"></trkpt>
+			<trkpt lat="35.0856206" lon="128.951833"></trkpt>
+			<trkpt lat="35.0855586" lon="128.9517829"></trkpt>
+			<trkpt lat="35.0848395" lon="128.9513918"></trkpt>
+			<trkpt lat="35.0844406" lon="128.9513232"></trkpt>
+			<trkpt lat="35.0843786" lon="128.9514196"></trkpt>
+			<trkpt lat="35.0842737" lon="128.9514045"></trkpt>
+			<trkpt lat="35.0840945" lon="128.9512174"></trkpt>
+			<trkpt lat="35.0836823" lon="128.9510044"></trkpt>
+			<trkpt lat="35.0828185" lon="128.950835"></trkpt>
+			<trkpt lat="35.0819748" lon="128.9507813"></trkpt>
+			<trkpt lat="35.0812954" lon="128.9508077"></trkpt>
+			<trkpt lat="35.080258" lon="128.951035"></trkpt>
+			<trkpt lat="35.0802546" lon="128.9511106"></trkpt>
+			<trkpt lat="35.0801813" lon="128.9510401"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 8</name>
+		<desc>Length: 0.297 km (0.184 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.0801813" lon="128.9510401"></trkpt>
+			<trkpt lat="35.0792563" lon="128.9512496"></trkpt>
+			<trkpt lat="35.0791879" lon="128.9513279"></trkpt>
+			<trkpt lat="35.0785519" lon="128.9514167"></trkpt>
+			<trkpt lat="35.0778153" lon="128.9516637"></trkpt>
+			<trkpt lat="35.07759" lon="128.951696"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 9</name>
+		<desc>Length: 2.466 km (1.532 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.0775823" lon="128.951716"></trkpt>
+			<trkpt lat="35.0767091" lon="128.9519597"></trkpt>
+			<trkpt lat="35.0756072" lon="128.9521916"></trkpt>
+			<trkpt lat="35.0730253" lon="128.9528999"></trkpt>
+			<trkpt lat="35.0726932" lon="128.9529511"></trkpt>
+			<trkpt lat="35.070462" lon="128.9535402"></trkpt>
+			<trkpt lat="35.0703714" lon="128.953529"></trkpt>
+			<trkpt lat="35.0698461" lon="128.9537064"></trkpt>
+			<trkpt lat="35.0673175" lon="128.9543817"></trkpt>
+			<trkpt lat="35.067245" lon="128.9544514"></trkpt>
+			<trkpt lat="35.0672278" lon="128.9544269"></trkpt>
+			<trkpt lat="35.0671212" lon="128.9544968"></trkpt>
+			<trkpt lat="35.0670222" lon="128.9544686"></trkpt>
+			<trkpt lat="35.0669672" lon="128.9544579"></trkpt>
+			<trkpt lat="35.0668787" lon="128.9544895"></trkpt>
+			<trkpt lat="35.0646227" lon="128.9550052"></trkpt>
+			<trkpt lat="35.0634104" lon="128.9553646"></trkpt>
+			<trkpt lat="35.0633131" lon="128.9554314"></trkpt>
+			<trkpt lat="35.0617102" lon="128.9558084"></trkpt>
+			<trkpt lat="35.0587477" lon="128.9565613"></trkpt>
+			<trkpt lat="35.0566786" lon="128.9571259"></trkpt>
+			<trkpt lat="35.0564519" lon="128.9572609"></trkpt>
+			<trkpt lat="35.0563841" lon="128.9570313"></trkpt>
+			<trkpt lat="35.0563094" lon="128.9569384"></trkpt>
+			<trkpt lat="35.056173" lon="128.9569402"></trkpt>
+			<trkpt lat="35.0562069" lon="128.956927"></trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>kvelo철새낙원자전거길 10</name>
+		<desc>Length: 1.535 km (0.954 mi)</desc>
+		<trkseg>
+			<trkpt lat="35.0562069" lon="128.956927"></trkpt>
+			<trkpt lat="35.0561354" lon="128.957007"></trkpt>
+			<trkpt lat="35.0545091" lon="128.9573814"></trkpt>
+			<trkpt lat="35.0542271" lon="128.9575131"></trkpt>
+			<trkpt lat="35.0534715" lon="128.9576211"></trkpt>
+			<trkpt lat="35.0534006" lon="128.9577187"></trkpt>
+			<trkpt lat="35.0527273" lon="128.9579381"></trkpt>
+			<trkpt lat="35.0517619" lon="128.9585244"></trkpt>
+			<trkpt lat="35.051654" lon="128.9585884"></trkpt>
+			<trkpt lat="35.0514453" lon="128.9587548"></trkpt>
+			<trkpt lat="35.0513213" lon="128.9588074"></trkpt>
+			<trkpt lat="35.0506039" lon="128.9592705"></trkpt>
+			<trkpt lat="35.0501901" lon="128.9597158"></trkpt>
+			<trkpt lat="35.0499185" lon="128.9602058"></trkpt>
+			<trkpt lat="35.0497616" lon="128.9603336"></trkpt>
+			<trkpt lat="35.0497351" lon="128.9604453"></trkpt>
+			<trkpt lat="35.049674" lon="128.9605373"></trkpt>
+			<trkpt lat="35.0496258" lon="128.960636"></trkpt>
+			<trkpt lat="35.0492728" lon="128.9618149"></trkpt>
+			<trkpt lat="35.0491759" lon="128.962264"></trkpt>
+			<trkpt lat="35.049066" lon="128.9625407"></trkpt>
+			<trkpt lat="35.0489265" lon="128.9629783"></trkpt>
+			<trkpt lat="35.0486235" lon="128.9640228"></trkpt>
+			<trkpt lat="35.0485424" lon="128.9640751"></trkpt>
+			<trkpt lat="35.048533" lon="128.9641977"></trkpt>
+			<trkpt lat="35.0484504" lon="128.9644311"></trkpt>
+			<trkpt lat="35.0481012" lon="128.9656882"></trkpt>
+			<trkpt lat="35.047869" lon="128.9663677"></trkpt>
+			<trkpt lat="35.0477025" lon="128.9672248"></trkpt>
+			<trkpt lat="35.0476515" lon="128.9674966"></trkpt>
+			<trkpt lat="35.0475583" lon="128.9676586"></trkpt>
+			<trkpt lat="35.0474472" lon="128.9677166"></trkpt>
+		</trkseg>
+	</trk>
+</gpx>
