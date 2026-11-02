@@ -1,0 +1,286 @@
+<!doctype html>
+<!--
+  부산 해안 걷기 코스 지도 (내부용) — 카카오맵
+  데이터: courses.js (build.py 가 docs/courses/gpx/ 의 두루누비 GPX로 만든다)
+  카카오 JavaScript 키: kakao-key.js
+  여는 법: 카카오맵은 등록한 주소에서만 열린다. serve.cmd 를 실행하면 http://localhost:8000/map/ 으로 열린다.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부산 해안 코스 지도</title>
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f7f5f1; --ink: #1d2731; --muted: #66727e; --line: #e2ddd4;
+    --sel: #f2683c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; font-size: 14px; }
+  .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+  aside { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 16px; }
+  #map { height: 100%; position: relative; }
+  #map .msg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted); line-height: 1.6; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 14px; font-size: 13px; }
+  fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px; background: #fff; }
+  legend { font-weight: 600; padding: 0 4px; }
+  label { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .count { color: var(--muted); margin-left: auto; }
+  .btn { width: 100%; padding: 9px; border: 1px solid var(--sel); background: #fff; color: var(--sel);
+    border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 12px; }
+  .btn.on { background: var(--sel); color: #fff; }
+  #detail { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 12px; display: none; }
+  #detail h2 { font-size: 16px; margin: 0 0 6px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+  .stat { background: var(--panel); border-radius: 8px; padding: 6px 8px; }
+  .stat b { display: block; font-size: 15px; }
+  .stat span { color: var(--muted); font-size: 12px; }
+  .desc { color: var(--ink); line-height: 1.5; margin: 8px 0; font-size: 13px; }
+  .links a { margin-right: 10px; font-size: 13px; }
+  .note { color: var(--muted); font-size: 12px; }
+  svg.profile { width: 100%; height: 110px; display: block; margin-top: 6px; }
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  ul.list li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 8px; border-radius: 8px; cursor: pointer; }
+  ul.list li:hover { background: #fff; }
+  ul.list li.sel { background: #fff; outline: 2px solid var(--sel); }
+  ul.list li .dot { margin-top: 4px; }
+  ul.list .name { font-weight: 600; }
+  ul.list .meta { color: var(--muted); font-size: 12px; }
+  .tag { font-size: 11px; background: #eee6da; color: #6b5a40; border-radius: 4px; padding: 0 5px; margin-left: 4px; }
+  .empty { color: var(--muted); padding: 10px; }
+  footer { color: var(--muted); font-size: 11px; margin-top: 14px; line-height: 1.5; }
+  /* 지도 위 표시 */
+  .tip { background: rgba(29,39,49,.9); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; transform: translate(12px, -50%); pointer-events: none; }
+  .pin { width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+  @media (max-width: 760px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
+    #map { height: 55vh; order: -1; }
+    aside { border-right: none; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <h1>부산 해안 걷기 코스 지도</h1>
+    <p class="sub">내부용 · 두루누비 공식 GPX 22개 코스</p>
+
+    <fieldset id="trails"><legend>길 종류</legend></fieldset>
+
+    <fieldset>
+      <legend>조건</legend>
+      <label><input type="checkbox" id="f-range"> 15~25km 코스만</label>
+      <label><input type="checkbox" id="f-coast"> 해안 위주 코스만 (도심·숲이 섞인 코스 빼기)</label>
+      <label><input type="checkbox" id="f-terrain"> 지도에 지형(산 그림자) 겹쳐 보기</label>
+    </fieldset>
+
+    <button class="btn" id="course1">코스 1번 보기 — 오륙도 → 송정</button>
+
+    <div id="detail"></div>
+
+    <ul class="list" id="list"></ul>
+
+    <footer>
+      거리는 GPX로 계산한 값이고, 괄호 안은 두루누비 공식 거리다.<br>
+      오르막 합계는 해파랑길·남파랑길은 GPX 높이, 갈맷길·해안누리길은 지형 고도(Open-Meteo, 90m 격자)로 계산한 근사치다.<br>
+      경로 자료: 한국관광공사 두루누비(공공데이터포털 이용허락 "제한 없음") · 지도: 카카오맵 (오른쪽 위에서 지도·스카이뷰 전환)
+    </footer>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<script src="courses.js"></script>
+<script src="kakao-key.js"></script>
+<script>
+const COLORS = { "해파랑길": "#e4572e", "남파랑길": "#1d7fd1", "갈맷길": "#7b4fd6", "해안누리길": "#1aa66c" };
+const COURSE1 = ["갈맷길 2-2코스", "갈맷길 2-1코스"];
+const mapBox = document.getElementById("map");
+
+function showMsg(html) { mapBox.innerHTML = `<div class="msg">${html}</div>`; }
+
+if (location.protocol === "file:") {
+  showMsg("카카오맵은 파일로 직접 열면 표시되지 않는다.<br><b>serve.cmd</b> 를 실행한 뒤 <b>http://localhost:8000/map/</b> 으로 연다.");
+} else if (!window.KAKAO_JS_KEY) {
+  showMsg("카카오 JavaScript 키가 없다. <b>kakao-key.js</b> 에 키를 넣는다.");
+} else {
+  const s = document.createElement("script");
+  s.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${window.KAKAO_JS_KEY}&autoload=false`;
+  s.onload = () => kakao.maps.load(init);
+  s.onerror = () => showMsg("카카오맵을 불러오지 못했다. 키와 등록한 사이트 주소(http://localhost:8000)를 확인한다.");
+  document.head.appendChild(s);
+}
+
+function init() {
+  const K = kakao.maps;
+  const LL = (p) => new K.LatLng(p[0], p[1]);
+  const map = new K.Map(mapBox, { center: new K.LatLng(35.13, 129.05), level: 9 });
+  map.addControl(new K.MapTypeControl(), K.ControlPosition.TOPRIGHT);
+  map.addControl(new K.ZoomControl(), K.ControlPosition.RIGHT);
+
+  const state = { trails: new Set(Object.keys(COLORS)), range: false, coast: false, selected: new Set(), course1: false };
+  const lines = {};
+  let pins = [];
+  let lineClickedAt = 0;
+
+  const tip = new K.CustomOverlay({ content: '<div class="tip"></div>', xAnchor: 0, yAnchor: 0.5, zIndex: 10 });
+  const fmtTime = (m) => m ? `${Math.floor(m / 60)}시간${m % 60 ? " " + (m % 60) + "분" : ""}` : "—";
+  const shortName = (c) => c.name.replace("해안누리길 ", "");
+
+  COURSES.forEach((c) => {
+    const pl = new K.Polyline({ path: c.line.map(LL), strokeWeight: 4, strokeColor: COLORS[c.trail], strokeOpacity: 0.9, strokeStyle: "solid" });
+    K.event.addListener(pl, "click", () => { lineClickedAt = Date.now(); select([c.name]); });
+    K.event.addListener(pl, "mouseover", (e) => {
+      tip.setContent(`<div class="tip">${c.name} · ${c.gpxKm}km</div>`);
+      tip.setPosition(e.latLng); tip.setMap(map);
+    });
+    K.event.addListener(pl, "mousemove", (e) => tip.setPosition(e.latLng));
+    K.event.addListener(pl, "mouseout", () => tip.setMap(null));
+    lines[c.name] = pl;
+  });
+
+  function passes(c) {
+    if (state.range && (c.gpxKm < 15 || c.gpxKm >= 25)) return false;
+    if (state.coast && c.kind !== "coast") return false;
+    return true;
+  }
+  const visible = (c) => state.trails.has(c.trail) && passes(c);
+
+  function render() {
+    const shown = COURSES.filter(visible);
+    COURSES.forEach((c) => {
+      const pl = lines[c.name];
+      const sel = state.selected.has(c.name);
+      const on = shown.includes(c) || sel;
+      pl.setMap(on ? map : null);
+      const dim = state.selected.size > 0 && !sel;
+      pl.setOptions({ strokeWeight: sel ? 7 : 4, strokeOpacity: dim ? 0.3 : 0.9 });
+      pl.setZIndex(sel ? 5 : 1);
+    });
+
+    pins.forEach((p) => p.setMap(null));
+    pins = [];
+    state.selected.forEach((n) => {
+      const c = COURSES.find((x) => x.name === n);
+      [[c.line[0], "#16a34a"], [c.line[c.line.length - 1], "#dc2626"]].forEach(([p, col]) => {
+        const o = new K.CustomOverlay({ position: LL(p), content: `<div class="pin" style="background:${col}"></div>`, xAnchor: 0.5, yAnchor: 0.5, zIndex: 6 });
+        o.setMap(map); pins.push(o);
+      });
+    });
+
+    const list = document.getElementById("list");
+    list.innerHTML = shown.length ? "" : '<li class="empty">조건에 맞는 코스가 없다.</li>';
+    shown.forEach((c) => {
+      const li = document.createElement("li");
+      if (state.selected.has(c.name)) li.className = "sel";
+      li.innerHTML = `<span class="dot" style="background:${COLORS[c.trail]}"></span>
+        <div><div class="name">${shortName(c)}${c.kind === "mixed" ? '<span class="tag">일부 도심·숲</span>' : ""}</div>
+        <div class="meta">${c.gpxKm}km (${c.officialKm}) · ${fmtTime(c.minutes)} · 오르막 ${c.gainM ?? "—"}m · ${c.level || ""}</div></div>`;
+      li.onclick = () => select([c.name]);
+      list.appendChild(li);
+    });
+
+    document.querySelectorAll("#trails .count").forEach((el) => {
+      el.textContent = COURSES.filter((c) => c.trail === el.dataset.trail && passes(c)).length;
+    });
+    document.getElementById("course1").classList.toggle("on", state.course1);
+    renderDetail();
+  }
+
+  function fit(courses) {
+    const b = new K.LatLngBounds();
+    courses.forEach((c) => c.line.forEach((p) => b.extend(LL(p))));
+    map.setBounds(b, 40, 40, 40, 40);
+  }
+
+  function select(names, fromCourse1 = false) {
+    state.course1 = fromCourse1;
+    state.selected = new Set(names);
+    fit(names.map((n) => COURSES.find((c) => c.name === n)));
+    render();
+  }
+
+  function profileSvg(profile) {
+    if (!profile || profile.length < 2) return "";
+    const W = 340, H = 100, P = 22;
+    const maxX = profile[profile.length - 1][0];
+    const ys = profile.map((p) => p[1]);
+    const minY = Math.min(...ys), maxY = Math.max(...ys, minY + 10);
+    const x = (d) => P + (d / maxX) * (W - P - 4);
+    const y = (e) => H - 16 - ((e - minY) / (maxY - minY)) * (H - 26);
+    const pts = profile.map((p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ");
+    const area = `${x(0)},${H - 16} ${pts} ${x(maxX)},${H - 16}`;
+    return `<svg class="profile" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="높이 그래프">
+      <polygon points="${area}" fill="rgba(242,104,60,.18)"/>
+      <polyline points="${pts}" fill="none" stroke="#f2683c" stroke-width="1.6"/>
+      <text x="2" y="${y(maxY) + 4}" font-size="9" fill="#66727e">${Math.round(maxY)}m</text>
+      <text x="2" y="${H - 16}" font-size="9" fill="#66727e">${Math.round(minY)}m</text>
+      <text x="${P}" y="${H - 3}" font-size="9" fill="#66727e">0km</text>
+      <text x="${W - 4}" y="${H - 3}" font-size="9" fill="#66727e" text-anchor="end">${maxX.toFixed(1)}km</text>
+    </svg>`;
+  }
+
+  function renderDetail() {
+    const box = document.getElementById("detail");
+    if (state.selected.size === 0) { box.style.display = "none"; return; }
+    box.style.display = "block";
+    const cs = [...state.selected].map((n) => COURSES.find((c) => c.name === n));
+    if (state.course1) {
+      const km = cs.reduce((s, c) => s + c.gpxKm, 0).toFixed(1);
+      const gain = cs.reduce((s, c) => s + (c.gainM || 0), 0);
+      box.innerHTML = `<h2>코스 1번 — 오륙도 → 송정</h2>
+        <div class="stats">
+          <div class="stat"><b>${km}km</b><span>공식 길 합계</span></div>
+          <div class="stat"><b>18km</b><span>호스트 실측</span></div>
+          <div class="stat"><b>${gain}m</b><span>오르막 합계</span></div>
+        </div>
+        <p class="desc">공식 길로는 <b>갈맷길 2-2코스</b>(오륙도 ↔ 민락교)와 <b>2-1코스</b>(민락교 ↔ 송정)를 이어 걷는 길이다. 해파랑길로는 1코스 전체 + 2코스 앞부분에 해당한다.
+        공식 길은 동백섬·민락교 쪽을 돌아가서 실제로 걸은 18km보다 길게 나온다.</p>
+        <p class="note">두 코스 모두 GPX 원본은 반대 방향(송정 → 오륙도 쪽)으로 그려져 있을 수 있다. 지도에서 초록 = 출발, 빨강 = 도착 표시는 GPX 기준이다.</p>`;
+      return;
+    }
+    const c = cs[0];
+    box.innerHTML = `<h2>${c.name}${c.kind === "mixed" ? '<span class="tag">일부 도심·숲</span>' : ""}</h2>
+      <div class="note">${c.trail} · ${c.area || ""} · 난이도 ${c.level || "—"}</div>
+      <div class="stats">
+        <div class="stat"><b>${c.gpxKm}km</b><span>공식 ${c.officialKm}km</span></div>
+        <div class="stat"><b>${fmtTime(c.minutes)}</b><span>공식 소요 시간</span></div>
+        <div class="stat"><b>${c.gainM ?? "—"}m</b><span>오르막 합계</span></div>
+      </div>
+      ${profileSvg(c.profile)}
+      <div class="note">높이 자료: ${c.eleSource}${c.maxEle != null ? " · 가장 높은 곳 약 " + c.maxEle + "m" : ""}</div>
+      ${c.start || c.end ? `<p class="desc">출발: ${c.start || "—"}<br>도착: ${c.end || "—"}</p>` : ""}
+      <p class="desc">${c.desc}</p>
+      <div class="links"><a href="${c.durunubi}" target="_blank" rel="noopener">두루누비 상세 ↗</a><a href="../gpx/${encodeURIComponent(c.gpx)}" download>GPX 원본</a></div>`;
+  }
+
+  const fs = document.getElementById("trails");
+  Object.entries(COLORS).forEach(([t, col]) => {
+    const lab = document.createElement("label");
+    lab.innerHTML = `<input type="checkbox" checked><span class="dot" style="background:${col}"></span>${t}<span class="count" data-trail="${t}"></span>`;
+    lab.querySelector("input").onchange = (e) => { e.target.checked ? state.trails.add(t) : state.trails.delete(t); render(); };
+    fs.appendChild(lab);
+  });
+  document.getElementById("f-range").onchange = (e) => { state.range = e.target.checked; render(); };
+  document.getElementById("f-coast").onchange = (e) => { state.coast = e.target.checked; render(); };
+  document.getElementById("f-terrain").onchange = (e) => {
+    e.target.checked ? map.addOverlayMapTypeId(K.MapTypeId.TERRAIN) : map.removeOverlayMapTypeId(K.MapTypeId.TERRAIN);
+  };
+  document.getElementById("course1").onclick = () => {
+    if (state.course1) { state.course1 = false; state.selected.clear(); render(); return; }
+    select(COURSE1, true);
+  };
+  K.event.addListener(map, "click", () => {
+    if (Date.now() - lineClickedAt < 300) return;
+    if (state.selected.size) { state.selected.clear(); state.course1 = false; render(); }
+  });
+
+  window.__courseMap = { map, select, state };
+  render();
+  fit(COURSES);
+}
+</script>
+</body>
+</html>
