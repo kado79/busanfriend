@@ -32,7 +32,11 @@
   h1 { font-size: 18px; margin: 0 0 4px; }
   .lang { font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 10px; color: var(--ink); text-decoration: none; white-space: nowrap; }
   .sub { color: var(--muted); margin: 0 0 14px; font-size: 13px; }
-  .mode-links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .modes { display: flex; gap: 4px; padding: 4px; margin: 0 0 10px; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+  .modes a { flex: 1; text-align: center; padding: 7px 4px; border-radius: 7px; font-size: 13px; font-weight: 600;
+    color: var(--muted); text-decoration: none; white-space: nowrap; }
+  .modes a:hover { background: var(--panel); color: var(--ink); }
+  .modes a[aria-current="page"] { background: var(--sel); color: #fff; }
   fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px; background: #fff; }
   fieldset.recs { border-color: var(--sel); }
   legend { font-weight: 600; padding: 0 4px; }
@@ -85,7 +89,7 @@
       <h1 id="t-title"></h1>
       <a class="lang" id="lang-link" href="#"></a>
     </div>
-    <p class="sub mode-links" id="mode-links"></p>
+    <nav class="modes" id="mode-links"></nav>
     <p class="sub" id="t-sub"></p>
 
     <fieldset class="recs"><legend id="t-recs"></legend><ul class="list" id="rec-list"></ul></fieldset>
@@ -150,7 +154,7 @@ const T = {
     title: "부산 해안 걷기 코스 지도", sub: "호스트 추천 코스 · 두루누비 공식 GPX 22개 코스", lang: "English",
     bikeTitle: "부산 자전거길 지도", bikeSub: "두루누비 공식 GPX · 부산과 근교 자전거길",
     runTitle: "부산 러닝·트레일런 지도", runSub: "두루누비 공식 GPX · 강변·해변 러닝과 산길 트레일런",
-    toBike: "🚴 자전거길 지도 →", toWalk: "🥾 걷기 코스 지도 →", toRun: "🏃 러닝·트레일런 지도 →", bikeLanes: "카카오 자전거길 겹쳐 보기",
+    modes: { walk: "🥾 걷기", bike: "🚴 자전거", run: "🏃 러닝·트레일런" }, bikeLanes: "카카오 자전거길 겹쳐 보기",
     recs: "호스트 추천 코스", trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
@@ -176,7 +180,7 @@ const T = {
     title: "Busan Coastal Walks", sub: "Host's picks · official GPS tracks from Korea Tourism Organization (Durunubi)", lang: "한국어",
     bikeTitle: "Busan Cycling Routes", bikeSub: "Official GPS tracks (Durunubi) · Busan and nearby",
     runTitle: "Busan Running & Trail Running", runSub: "Official GPS tracks (Durunubi) · flat river & beach runs, mountain trail runs",
-    toBike: "🚴 Cycling map →", toWalk: "🥾 Walking map →", toRun: "🏃 Running & trail map →", bikeLanes: "Show Kakao bike lanes",
+    modes: { walk: "🥾 Walk", bike: "🚴 Cycle", run: "🏃 Run & Trail" }, bikeLanes: "Show Kakao bike lanes",
     recs: "Host's picks", trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
@@ -230,14 +234,15 @@ setText("t-footer", T.footer, true);
 if (!RECS.length) { document.querySelector("fieldset.recs").style.display = "none"; document.getElementById("f-rec").closest("label").style.display = "none"; }
 if (!CFG.course1) document.getElementById("course1").style.display = "none";
 if (!CFG.coastFilter) document.getElementById("row-coast").style.display = "none";
-// 다른 종류 지도로 가는 링크 (언어는 유지)
-[["walk", T.toWalk], ["bike", T.toBike], ["run", T.toRun]].filter(([m]) => m !== MODE).forEach(([m, label]) => {
+// 지도 종류 버튼 3개 (지금 보고 있는 종류는 눌린 모양, 언어는 유지)
+Object.entries(T.modes).forEach(([m, label]) => {
   const mq = new URLSearchParams();
   if (m !== "walk") mq.set("type", m);
   if (LANG === "en") mq.set("lang", "en");
   const a = document.createElement("a");
   a.href = location.pathname + (mq.toString() ? "?" + mq : "");
   a.textContent = label;
+  if (m === MODE) a.setAttribute("aria-current", "page");
   document.getElementById("mode-links").appendChild(a);
 });
 const langLink = document.getElementById("lang-link");
