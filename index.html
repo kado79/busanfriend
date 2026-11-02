@@ -104,6 +104,25 @@
   .card-btn { align-self: flex-start; margin: auto 0 0; padding: 8px 16px; border: 1.5px solid var(--coral); border-radius: 999px;
     color: var(--coral); font-weight: 600; font-size: .9rem; text-decoration: none; }
   .card-btn:hover { background: var(--coral); color: #fff; }
+  .card[data-photos] { position: relative; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+  .card[data-photos]:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,30,46,.10); }
+  .card .ph { position: absolute; top: 18px; right: 18px; font-size: .8rem; color: var(--muted); }
+
+  /* Activity modal */
+  dialog.act { width: min(720px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: none; border-radius: var(--radius); overflow: auto; }
+  dialog.act::backdrop { background: rgba(15,30,46,.6); }
+  .act-photo { position: relative; aspect-ratio: 3 / 2; background: var(--night); }
+  .act-photo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .act-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: none; border-radius: 50%;
+    background: rgba(255,255,255,.85); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .act-prev { left: 10px; }
+  .act-next { right: 10px; }
+  .act-count { position: absolute; right: 12px; bottom: 10px; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,.45); color: #fff; font-size: .8rem; }
+  .act-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border: none; border-radius: 50%;
+    background: rgba(255,255,255,.9); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+  .act-credit { margin: 6px 20px 0; font-size: .75rem; color: var(--muted); }
+  .act-credit a { color: var(--muted); }
+  .act-body { padding: 14px 20px 22px; }
 
   /* Days */
   .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
@@ -210,26 +229,26 @@
     <h2><span lang="en">What we can do together</span><span lang="ko">함께 할 수 있는 것</span></h2>
     <p class="lead"><span lang="en">Pick what you like on the application form — we'll shape your days around it.</span><span lang="ko">신청서에서 하고 싶은 것을 고르면, 그에 맞춰 일정을 짭니다.</span></p>
     <div class="grid grid-cards">
-      <div class="card featured">
+      <div class="card featured" data-photos="crab">
         <div class="emoji">🦀</div>
         <h3><span lang="en">Snow crab trip to Yeongdeok</span><span lang="ko">영덕 대게 여행</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Your host's favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</span><span lang="ko">호스트가 가장 좋아하는 나들이. 동해안을 따라 올라가 시장에서 대게를 고르고, 근처 식당에서 쪄 먹어요.</span></p>
         <p><span lang="en">On the way, stop at a Korean highway rest area — a food-and-snack culture all of its own.</span><span lang="ko">한국의 휴게소를 방문해서 한국만의 휴게소 문화를 느껴 보세요.</span></p>
       </div>
-      <div class="card featured">
+      <div class="card featured" data-photos="billiards">
         <div class="emoji">🎱</div>
         <h3><span lang="en">3-cushion billiards</span><span lang="ko">3쿠션 당구</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Korea is a 3-cushion powerhouse, with a billiard hall on almost every street. We'll set up a match for you against local players.</span><span lang="ko">한국은 3쿠션 강국이라 거의 모든 동네에 당구장이 있어요. 현지인과의 당구 대결 매칭을 주선해 줘요.</span></p>
       </div>
-      <div class="card featured">
+      <div class="card featured" data-photos="nightview">
         <div class="emoji">🌃</div>
         <h3><span lang="en">Late-night view from Hwangnyeongsan</span><span lang="ko">황령산 새벽 야경</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Late night</span><span lang="ko">심야</span></span><span class="chip"><span lang="en">Easy</span><span lang="ko">쉬움</span></span></div>
         <p><span lang="en">What your host thinks is the best view in Busan — late at night, the whole city full of lights.</span><span lang="ko">호스트가 생각하는 부산 최고의 전망 — 심야, 불빛으로 가득한 도시 전체.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="trekking">
         <div class="emoji">🥾</div>
         <h3><span lang="en">Coastal trekking</span><span lang="ko">해안 트레킹</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
@@ -238,14 +257,14 @@
         <a class="card-btn" lang="en" href="map/?lang=en#haeparang-1" target="_blank" rel="noopener">See trekking routes →</a>
         <a class="card-btn" lang="ko" href="map/#haeparang-1" target="_blank" rel="noopener">트레킹 코스 보기 →</a>
       </div>
-      <div class="card">
+      <div class="card" data-photos="hiking">
         <div class="emoji">⛰️</div>
         <h3><span lang="en">Hiking</span><span lang="ko">등산</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Easy</span><span lang="ko">쉬움</span></span></div>
         <p><span lang="en">Climb a mountain right in the middle of the city. The paths are gentle enough for anyone, and from the top you can see Gwangan Bridge, Haeundae and the port all at once.</span><span lang="ko">도심 한가운데 있는 산에 올라요. 길이 완만해 누구나 오를 수 있고, 정상에서는 광안대교와 해운대, 부산항이 한눈에 들어와요.</span></p>
         <p><span lang="en">Recommended: Hwangnyeongsan (427 m)</span><span lang="ko">추천 코스: 황령산 (427m)</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="cycling">
         <div class="emoji">🚴</div>
         <h3><span lang="en">Cycling</span><span lang="ko">자전거</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
@@ -254,13 +273,13 @@
         <a class="card-btn" lang="en" href="map/?type=bike&amp;lang=en#migratory-bird" target="_blank" rel="noopener">See cycling routes →</a>
         <a class="card-btn" lang="ko" href="map/?type=bike#migratory-bird" target="_blank" rel="noopener">자전거길 보기 →</a>
       </div>
-      <div class="card">
+      <div class="card" data-photos="soulfood">
         <div class="emoji">🍜</div>
         <h3><span lang="en">Busan soul food</span><span lang="ko">부산 소울 푸드</span></h3>
         <div class="meta"><span class="chip"><span lang="en">A meal</span><span lang="ko">한 끼</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">The food Koreans think of when they hear "Busan" — dwaeji-gukbap (pork rice soup), yang-gopchang (grilled tripe), kkomjangeo (grilled sea eel) and more. Get a real taste of Busan.</span><span lang="ko">한국에서 부산 하면 떠오르는 음식 — 돼지국밥, 양곱창, 꼼장어 등으로 부산의 향기를 느껴 보세요.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="running">
         <div class="emoji">🏃</div>
         <h3><span lang="en">Running</span><span lang="ko">러닝</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–3 hours</span><span lang="ko">1–3시간</span></span><span class="chip"><span lang="en">Runners</span><span lang="ko">러너</span></span></div>
@@ -269,7 +288,7 @@
         <a class="card-btn" lang="en" href="map/?type=run&amp;lang=en#haeundae-sampo" target="_blank" rel="noopener">See running routes →</a>
         <a class="card-btn" lang="ko" href="map/?type=run#haeundae-sampo" target="_blank" rel="noopener">러닝 코스 보기 →</a>
       </div>
-      <div class="card">
+      <div class="card" data-photos="trail">
         <div class="emoji">🌲</div>
         <h3><span lang="en">Trail running</span><span lang="ko">트레일런</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–3 hours</span><span lang="ko">1–3시간</span></span><span class="chip"><span lang="en">Easy pace</span><span lang="ko">가볍게</span></span></div>
@@ -278,32 +297,32 @@
         <a class="card-btn" lang="en" href="map/?type=trail&amp;lang=en#cheonmasan" target="_blank" rel="noopener">See trail running routes →</a>
         <a class="card-btn" lang="ko" href="map/?type=trail#cheonmasan" target="_blank" rel="noopener">트레일런 코스 보기 →</a>
       </div>
-      <div class="card">
+      <div class="card" data-photos="dinner">
         <div class="emoji">🍚</div>
         <h3><span lang="en">Home-cooked dinner</span><span lang="ko">집밥 저녁</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Once</span><span lang="ko">1회</span></span><span class="chip"><span lang="en">Included</span><span lang="ko">포함</span></span></div>
         <p><span lang="en">Korean home food at your host's family table. Tell them what you can't eat and they'll cook around it.</span><span lang="ko">호스트 가족의 식탁에서 먹는 한국 집밥. 못 먹는 음식을 알려 주면 빼고 요리해요.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="clinic">
         <div class="emoji">🏥</div>
         <h3><span lang="en">A visit to a Korean clinic</span><span lang="ko">한국 병원 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">On request</span><span lang="ko">희망 시</span></span></div>
         <p><span lang="en">Korean clinics — skin care, health check-ups and more — are popular with visitors. Your host goes with you, so the language barrier is nothing to worry about.</span><span lang="ko">피부과, 건강검진 등 외국인도 많이 찾는 한국 병원에 호스트가 함께 가요. 말이 통하지 않아도 걱정 없어요.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="gyeongju">
         <div class="emoji">👑</div>
         <h3><span lang="en">Day trip to Gyeongju</span><span lang="ko">경주 여행</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">The thousand-year capital of the Silla kingdom, about an hour from Busan — Bulguksa Temple, the royal tombs of Daereungwon and the cafés of Hwangnidan-gil.</span><span lang="ko">부산에서 한 시간 남짓 거리, 신라 천년의 수도 경주. 불국사, 대릉원, 황리단길을 둘러봐요.</span></p>
         <p><span lang="en">On the way, stop at a Korean highway rest area — a food-and-snack culture all of its own.</span><span lang="ko">한국의 휴게소를 방문해서 한국만의 휴게소 문화를 느껴 보세요.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="oliveyoung">
         <div class="emoji">💄</div>
         <h3><span lang="en">Olive Young visit</span><span lang="ko">올리브영 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–2 hours</span><span lang="ko">1–2시간</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Korea's favourite beauty store, loved by visitors from all over the world. The host's daughter works there, so she can show you the best-sellers and how to choose.</span><span lang="ko">외국인 관광객에게도 인기 많은 K‑뷰티 매장. 호스트의 딸이 올리브영 직원이라 인기 제품과 고르는 법을 알려 드려요.</span></p>
       </div>
-      <div class="card">
+      <div class="card" data-photos="market">
         <div class="emoji">🛒</div>
         <h3><span lang="en">Traditional markets</span><span lang="ko">전통시장 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
@@ -435,6 +454,19 @@
   </div>
 </footer>
 
+<dialog class="act" id="act" aria-label="Photos">
+  <button class="act-close" type="button" aria-label="Close">×</button>
+  <div class="act-photo">
+    <img alt="">
+    <button class="act-nav act-prev" type="button" aria-label="Previous photo">‹</button>
+    <button class="act-nav act-next" type="button" aria-label="Next photo">›</button>
+    <span class="act-count"></span>
+  </div>
+  <p class="act-credit"></p>
+  <div class="act-body"></div>
+</dialog>
+
+<script src="activities.js"></script>
 <script>
   // 오른쪽 위 EN / 한국어 버튼: 새로 불러오지 않고 바꾸며, 주소의 ?lang=ko 도 같이 바꿔 링크로 공유할 수 있게 한다
   const TITLES = { en: "My Korean Friend — Stay with a Busan family", ko: "My Korean Friend — 부산 가족 집에 머무는 여행" };
@@ -450,6 +482,45 @@
   }
   document.querySelectorAll(".langs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); setLang(a.dataset.l); });
   setLang(document.documentElement.dataset.lang);
+
+  // 메뉴 카드를 누르면 사진과 설명을 모달로 보여 준다 (카드 안의 지도 링크는 그대로 열린다)
+  const act = document.getElementById("act");
+  const actImg = act.querySelector("img"), actCredit = act.querySelector(".act-credit");
+  const actBody = act.querySelector(".act-body"), actCount = act.querySelector(".act-count");
+  let photos = [], at = 0;
+  function showPhoto(i) {
+    at = (i + photos.length) % photos.length;
+    const p = photos[at];
+    actImg.src = p.src;
+    actCount.textContent = `${at + 1} / ${photos.length}`;
+    act.querySelectorAll(".act-nav, .act-count").forEach((el) => el.hidden = photos.length < 2);
+    const link = document.createElement("a");
+    link.href = p.url; link.target = "_blank"; link.rel = "noopener";
+    link.textContent = p.license + " · Wikimedia Commons";
+    actCredit.replaceChildren("Photo: " + p.artist + " · ", link);
+  }
+  document.querySelectorAll("#together .card[data-photos]").forEach((card) => {
+    const list = window.ACTIVITY_PHOTOS[card.dataset.photos];
+    const badge = document.createElement("span");
+    badge.className = "ph";
+    badge.textContent = "📷 " + list.length;
+    card.appendChild(badge);
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      photos = list;
+      actBody.replaceChildren(...[...card.querySelectorAll(":scope > h3, :scope > .meta, :scope > p, :scope > a.card-btn")].map((n) => n.cloneNode(true)));
+      showPhoto(0);
+      act.showModal();
+    });
+  });
+  act.querySelector(".act-prev").onclick = () => showPhoto(at - 1);
+  act.querySelector(".act-next").onclick = () => showPhoto(at + 1);
+  act.querySelector(".act-close").onclick = () => act.close();
+  act.addEventListener("click", (e) => { if (e.target === act) act.close(); });
+  act.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") showPhoto(at - 1);
+    if (e.key === "ArrowRight") showPhoto(at + 1);
+  });
 </script>
 </body>
 </html>
