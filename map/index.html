@@ -8,7 +8,8 @@
         .../map/#haeparang-1  (코스 링크 — 열면 그 코스가 바로 보인다)
         .../map/?min=15&max=25 (거리 조건 — 화면의 거리 칸에 입력해도 주소에 반영된다)
         .../map/?type=bike     자전거길 지도 (데이터: bike-courses.js, bike-text.js, GPX: ../gpx-bike/)
-        .../map/?type=run      러닝·트레일런 지도 (데이터: run-courses.js, run-text.js, GPX: ../gpx-run/)
+        .../map/?type=run      러닝 지도   ┐ 같은 데이터(run-courses.js, run-text.js, GPX: ../gpx-run/)를
+        .../map/?type=trail    트레일런 지도 ┘ courses.json 의 trail(러닝/트레일런)로 나눠 보여 준다
   로컬: serve.cmd 실행 → http://localhost:8000/map/ (카카오맵은 등록한 주소에서만 열린다)
 -->
 <html lang="ko">
@@ -112,13 +113,25 @@
 </div>
 
 <script>
-// 지도 종류: 걷기(기본) / 자전거(?type=bike) / 러닝·트레일런(?type=run). 종류마다 데이터 파일이 다르다.
-const MODE = { bike: "bike", run: "run" }[new URLSearchParams(location.search).get("type")] || "walk";
-({ walk: ["courses.js", "courses-text.js"], bike: ["bike-courses.js", "bike-text.js"], run: ["run-courses.js", "run-text.js"] })[MODE]
+// 지도 종류: 걷기(기본) / 자전거(?type=bike) / 러닝(?type=run) / 트레일런(?type=trail). 종류마다 데이터 파일이 다르다.
+const MODE = { bike: "bike", run: "run", trail: "trail" }[new URLSearchParams(location.search).get("type")] || "walk";
+({ walk: ["courses.js", "courses-text.js"], bike: ["bike-courses.js", "bike-text.js"],
+   run: ["run-courses.js", "run-text.js"], trail: ["run-courses.js", "run-text.js"] })[MODE]
   .concat("kakao-key.js").forEach((f) => document.write(`<script src="${f}"><\/script>`));
 </script>
 <script>
 const LANG = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "ko";
+// 러닝·트레일런은 같은 데이터를 나눠 보여 준다. 다른 쪽 코스 링크(예: ?type=run#cheonmasan)로 들어오면 그쪽 지도로 옮긴다.
+if (MODE === "run" || MODE === "trail") {
+  const kind = { run: "러닝", trail: "트레일런" }[MODE];
+  const slug = decodeURIComponent(location.hash.slice(1));
+  if (COURSES.some((c) => c.trail !== kind && (window.COURSE_TEXT[c.name] || {}).slug === slug)) {
+    const q = new URLSearchParams(location.search);
+    q.set("type", MODE === "run" ? "trail" : "run");
+    location.replace(location.pathname + "?" + q + location.hash);
+  }
+  window.COURSES = COURSES.filter((c) => c.trail === kind);
+}
 const CFG = {
   walk: {
     colors: { "해파랑길": "#e4572e", "남파랑길": "#1d7fd1", "갈맷길": "#7b4fd6", "해안누리길": "#1aa66c" },
@@ -132,7 +145,11 @@ const CFG = {
     recs: [], coastFilter: false, bikeLanes: true, gpxDir: "../gpx-bike/",
   },
   run: {
-    colors: { "러닝": "#1d7fd1", "트레일런": "#e4572e" },
+    colors: { "러닝": "#1d7fd1" },
+    recs: [], coastFilter: false, bikeLanes: false, gpxDir: "../gpx-run/",
+  },
+  trail: {
+    colors: { "트레일런": "#e4572e" },
     recs: [], coastFilter: false, bikeLanes: false, gpxDir: "../gpx-run/",
   },
 }[MODE];
@@ -145,8 +162,9 @@ const T = {
   ko: {
     title: "부산 해안 걷기 코스 지도", sub: "호스트 추천 코스 · 두루누비 공식 GPX 22개 코스", lang: "English",
     bikeTitle: "부산 자전거길 지도", bikeSub: "두루누비 공식 GPX · 부산과 근교 자전거길",
-    runTitle: "부산 러닝·트레일런 지도", runSub: "두루누비 공식 GPX · 강변·해변 러닝과 산길 트레일런",
-    modes: { walk: "🥾 걷기", bike: "🚴 자전거", run: "🏃 러닝·트레일런" }, bikeLanes: "카카오 자전거길 겹쳐 보기",
+    runTitle: "부산 러닝 지도", runSub: "두루누비 공식 GPX · 강변·해변 러닝 코스",
+    trailTitle: "부산 트레일런 지도", trailSub: "두루누비 공식 GPX · 산길 트레일런 코스",
+    modes: { walk: "🥾 걷기", bike: "🚴 자전거", run: "🏃 러닝", trail: "🌲 트레일런" }, bikeLanes: "카카오 자전거길 겹쳐 보기",
     trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", all: "전체 코스",
@@ -171,8 +189,9 @@ const T = {
   en: {
     title: "Busan Coastal Walks", sub: "Host's picks · official GPS tracks from Korea Tourism Organization (Durunubi)", lang: "한국어",
     bikeTitle: "Busan Cycling Routes", bikeSub: "Official GPS tracks (Durunubi) · Busan and nearby",
-    runTitle: "Busan Running & Trail Running", runSub: "Official GPS tracks (Durunubi) · flat river & beach runs, mountain trail runs",
-    modes: { walk: "🥾 Walk", bike: "🚴 Cycle", run: "🏃 Run & Trail" }, bikeLanes: "Show Kakao bike lanes",
+    runTitle: "Busan Running Routes", runSub: "Official GPS tracks (Durunubi) · flat river & beach runs",
+    trailTitle: "Busan Trail Running", trailSub: "Official GPS tracks (Durunubi) · mountain trail runs",
+    modes: { walk: "🥾 Walk", bike: "🚴 Cycle", run: "🏃 Run", trail: "🌲 Trail" }, bikeLanes: "Show Kakao bike lanes",
     trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", all: "All courses",
@@ -214,11 +233,11 @@ const linkFor = (slug) => {
 };
 
 // 화면 글자
-const TITLE = { walk: T.title, bike: T.bikeTitle, run: T.runTitle }[MODE];
+const TITLE = { walk: T.title, bike: T.bikeTitle, run: T.runTitle, trail: T.trailTitle }[MODE];
 document.documentElement.lang = LANG;
 document.title = TITLE;
 const setText = (id, v, html) => { const el = document.getElementById(id); html ? (el.innerHTML = v) : (el.textContent = v); };
-[["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub }[MODE]], ["t-trails", T.trails], ["t-filters", T.filters],
+[["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub, trail: T.trailSub }[MODE]], ["t-trails", T.trails], ["t-filters", T.filters],
  ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-bike", T.bikeLanes], ["t-terrain", T.terrain],
  ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);

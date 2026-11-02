@@ -1,5 +1,5 @@
 // 러닝·트레일런 코스별 링크 주소(slug)와 영어 이름·설명. 손으로 관리하는 파일이다(build.py 가 만들지 않는다).
-// 링크 예: .../map/?type=run#samnak-1 (한국어), .../map/?type=run&lang=en#samnak-1 (영어)
+// 링크 예: 러닝 .../map/?type=run#samnak-1, 트레일런 .../map/?type=trail#cheonmasan (영어는 &lang=en 을 붙인다)
 window.COURSE_TEXT = {
   // 러닝 — 강변·해변 평지
   "낙동강 하구 생태길 1코스 삼락 맹꽁이길": { slug: "samnak-1", name: "Nakdong Estuary Eco Trail 1 · Samnak",
