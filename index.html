@@ -1,0 +1,390 @@
+<!doctype html>
+<!--
+  My Korean Friend — 소개 페이지 (GitHub Pages)
+  노란색 [TODO …] 표시는 아직 정하지 않은 부분이다. 커뮤니티에 링크를 올리기 전에 모두 채운다.
+  신청 버튼 링크는 구글 폼을 만든 뒤 FORM_URL 자리에 넣는다.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Korean Friend — Stay with a Busan family</title>
+<meta name="description" content="Stay with a family in Busan, Korea. Share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — and eat where locals eat. Come as a guest, leave with a Korean friend.">
+<meta property="og:title" content="My Korean Friend — Stay with a Busan family">
+<meta property="og:description" content="Come as a guest. Leave with a Korean friend. 1–5 days in Busan with a local family and their hobbies.">
+<meta property="og:image" content="images/gwangan-bridge.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0f1e2e;
+    --sea: #12355b;
+    --teal: #1f7a7a;
+    --coral: #f2683c;
+    --sand: #f6efe4;
+    --paper: #fffdf9;
+    --ink: #1c2733;
+    --muted: #5b6b7b;
+    --line: #e6ddd0;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.2; margin: 0 0 .5em; }
+  h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); color: var(--sea); }
+  h3 { font-size: 1.2rem; }
+  p { margin: 0 0 1em; }
+  a { color: var(--teal); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+  section { padding: 72px 0; }
+  .lead { font-size: 1.1rem; color: var(--muted); max-width: 680px; }
+  .todo { background: #ffe680; color: #5a4600; padding: 0 4px; border-radius: 4px; font-size: .9em; }
+
+  /* Buttons */
+  .btn { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; transition: transform .15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--coral); color: #fff; }
+  .btn-ghost { border: 1.5px solid rgba(255,255,255,.7); color: #fff; }
+
+  /* Hero */
+  .hero {
+    min-height: 92vh; display: flex; align-items: flex-end; color: #fff;
+    background: linear-gradient(180deg, rgba(15,30,46,.15) 0%, rgba(15,30,46,.55) 55%, rgba(15,30,46,.92) 100%),
+                url("images/gwangan-bridge.jpg") center/cover no-repeat, var(--night);
+  }
+  .hero .wrap { padding-bottom: 64px; padding-top: 24px; }
+  .brand { font-family: "Fraunces", serif; font-size: 1.1rem; letter-spacing: .02em; opacity: .9; margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2.3rem, 7vw, 4.2rem); max-width: 820px; }
+  .hero p { font-size: 1.15rem; max-width: 640px; opacity: .92; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 18px; }
+  .facts { font-size: .95rem; opacity: .8; }
+
+  /* Three pillars */
+  .grid { display: grid; gap: 20px; }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .grid-cards { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .pillar { padding: 26px; border-radius: var(--radius); background: var(--sand); }
+  .pillar .icon { font-size: 1.8rem; }
+
+  /* Hosts */
+  .hosts { background: var(--sand); }
+  .host { background: var(--paper); border-radius: var(--radius); padding: 26px; border: 1px solid var(--line); }
+  .avatar { width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--sea)); color: #fff; display: grid; place-items: center; font-family: "Fraunces", serif; font-size: 1.6rem; margin-bottom: 14px; }
+  .role { color: var(--coral); font-weight: 600; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* Activities */
+  .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: #fff; display: flex; flex-direction: column; }
+  .card .emoji { font-size: 2rem; }
+  .card.featured { border-color: var(--coral); box-shadow: 0 6px 24px rgba(242,104,60,.12); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+  .chip { font-size: .8rem; background: var(--sand); padding: 3px 10px; border-radius: 999px; color: var(--muted); }
+  .cost { margin-top: auto; font-size: .9rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+
+  /* Days */
+  .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .days li { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 12px; background: var(--sand); }
+  .days b { font-family: "Fraunces", serif; color: var(--sea); font-size: 1.1rem; }
+
+  /* Price */
+  .price { background: var(--night); color: #fff; }
+  .price h2 { color: #fff; }
+  .price .lead { color: rgba(255,255,255,.75); }
+  .tiers { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 26px; }
+  .tier { border-radius: var(--radius); padding: 26px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); }
+  .tier .amount { font-family: "Fraunces", serif; font-size: 2.4rem; }
+  .tier .usd { opacity: .7; font-size: .95rem; }
+  .launch { background: var(--coral); border: none; }
+  .launch .usd { opacity: .9; }
+  .inout { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 26px; }
+  .inout ul { margin: 0; padding-left: 20px; }
+  .note { font-size: .9rem; opacity: .75; margin-top: 22px; }
+
+  /* Steps */
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .steps li { counter-increment: s; padding: 22px; border-radius: var(--radius); border: 1px solid var(--line); }
+  .steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 600; margin-bottom: 10px; }
+
+  /* Trust */
+  .trust { background: var(--sand); }
+  .trust ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .trust li { background: var(--paper); padding: 20px; border-radius: 12px; }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+  details p { margin: 10px 0 0; color: var(--muted); }
+
+  /* Final CTA + footer */
+  .final { text-align: center; background: linear-gradient(180deg, var(--sea), var(--night)); color: #fff; }
+  .final h2 { color: #fff; }
+  footer { padding: 30px 0; font-size: .9rem; color: var(--muted); text-align: center; }
+
+  @media (max-width: 600px) {
+    section { padding: 56px 0; }
+    .days li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">My Korean Friend</div>
+    <h1>Come as a guest. Leave with a Korean friend.</h1>
+    <p>Stay with a family in Busan and share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — then eat where locals actually eat.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#apply">Apply to stay</a>
+      <a class="btn btn-ghost" href="#together">See what we do</a>
+    </div>
+    <div class="facts">1–5 days · up to 2 guests · Busan, South Korea</div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Not a tour. Not a hotel.</h2>
+    <p class="lead">We are not guides. We are a Busan family with hobbies we love — and we'd like to share them with you.</p>
+    <div class="grid grid-3">
+      <div class="pillar">
+        <div class="icon">🏠</div>
+        <h3>A real Korean home</h3>
+        <p>Stay in a private room in our family apartment and see how Koreans really live. Home-cooked dinners together, every day.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🤝</div>
+        <h3>Our hobbies, your trip</h3>
+        <p>No tourist checklists. You join the things we actually do on our weekends — and we plan the days around your wishlist.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🍲</div>
+        <h3>Where we actually eat</h3>
+        <p>Our own list of places — every one tried, tested and loved by us. No tourist traps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hosts">
+  <div class="wrap">
+    <h2>Meet your hosts</h2>
+    <div class="grid grid-3">
+      <div class="host">
+        <div class="avatar">H</div>
+        <div class="role">Your host · 47</div>
+        <h3><span class="todo">[TODO: 이름]</span></h3>
+        <p>A developer who spends weekends trekking 30 km along Busan's coast, cycling out to the mountains and playing 3-cushion billiards (average 0.8). He owns two premium cues — you're welcome to use them.</p>
+      </div>
+      <div class="host">
+        <div class="avatar">D</div>
+        <div class="role">Translator &amp; filmmaker · 25</div>
+        <h3><span class="todo">[TODO: 이름]</span></h3>
+        <p>His daughter joins your days, translates, and films the adventure for our channel — only if you want to be on camera. <span class="todo">[TODO: 딸의 취미 메뉴]</span></p>
+      </div>
+      <div class="host">
+        <div class="avatar">R</div>
+        <div class="role">Running host · 44</div>
+        <h3><span class="todo">[TODO: 이름]</span></h3>
+        <p>A developer and runner who'll take you along the coast at sunrise or up Busan's mountain trails. <span class="todo">[TODO: 러닝 코스]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="together">
+  <div class="wrap">
+    <h2>What we can do together</h2>
+    <p class="lead">Pick what you like on the application form — we'll shape your days around it. <span class="todo">[TODO: 상품 구성 확정 후 수정]</span></p>
+    <div class="grid grid-cards">
+      <div class="card featured">
+        <div class="emoji">🦀</div>
+        <h3>Snow crab trip to Yeongdeok</h3>
+        <div class="meta"><span class="chip">Full day</span><span class="chip">Anyone</span></div>
+        <p>Our favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</p>
+        <div class="cost">You pay on the day: crab, restaurant, fuel &amp; tolls — about ₩250,000 per person for 2 guests.</div>
+      </div>
+      <div class="card featured">
+        <div class="emoji">🎱</div>
+        <h3>3-cushion billiards</h3>
+        <div class="meta"><span class="chip">2–3 hours</span><span class="chip">Anyone</span></div>
+        <p>Korea is a 3-cushion powerhouse, with a billiard hall on almost every street. Play at our neighbourhood hall with premium cues.</p>
+        <div class="cost">You pay on the day: table fee.</div>
+      </div>
+      <div class="card featured">
+        <div class="emoji">🌃</div>
+        <h3>Dawn view from Hwangnyeongsan</h3>
+        <div class="meta"><span class="chip">Early morning</span><span class="chip">Easy</span></div>
+        <p>What we think is the best view in Busan — the whole city lit up before sunrise.</p>
+        <div class="cost">You pay on the day: transport.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">🥾</div>
+        <h3>Coastal trekking, 20–30 km</h3>
+        <div class="meta"><span class="chip">Full day</span><span class="chip">Good fitness</span></div>
+        <p>Three coastal routes we walk ourselves. <span class="todo">[TODO: 코스 이름·구간]</span></p>
+        <div class="cost">You pay on the day: transport, food.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">🚴</div>
+        <h3>Cycling, 50–80 km</h3>
+        <div class="meta"><span class="chip">Full day</span><span class="chip">Good fitness</span></div>
+        <p>Daejeo Eco Park to Taejongdae and back, or Daejeo to Mt. Muchuk in Gimhae.</p>
+        <div class="cost">You pay on the day: food. <span class="todo">[TODO: 자전거 대여]</span></div>
+      </div>
+      <div class="card">
+        <div class="emoji">🍜</div>
+        <h3>Busan soul food</h3>
+        <div class="meta"><span class="chip">A meal</span><span class="chip">Anyone</span></div>
+        <p>Dwaeji-gukbap (pork rice soup), yang-gopchang (grilled tripe), kkomjangeo (grilled sea eel) — at our regular spots. <span class="todo">[TODO: 맛집 리스트]</span></p>
+        <div class="cost">You pay on the day: your meal and drinks.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">🏃</div>
+        <h3>Running &amp; trail running</h3>
+        <div class="meta"><span class="chip">1–3 hours</span><span class="chip">Runners</span></div>
+        <p>Coastal morning runs or Busan's mountain trails with our running host.</p>
+        <div class="cost">You pay on the day: transport.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">🍚</div>
+        <h3>Home-cooked dinners</h3>
+        <div class="meta"><span class="chip">Every day</span><span class="chip">Included</span></div>
+        <p>Korean home food at our family table. Tell us what you can't eat and we'll cook around it.</p>
+        <div class="cost">Included in your stay.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Five days, for example</h2>
+    <ul class="days">
+      <li><b>Day 1</b><span>Arrive, settle into your room, walk around the neighbourhood — dinner at home.</span></li>
+      <li><b>Day 2</b><span>Dawn view from Hwangnyeongsan → pork rice soup breakfast → 3-cushion in the afternoon → grilled tripe at night.</span></li>
+      <li><b>Day 3</b><span>Coastal trekking, 20–30 km → grilled sea eel to finish the day.</span></li>
+      <li><b>Day 4</b><span>Snow crab trip to Yeongdeok.</span></li>
+      <li><b>Day 5</b><span>Morning run or a bike ride — then see you again, friend.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="price" id="price">
+  <div class="wrap">
+    <h2>Price</h2>
+    <p class="lead">One simple price per day. Your room, our home-cooked meals and your host's whole day are included.</p>
+    <div class="tiers">
+      <div class="tier">
+        <div>1 guest · per day</div>
+        <div class="amount">₩300,000</div>
+        <div class="usd">about US$217</div>
+      </div>
+      <div class="tier">
+        <div>2 guests · per day</div>
+        <div class="amount">₩400,000</div>
+        <div class="usd">about US$290 — US$145 each</div>
+      </div>
+      <div class="tier launch">
+        <div><strong>Launch offer</strong> · first <span class="todo">[TODO: N]</span> guests</div>
+        <div class="amount">₩200,000</div>
+        <div class="usd">₩300,000 for 2 guests · just leave us an honest review</div>
+      </div>
+    </div>
+    <div class="inout">
+      <div>
+        <h3>Included</h3>
+        <ul>
+          <li>Private room in our home</li>
+          <li>Home-cooked meals</li>
+          <li>Your host, all day</li>
+          <li>Translation by our daughter</li>
+        </ul>
+      </div>
+      <div>
+        <h3>You pay on the day, at cost</h3>
+        <ul>
+          <li>Restaurants and drinks</li>
+          <li>Snow crab, billiard tables</li>
+          <li>Transport, fuel and tolls</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">For comparison, a private guided day in Busan usually costs US$400 or more — without a bed or dinner. US$ amounts are approximate. Stays of 1–5 days, up to 2 guests. Payment: <span class="todo">[TODO: 결제 방법]</span> · Cancellation: <span class="todo">[TODO: 취소·환불 규정]</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><h3>Apply</h3><p>Tell us your dates and your wishlist — what you'd love to do in Busan.</p></li>
+      <li><h3>Say hello</h3><p>A short video call so we can meet each other before anything is booked.</p></li>
+      <li><h3>Plan together</h3><p>We match our hobbies to your wishlist and send you a day-by-day plan.</p></li>
+      <li><h3>Come as a guest</h3><p>…and leave as a friend.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="trust">
+  <div class="wrap">
+    <h2>Good to know</h2>
+    <ul>
+      <li><h3>A family home</h3><p>Our daughter lives with us — you'll be staying with a family, not a stranger.</p></li>
+      <li><h3>Meet before you book</h3><p>We always have a video call first. If it doesn't feel right for either side, no hard feelings.</p></li>
+      <li><h3>Filming is your choice</h3><p>We love sharing our adventures on YouTube, but only with your consent. Say no and nothing changes. Faces can be blurred.</p></li>
+      <li><h3>Travel insurance</h3><p>Please bring travel insurance that covers hiking and cycling if you plan to join those days.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Questions</h2>
+    <details>
+      <summary>Do I need to speak Korean?</summary>
+      <p>No. Our daughter translates, and we use a translation app for the rest. Plenty of laughing helps too.</p>
+    </details>
+    <details>
+      <summary>How fit do I need to be?</summary>
+      <p>The trekking and cycling days need decent fitness. Everything else — crab, billiards, food, the dawn view — is for anyone.</p>
+    </details>
+    <details>
+      <summary>What is the room like? Where is your home?</summary>
+      <p><span class="todo">[TODO: 방·침대·화장실, 동네·가까운 지하철역]</span></p>
+    </details>
+    <details>
+      <summary>Can I join the activities without staying?</summary>
+      <p><span class="todo">[TODO: 체험만 하는 손님을 받을지]</span></p>
+    </details>
+    <details>
+      <summary>How do I pay, and what if I need to cancel?</summary>
+      <p><span class="todo">[TODO: 결제 방법·취소 규정]</span></p>
+    </details>
+  </div>
+</section>
+
+<section class="final" id="apply">
+  <div class="wrap">
+    <h2>Come as a guest. Leave as a friend.</h2>
+    <p>Tell us your dates and your wishlist. We'll get back to you within <span class="todo">[TODO: 답장 기한]</span>.</p>
+    <p style="margin-top:24px"><a class="btn btn-primary" href="FORM_URL">Apply to stay</a></p>
+    <p class="note"><span class="todo">[TODO: 구글 폼 링크를 FORM_URL 자리에]</span></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    My Korean Friend · Busan, South Korea · <span class="todo">[TODO: 이메일·인스타·유튜브]</span>
+  </div>
+</footer>
+
+</body>
+</html>
