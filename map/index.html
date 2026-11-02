@@ -44,9 +44,6 @@
   .range input { width: 64px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
   .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
   .count { color: var(--muted); margin-left: auto; }
-  .btn { width: 100%; padding: 9px; border: 1px solid var(--sel); background: #fff; color: var(--sel);
-    border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 12px; }
-  .btn.on { background: var(--sel); color: #fff; }
   #detail { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 12px; display: none; }
   #detail h2 { font-size: 16px; margin: 0 0 6px; }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
@@ -106,8 +103,6 @@
       <label><input type="checkbox" id="f-terrain"> <span id="t-terrain"></span></label>
     </fieldset>
 
-    <button class="btn" id="course1"></button>
-
     <div class="list-title" id="t-all"></div>
     <ul class="list" id="list"></ul>
 
@@ -130,15 +125,15 @@ const CFG = {
     // 호스트 추천 코스 (2026-11-02 사용자 지정, 이 순서대로 보여 준다)
     recs: ["해파랑길 1코스", "해파랑길 3코스", "남파랑길 2코스", "갈맷길 1-2코스", "갈맷길 5-2코스",
       "해안누리길 해운대삼포길", "해안누리길 절영해안산책로", "해안누리길 기장 해안산책로", "갈맷길 4-1코스"],
-    course1: true, coastFilter: true, bikeLanes: false, gpxDir: "../gpx/",
+    coastFilter: true, bikeLanes: false, gpxDir: "../gpx/",
   },
   bike: {
     colors: { "부산": "#1d7fd1", "낙동강 종주": "#e4572e", "부산 근교": "#7b4fd6" },
-    recs: [], course1: false, coastFilter: false, bikeLanes: true, gpxDir: "../gpx-bike/",
+    recs: [], coastFilter: false, bikeLanes: true, gpxDir: "../gpx-bike/",
   },
   run: {
     colors: { "러닝": "#1d7fd1", "트레일런": "#e4572e" },
-    recs: [], course1: false, coastFilter: false, bikeLanes: false, gpxDir: "../gpx-run/",
+    recs: [], coastFilter: false, bikeLanes: false, gpxDir: "../gpx-run/",
   },
 }[MODE];
 const COLORS = CFG.colors;
@@ -154,7 +149,7 @@ const T = {
     modes: { walk: "🥾 걷기", bike: "🚴 자전거", run: "🏃 러닝·트레일런" }, bikeLanes: "카카오 자전거길 겹쳐 보기",
     trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
-    terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
+    terrain: "지도에 지형(산 그림자) 겹쳐 보기", all: "전체 코스",
     empty: "조건에 맞는 코스가 없다.", mixed: "일부 도심·숲", rec: "*추천코스",
     official: "공식", officialTime: "공식 소요 시간", climb: "오르막 합계", climbShort: "오르막",
     eleSrc: "높이 자료", maxEle: "가장 높은 곳 약", start: "출발", end: "도착", level: "난이도",
@@ -180,7 +175,7 @@ const T = {
     modes: { walk: "🥾 Walk", bike: "🚴 Cycle", run: "🏃 Run & Trail" }, bikeLanes: "Show Kakao bike lanes",
     trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
-    terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
+    terrain: "Show terrain shading", all: "All courses",
     empty: "No courses match.", mixed: "partly urban / forest", rec: "*Host pick",
     official: "official", officialTime: "official time", climb: "total climb", climbShort: "climb",
     eleSrc: "Elevation", maxEle: "highest point about", start: "Start", end: "End", level: "Level",
@@ -225,11 +220,10 @@ document.title = TITLE;
 const setText = (id, v, html) => { const el = document.getElementById(id); html ? (el.innerHTML = v) : (el.textContent = v); };
 [["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub }[MODE]], ["t-trails", T.trails], ["t-filters", T.filters],
  ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-bike", T.bikeLanes], ["t-terrain", T.terrain],
- ["course1", T.course1], ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
+ ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);
 // 종류에 없는 칸은 숨긴다
 if (!RECS.length) document.getElementById("f-rec").closest("label").style.display = "none";
-if (!CFG.course1) document.getElementById("course1").style.display = "none";
 if (!CFG.coastFilter) document.getElementById("row-coast").style.display = "none";
 // 지도 종류 버튼 3개 (지금 보고 있는 종류는 눌린 모양, 언어는 유지)
 Object.entries(T.modes).forEach(([m, label]) => {
@@ -351,7 +345,6 @@ function init() {
     document.querySelectorAll("#trails .count").forEach((el) => {
       el.textContent = COURSES.filter((c) => c.trail === el.dataset.trail && passes(c)).length;
     });
-    document.getElementById("course1").classList.toggle("on", state.course1);
     renderDetail();
   }
 
@@ -471,7 +464,6 @@ function init() {
   document.getElementById("f-terrain").onchange = (e) => {
     e.target.checked ? map.addOverlayMapTypeId(K.MapTypeId.TERRAIN) : map.removeOverlayMapTypeId(K.MapTypeId.TERRAIN);
   };
-  document.getElementById("course1").onclick = () => state.course1 ? clearSel() : select(COURSE1, true);
   K.event.addListener(map, "click", () => {
     if (Date.now() - lineClickedAt < 300) return;
     if (state.selected.size) clearSel();
