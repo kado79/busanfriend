@@ -88,6 +88,9 @@
   .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
   .chip { font-size: .8rem; background: var(--sand); padding: 3px 10px; border-radius: 999px; color: var(--muted); }
   .cost { margin-top: auto; font-size: .9rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+  .card-btn { align-self: flex-start; margin: 0 0 14px; padding: 8px 16px; border: 1.5px solid var(--coral); border-radius: 999px;
+    color: var(--coral); font-weight: 600; font-size: .9rem; text-decoration: none; }
+  .card-btn:hover { background: var(--coral); color: #fff; }
 
   /* Days */
   .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
@@ -229,7 +232,9 @@
         <div class="emoji">🥾</div>
         <h3>Coastal trekking, 20–30 km</h3>
         <div class="meta"><span class="chip">Full day</span><span class="chip">Good fitness</span></div>
-        <p>Three coastal routes we walk ourselves. <span class="todo">[TODO: 코스 이름·구간]</span></p>
+        <p>Three coastal routes we walk ourselves.</p>
+        <p>Recommended route: <span class="todo">[TODO: 추천 코스]</span></p>
+        <a class="card-btn" href="map/?lang=en">See trekking routes →</a>
         <div class="cost">You pay on the day: transport, food.</div>
       </div>
       <div class="card">
