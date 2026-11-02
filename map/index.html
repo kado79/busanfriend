@@ -8,6 +8,7 @@
         .../map/#haeparang-1  (코스 링크 — 열면 그 코스가 바로 보인다)
         .../map/?min=15&max=25 (거리 조건 — 화면의 거리 칸에 입력해도 주소에 반영된다)
         .../map/?type=bike     자전거길 지도 (데이터: bike-courses.js, bike-text.js, GPX: ../gpx-bike/)
+        .../map/?type=run      러닝·트레일런 지도 (데이터: run-courses.js, run-text.js, GPX: ../gpx-run/)
   로컬: serve.cmd 실행 → http://localhost:8000/map/ (카카오맵은 등록한 주소에서만 열린다)
 -->
 <html lang="ko">
@@ -31,6 +32,7 @@
   h1 { font-size: 18px; margin: 0 0 4px; }
   .lang { font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 10px; color: var(--ink); text-decoration: none; white-space: nowrap; }
   .sub { color: var(--muted); margin: 0 0 14px; font-size: 13px; }
+  .mode-links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
   fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px; background: #fff; }
   fieldset.recs { border-color: var(--sel); }
   legend { font-weight: 600; padding: 0 4px; }
@@ -83,7 +85,7 @@
       <h1 id="t-title"></h1>
       <a class="lang" id="lang-link" href="#"></a>
     </div>
-    <p class="sub"><a id="mode-link" href="#"></a></p>
+    <p class="sub mode-links" id="mode-links"></p>
     <p class="sub" id="t-sub"></p>
 
     <fieldset class="recs"><legend id="t-recs"></legend><ul class="list" id="rec-list"></ul></fieldset>
@@ -114,9 +116,9 @@
 </div>
 
 <script>
-// 지도 종류: 걷기(기본) / 자전거(?type=bike). 종류마다 데이터 파일이 다르다.
-const MODE = new URLSearchParams(location.search).get("type") === "bike" ? "bike" : "walk";
-(MODE === "bike" ? ["bike-courses.js", "bike-text.js"] : ["courses.js", "courses-text.js"])
+// 지도 종류: 걷기(기본) / 자전거(?type=bike) / 러닝·트레일런(?type=run). 종류마다 데이터 파일이 다르다.
+const MODE = { bike: "bike", run: "run" }[new URLSearchParams(location.search).get("type")] || "walk";
+({ walk: ["courses.js", "courses-text.js"], bike: ["bike-courses.js", "bike-text.js"], run: ["run-courses.js", "run-text.js"] })[MODE]
   .concat("kakao-key.js").forEach((f) => document.write(`<script src="${f}"><\/script>`));
 </script>
 <script>
@@ -133,6 +135,10 @@ const CFG = {
     colors: { "부산": "#1d7fd1", "낙동강 종주": "#e4572e", "부산 근교": "#7b4fd6" },
     recs: [], course1: false, coastFilter: false, bikeLanes: true, gpxDir: "../gpx-bike/",
   },
+  run: {
+    colors: { "러닝": "#1d7fd1", "트레일런": "#e4572e" },
+    recs: [], course1: false, coastFilter: false, bikeLanes: false, gpxDir: "../gpx-run/",
+  },
 }[MODE];
 const COLORS = CFG.colors;
 const RECS = CFG.recs;
@@ -143,7 +149,8 @@ const T = {
   ko: {
     title: "부산 해안 걷기 코스 지도", sub: "호스트 추천 코스 · 두루누비 공식 GPX 22개 코스", lang: "English",
     bikeTitle: "부산 자전거길 지도", bikeSub: "두루누비 공식 GPX · 부산과 근교 자전거길",
-    toBike: "🚴 자전거길 지도 보기 →", toWalk: "🥾 걷기 코스 지도 보기 →", bikeLanes: "카카오 자전거길 겹쳐 보기",
+    runTitle: "부산 러닝·트레일런 지도", runSub: "두루누비 공식 GPX · 강변·해변 러닝과 산길 트레일런",
+    toBike: "🚴 자전거길 지도 →", toWalk: "🥾 걷기 코스 지도 →", toRun: "🏃 러닝·트레일런 지도 →", bikeLanes: "카카오 자전거길 겹쳐 보기",
     recs: "호스트 추천 코스", trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
@@ -154,7 +161,7 @@ const T = {
     eleGpx: "GPX", eleDem: "지형 고도(Open-Meteo)",
     trailName: (t) => t,
     footer: `거리는 GPX로 계산한 값이고, 괄호 안은 두루누비 공식 거리다.<br>
-      오르막 합계는 해파랑길·남파랑길은 GPX 높이, 갈맷길·해안누리길은 지형 고도(Open-Meteo, 90m 격자)로 계산한 근사치다.<br>
+      오르막 합계는 GPX 높이가 고르게 들어 있으면 GPX로, 아니면 지형 고도(Open-Meteo, 90m 격자)로 계산한 근사치다 (코스 상세에 표시).<br>
       경로 자료: 한국관광공사 두루누비(공공데이터포털 이용허락 "제한 없음") · 지도: 카카오맵 (오른쪽 위에서 지도·스카이뷰 전환)`,
     fileMsg: "카카오맵은 파일로 직접 열면 표시되지 않는다.<br><b>serve.cmd</b> 를 실행한 뒤 <b>http://localhost:8000/map/</b> 으로 연다.",
     keyMsg: "카카오 JavaScript 키가 없다. <b>kakao-key.js</b> 에 키를 넣는다.",
@@ -168,7 +175,8 @@ const T = {
   en: {
     title: "Busan Coastal Walks", sub: "Host's picks · official GPS tracks from Korea Tourism Organization (Durunubi)", lang: "한국어",
     bikeTitle: "Busan Cycling Routes", bikeSub: "Official GPS tracks (Durunubi) · Busan and nearby",
-    toBike: "🚴 See the cycling map →", toWalk: "🥾 See the walking map →", bikeLanes: "Show Kakao bike lanes",
+    runTitle: "Busan Running & Trail Running", runSub: "Official GPS tracks (Durunubi) · flat river & beach runs, mountain trail runs",
+    toBike: "🚴 Cycling map →", toWalk: "🥾 Walking map →", toRun: "🏃 Running & trail map →", bikeLanes: "Show Kakao bike lanes",
     recs: "Host's picks", trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
@@ -178,9 +186,10 @@ const T = {
     durunubi: "Durunubi page ↗", gpx: "Download GPX", copy: "Copy link", copied: "Copied",
     eleGpx: "GPS track", eleDem: "terrain data (Open-Meteo)",
     trailName: (t) => ({ "해파랑길": "Haeparang Trail", "남파랑길": "Namparang Trail", "갈맷길": "Galmaetgil", "해안누리길": "Coastal Nuri-gil",
-      "부산": "Busan", "낙동강 종주": "Nakdong River (cross-country)", "부산 근교": "Near Busan" })[t] || t,
+      "부산": "Busan", "낙동강 종주": "Nakdong River (cross-country)", "부산 근교": "Near Busan",
+      "러닝": "Easy run (flat river & beach)", "트레일런": "Trail run (mountain)" })[t] || t,
     footer: `Distances are calculated from the GPS tracks (official distance in brackets).<br>
-      Total climb uses the track's own elevation (Haeparang / Namparang) or terrain data (Open-Meteo, 90 m grid) for the others — approximate.<br>
+      Total climb uses the track's own elevation when it is clean, otherwise terrain data (Open-Meteo, 90 m grid) — approximate (shown on each course).<br>
       Route data: Korea Tourism Organization, Durunubi · Map: Kakao Map (map labels are in Korean; switch Map / Skyview at the top right)`,
     fileMsg: "Kakao Map does not load from a local file. Run <b>serve.cmd</b> and open <b>http://localhost:8000/map/</b>.",
     keyMsg: "The Kakao JavaScript key is missing. Put it in <b>kakao-key.js</b>.",
@@ -203,17 +212,17 @@ const fmtTime = (m) => m ? T.time(m) : "—";
 const isRec = (c) => RECS.includes(c.name);
 const linkFor = (slug) => {
   const q = new URLSearchParams();
-  if (MODE === "bike") q.set("type", "bike");
+  if (MODE !== "walk") q.set("type", MODE);
   if (LANG === "en") q.set("lang", "en");
   return location.origin + location.pathname + (q.toString() ? "?" + q : "") + "#" + slug;
 };
 
 // 화면 글자
-const TITLE = MODE === "bike" ? T.bikeTitle : T.title;
+const TITLE = { walk: T.title, bike: T.bikeTitle, run: T.runTitle }[MODE];
 document.documentElement.lang = LANG;
 document.title = TITLE;
 const setText = (id, v, html) => { const el = document.getElementById(id); html ? (el.innerHTML = v) : (el.textContent = v); };
-[["t-title", TITLE], ["t-sub", MODE === "bike" ? T.bikeSub : T.sub], ["t-recs", T.recs], ["t-trails", T.trails], ["t-filters", T.filters],
+[["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub }[MODE]], ["t-recs", T.recs], ["t-trails", T.trails], ["t-filters", T.filters],
  ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-bike", T.bikeLanes], ["t-terrain", T.terrain],
  ["course1", T.course1], ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);
@@ -221,13 +230,16 @@ setText("t-footer", T.footer, true);
 if (!RECS.length) { document.querySelector("fieldset.recs").style.display = "none"; document.getElementById("f-rec").closest("label").style.display = "none"; }
 if (!CFG.course1) document.getElementById("course1").style.display = "none";
 if (!CFG.coastFilter) document.getElementById("row-coast").style.display = "none";
-// 걷기 ↔ 자전거 지도 바꾸기 (언어는 유지)
-const modeLink = document.getElementById("mode-link");
-const mq = new URLSearchParams();
-if (MODE === "walk") mq.set("type", "bike");
-if (LANG === "en") mq.set("lang", "en");
-modeLink.href = location.pathname + (mq.toString() ? "?" + mq : "");
-modeLink.textContent = MODE === "bike" ? T.toWalk : T.toBike;
+// 다른 종류 지도로 가는 링크 (언어는 유지)
+[["walk", T.toWalk], ["bike", T.toBike], ["run", T.toRun]].filter(([m]) => m !== MODE).forEach(([m, label]) => {
+  const mq = new URLSearchParams();
+  if (m !== "walk") mq.set("type", m);
+  if (LANG === "en") mq.set("lang", "en");
+  const a = document.createElement("a");
+  a.href = location.pathname + (mq.toString() ? "?" + mq : "");
+  a.textContent = label;
+  document.getElementById("mode-links").appendChild(a);
+});
 const langLink = document.getElementById("lang-link");
 const updateLangLink = () => {
   const q = new URLSearchParams(location.search);
