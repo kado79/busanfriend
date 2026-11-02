@@ -38,7 +38,6 @@
   .modes a:hover { background: var(--panel); color: var(--ink); }
   .modes a[aria-current="page"] { background: var(--sel); color: #fff; }
   fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px; background: #fff; }
-  fieldset.recs { border-color: var(--sel); }
   legend { font-weight: 600; padding: 0 4px; }
   label { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
   .range { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
@@ -91,8 +90,6 @@
     </div>
     <nav class="modes" id="mode-links"></nav>
     <p class="sub" id="t-sub"></p>
-
-    <fieldset class="recs"><legend id="t-recs"></legend><ul class="list" id="rec-list"></ul></fieldset>
 
     <div id="detail"></div>
 
@@ -155,10 +152,10 @@ const T = {
     bikeTitle: "부산 자전거길 지도", bikeSub: "두루누비 공식 GPX · 부산과 근교 자전거길",
     runTitle: "부산 러닝·트레일런 지도", runSub: "두루누비 공식 GPX · 강변·해변 러닝과 산길 트레일런",
     modes: { walk: "🥾 걷기", bike: "🚴 자전거", run: "🏃 러닝·트레일런" }, bikeLanes: "카카오 자전거길 겹쳐 보기",
-    recs: "호스트 추천 코스", trails: "길 종류", filters: "조건",
+    trails: "길 종류", filters: "조건",
     recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
-    empty: "조건에 맞는 코스가 없다.", mixed: "일부 도심·숲", rec: "추천",
+    empty: "조건에 맞는 코스가 없다.", mixed: "일부 도심·숲", rec: "*추천코스",
     official: "공식", officialTime: "공식 소요 시간", climb: "오르막 합계", climbShort: "오르막",
     eleSrc: "높이 자료", maxEle: "가장 높은 곳 약", start: "출발", end: "도착", level: "난이도",
     durunubi: "두루누비 상세 ↗", gpx: "GPX 원본", copy: "링크 복사", copied: "복사됨",
@@ -181,10 +178,10 @@ const T = {
     bikeTitle: "Busan Cycling Routes", bikeSub: "Official GPS tracks (Durunubi) · Busan and nearby",
     runTitle: "Busan Running & Trail Running", runSub: "Official GPS tracks (Durunubi) · flat river & beach runs, mountain trail runs",
     modes: { walk: "🥾 Walk", bike: "🚴 Cycle", run: "🏃 Run & Trail" }, bikeLanes: "Show Kakao bike lanes",
-    recs: "Host's picks", trails: "Trails", filters: "Filters",
+    trails: "Trails", filters: "Filters",
     recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
-    empty: "No courses match.", mixed: "partly urban / forest", rec: "Host pick",
+    empty: "No courses match.", mixed: "partly urban / forest", rec: "*Host pick",
     official: "official", officialTime: "official time", climb: "total climb", climbShort: "climb",
     eleSrc: "Elevation", maxEle: "highest point about", start: "Start", end: "End", level: "Level",
     durunubi: "Durunubi page ↗", gpx: "Download GPX", copy: "Copy link", copied: "Copied",
@@ -226,12 +223,12 @@ const TITLE = { walk: T.title, bike: T.bikeTitle, run: T.runTitle }[MODE];
 document.documentElement.lang = LANG;
 document.title = TITLE;
 const setText = (id, v, html) => { const el = document.getElementById(id); html ? (el.innerHTML = v) : (el.textContent = v); };
-[["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub }[MODE]], ["t-recs", T.recs], ["t-trails", T.trails], ["t-filters", T.filters],
+[["t-title", TITLE], ["t-sub", { walk: T.sub, bike: T.bikeSub, run: T.runSub }[MODE]], ["t-trails", T.trails], ["t-filters", T.filters],
  ["t-rec-only", T.recOnly], ["t-range", T.range], ["t-coast", T.coast], ["t-bike", T.bikeLanes], ["t-terrain", T.terrain],
  ["course1", T.course1], ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);
 // 종류에 없는 칸은 숨긴다
-if (!RECS.length) { document.querySelector("fieldset.recs").style.display = "none"; document.getElementById("f-rec").closest("label").style.display = "none"; }
+if (!RECS.length) document.getElementById("f-rec").closest("label").style.display = "none";
 if (!CFG.course1) document.getElementById("course1").style.display = "none";
 if (!CFG.coastFilter) document.getElementById("row-coast").style.display = "none";
 // 지도 종류 버튼 3개 (지금 보고 있는 종류는 눌린 모양, 언어는 유지)
@@ -314,7 +311,7 @@ function init() {
     const li = document.createElement("li");
     if (state.selected.has(c.name) && !state.course1) li.className = "sel";
     li.innerHTML = `<span class="dot" style="background:${COLORS[c.trail]}"></span>
-      <div><div class="name">${nameOf(c)}${c.kind === "mixed" ? `<span class="tag">${T.mixed}</span>` : ""}</div>
+      <div><div class="name">${nameOf(c)}${isRec(c) ? `<span class="tag rec">${T.rec}</span>` : ""}${c.kind === "mixed" ? `<span class="tag">${T.mixed}</span>` : ""}</div>
       <div class="meta">${c.gpxKm}km (${c.officialKm ?? "—"}) · ${fmtTime(c.minutes)} · ${T.climbShort} ${c.gainM ?? "—"}m · ${levelOf(c)}</div></div>`;
     li.onclick = () => select([c.name]);
     return li;
@@ -345,13 +342,11 @@ function init() {
       });
     });
 
-    const recList = document.getElementById("rec-list");
-    recList.innerHTML = "";
-    RECS.map((n) => COURSES.find((c) => c.name === n)).forEach((c) => recList.appendChild(item(c)));
-
+    // 전체 코스 목록: 추천 코스를 RECS 순서대로 먼저, 나머지는 그 뒤에
+    const rank = (c) => isRec(c) ? RECS.indexOf(c.name) : RECS.length + COURSES.indexOf(c);
     const list = document.getElementById("list");
     list.innerHTML = shown.length ? "" : `<li class="empty">${T.empty}</li>`;
-    shown.forEach((c) => list.appendChild(item(c)));
+    [...shown].sort((a, b) => rank(a) - rank(b)).forEach((c) => list.appendChild(item(c)));
 
     document.querySelectorAll("#trails .count").forEach((el) => {
       el.textContent = COURSES.filter((c) => c.trail === el.dataset.trail && passes(c)).length;
