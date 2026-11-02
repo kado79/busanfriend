@@ -6,6 +6,7 @@
   주소: .../map/            한국어
         .../map/?lang=en    영어
         .../map/#haeparang-1  (코스 링크 — 열면 그 코스가 바로 보인다)
+        .../map/?min=15&max=25 (거리 조건 — 화면의 거리 칸에 입력해도 주소에 반영된다)
   로컬: serve.cmd 실행 → http://localhost:8000/map/ (카카오맵은 등록한 주소에서만 열린다)
 -->
 <html lang="ko">
@@ -33,6 +34,8 @@
   fieldset.recs { border-color: var(--sel); }
   legend { font-weight: 600; padding: 0 4px; }
   label { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
+  .range { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+  .range input { width: 64px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
   .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
   .count { color: var(--muted); margin-left: auto; }
   .btn { width: 100%; padding: 9px; border: 1px solid var(--sel); background: #fff; color: var(--sel);
@@ -90,7 +93,9 @@
     <fieldset>
       <legend id="t-filters"></legend>
       <label><input type="checkbox" id="f-rec" checked> <span id="t-rec-only"></span></label>
-      <label><input type="checkbox" id="f-range"> <span id="t-range"></span></label>
+      <div class="range"><span id="t-range"></span>
+        <input type="number" id="f-min" min="0" step="1" inputmode="numeric" aria-label="min km"> ~
+        <input type="number" id="f-max" min="0" step="1" inputmode="numeric" aria-label="max km"> km</div>
       <label><input type="checkbox" id="f-coast"> <span id="t-coast"></span></label>
       <label><input type="checkbox" id="f-terrain"> <span id="t-terrain"></span></label>
     </fieldset>
@@ -121,7 +126,7 @@ const T = {
   ko: {
     title: "부산 해안 걷기 코스 지도", sub: "호스트 추천 코스 · 두루누비 공식 GPX 22개 코스", lang: "English",
     recs: "호스트 추천 코스", trails: "길 종류", filters: "조건",
-    recOnly: "추천 코스만 지도에 보기", range: "15~25km 코스만", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
+    recOnly: "추천 코스만 지도에 보기", range: "거리", coast: "해안 위주 코스만 (도심·숲이 섞인 코스 빼기)",
     terrain: "지도에 지형(산 그림자) 겹쳐 보기", course1: "코스 1번 보기 — 오륙도 → 송정", all: "전체 코스",
     empty: "조건에 맞는 코스가 없다.", mixed: "일부 도심·숲", rec: "추천",
     official: "공식", officialTime: "공식 소요 시간", climb: "오르막 합계", climbShort: "오르막",
@@ -144,7 +149,7 @@ const T = {
   en: {
     title: "Busan Coastal Walks", sub: "Host's picks · official GPS tracks from Korea Tourism Organization (Durunubi)", lang: "한국어",
     recs: "Host's picks", trails: "Trails", filters: "Filters",
-    recOnly: "Show only host's picks", range: "15–25 km only", coast: "Mostly-coastal routes only",
+    recOnly: "Show only host's picks", range: "Distance", coast: "Mostly-coastal routes only",
     terrain: "Show terrain shading", course1: "Host's own walk — Oryukdo → Songjeong", all: "All courses",
     empty: "No courses match.", mixed: "partly urban / forest", rec: "Host pick",
     official: "official", officialTime: "official time", climb: "total climb", climbShort: "climb",
@@ -185,7 +190,11 @@ const setText = (id, v, html) => { const el = document.getElementById(id); html 
  ["course1", T.course1], ["t-all", T.all]].forEach(([id, v]) => setText(id, v));
 setText("t-footer", T.footer, true);
 const langLink = document.getElementById("lang-link");
-const updateLangLink = () => { langLink.href = location.pathname + (LANG === "en" ? "" : "?lang=en") + location.hash; };
+const updateLangLink = () => {
+  const q = new URLSearchParams(location.search);
+  LANG === "en" ? q.delete("lang") : q.set("lang", "en");
+  langLink.href = location.pathname + (q.toString() ? "?" + q : "") + location.hash;
+};
 langLink.textContent = T.lang;
 updateLangLink();
 
@@ -207,19 +216,25 @@ if (location.protocol === "file:") {
 function init() {
   const K = kakao.maps;
   const LL = (p) => new K.LatLng(p[0], p[1]);
-  const map = new K.Map(mapBox, { center: new K.LatLng(35.13, 129.05), level: 9 });
+  // 기본은 스카이뷰(위성 + 지명). 오른쪽 위 버튼으로 일반 지도로 바꿀 수 있다.
+  const map = new K.Map(mapBox, { center: new K.LatLng(35.13, 129.05), level: 9, mapTypeId: K.MapTypeId.HYBRID });
   map.addControl(new K.MapTypeControl(), K.ControlPosition.TOPRIGHT);
   map.addControl(new K.ZoomControl(), K.ControlPosition.RIGHT);
 
-  const state = { trails: new Set(Object.keys(COLORS)), recOnly: true, range: false, coast: false, selected: new Set(), course1: false };
+  // 거리 조건: 주소 파라미터 ?min=15&max=25 로도 받는다 (빈칸 = 제한 없음)
+  const numParam = (k) => { const v = parseFloat(new URLSearchParams(location.search).get(k)); return Number.isFinite(v) ? v : null; };
+  const state = { trails: new Set(Object.keys(COLORS)), recOnly: true, min: numParam("min"), max: numParam("max"), coast: false, selected: new Set(), course1: false };
   const lines = {};
+  const halos = {}; // 위성 사진 위에서도 선이 보이도록 코스 선 아래에 까는 흰 테두리
   let pins = [];
   let lineClickedAt = 0;
 
   const tip = new K.CustomOverlay({ content: '<div class="tip"></div>', xAnchor: 0, yAnchor: 0.5, zIndex: 10 });
 
   COURSES.forEach((c) => {
-    const pl = new K.Polyline({ path: c.line.map(LL), strokeWeight: 4, strokeColor: COLORS[c.trail], strokeOpacity: 0.9, strokeStyle: "solid" });
+    const path = c.line.map(LL);
+    halos[c.name] = new K.Polyline({ path, strokeWeight: 8, strokeColor: "#ffffff", strokeOpacity: 0.75, strokeStyle: "solid" });
+    const pl = new K.Polyline({ path, strokeWeight: 4, strokeColor: COLORS[c.trail], strokeOpacity: 0.9, strokeStyle: "solid" });
     K.event.addListener(pl, "click", () => { lineClickedAt = Date.now(); select([c.name]); });
     K.event.addListener(pl, "mouseover", (e) => {
       tip.setContent(`<div class="tip">${nameOf(c)} · ${c.gpxKm}km</div>`);
@@ -232,7 +247,8 @@ function init() {
 
   function passes(c) {
     if (state.recOnly && !isRec(c)) return false;
-    if (state.range && (c.gpxKm < 15 || c.gpxKm >= 25)) return false;
+    if (state.min != null && c.gpxKm < state.min) return false;
+    if (state.max != null && c.gpxKm > state.max) return false;
     if (state.coast && c.kind !== "coast") return false;
     return true;
   }
@@ -251,12 +267,16 @@ function init() {
   function render() {
     const shown = COURSES.filter(visible);
     COURSES.forEach((c) => {
-      const pl = lines[c.name];
+      const pl = lines[c.name], halo = halos[c.name];
       const sel = state.selected.has(c.name);
-      pl.setMap(shown.includes(c) || sel ? map : null);
+      const on = shown.includes(c) || sel;
+      pl.setMap(on ? map : null);
+      halo.setMap(on ? map : null);
       const dim = state.selected.size > 0 && !sel;
       pl.setOptions({ strokeWeight: sel ? 7 : 4, strokeOpacity: dim ? 0.3 : 0.9 });
+      halo.setOptions({ strokeWeight: sel ? 12 : 8, strokeOpacity: dim ? 0.2 : 0.75 });
       pl.setZIndex(sel ? 5 : 1);
+      halo.setZIndex(sel ? 4 : 0);
     });
 
     pins.forEach((p) => p.setMap(null));
@@ -377,7 +397,20 @@ function init() {
     fs.appendChild(lab);
   });
   document.getElementById("f-rec").onchange = (e) => { state.recOnly = e.target.checked; render(); };
-  document.getElementById("f-range").onchange = (e) => { state.range = e.target.checked; render(); };
+  const fMin = document.getElementById("f-min"), fMax = document.getElementById("f-max");
+  if (state.min != null) fMin.value = state.min;
+  if (state.max != null) fMax.value = state.max;
+  const onRange = () => {
+    const num = (el) => el.value === "" ? null : parseFloat(el.value);
+    state.min = num(fMin); state.max = num(fMax);
+    const q = new URLSearchParams(location.search);
+    state.min != null ? q.set("min", state.min) : q.delete("min");
+    state.max != null ? q.set("max", state.max) : q.delete("max");
+    history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+    updateLangLink();
+    render();
+  };
+  fMin.oninput = onRange; fMax.oninput = onRange;
   document.getElementById("f-coast").onchange = (e) => { state.coast = e.target.checked; render(); };
   document.getElementById("f-terrain").onchange = (e) => {
     e.target.checked ? map.addOverlayMapTypeId(K.MapTypeId.TERRAIN) : map.removeOverlayMapTypeId(K.MapTypeId.TERRAIN);
