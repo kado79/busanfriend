@@ -3,6 +3,8 @@
   My Korean Friend — 소개 페이지 (GitHub Pages)
   노란색 [TODO …] 표시는 아직 정하지 않은 부분이다. 커뮤니티에 링크를 올리기 전에 모두 채운다.
   신청 버튼 링크는 구글 폼을 만든 뒤 FORM_URL 자리에 넣는다.
+  언어: 기본은 영어, 주소에 ?lang=ko 를 붙이거나 오른쪽 위 버튼을 누르면 한국어.
+        글자는 <span lang="en">…</span><span lang="ko">…</span> 처럼 두 언어를 나란히 두고, 고르지 않은 쪽을 숨긴다.
 -->
 <html lang="en">
 <head>
@@ -13,9 +15,13 @@
 <meta property="og:title" content="My Korean Friend — Stay with a Busan family">
 <meta property="og:description" content="Come as a guest. Leave with a Korean friend. 1–5 days in Busan with a local family and their hobbies.">
 <meta property="og:image" content="images/gwangan-bridge.jpg">
+<script>
+  // 화면을 그리기 전에 언어를 정해 두어야 영어가 잠깐 보였다 바뀌지 않는다
+  document.documentElement.dataset.lang = new URLSearchParams(location.search).get("lang") === "ko" ? "ko" : "en";
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --night: #0f1e2e;
@@ -33,13 +39,13 @@
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     color: var(--ink);
     background: var(--paper);
     line-height: 1.6;
     font-size: 17px;
   }
-  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.2; margin: 0 0 .5em; }
+  h1, h2, h3 { font-family: "Fraunces", "Noto Serif KR", Georgia, serif; line-height: 1.2; margin: 0 0 .5em; }
   h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); color: var(--sea); }
   h3 { font-size: 1.2rem; }
   p { margin: 0 0 1em; }
@@ -48,6 +54,14 @@
   section { padding: 72px 0; }
   .lead { font-size: 1.1rem; color: var(--muted); max-width: 680px; }
   .todo { background: #ffe680; color: #5a4600; padding: 0 4px; border-radius: 4px; font-size: .9em; }
+
+  /* Language */
+  html:not([data-lang="ko"]) body [lang="ko"], html[data-lang="ko"] body [lang="en"] { display: none !important; }
+  html[data-lang="ko"] body { word-break: keep-all; }
+  .langs { position: fixed; top: 14px; right: 14px; z-index: 50; display: flex; gap: 2px; padding: 3px;
+    border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 2px 12px rgba(0,0,0,.18); }
+  .langs a { padding: 6px 12px; border-radius: 999px; font-size: .85rem; font-weight: 600; color: var(--muted); text-decoration: none; }
+  .langs a[aria-current="true"] { background: var(--coral); color: #fff; }
 
   /* Buttons */
   .btn { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; transition: transform .15s ease; }
@@ -87,7 +101,6 @@
   .card.featured { border-color: var(--coral); box-shadow: 0 6px 24px rgba(242,104,60,.12); }
   .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
   .chip { font-size: .8rem; background: var(--sand); padding: 3px 10px; border-radius: 999px; color: var(--muted); }
-  .cost { margin-top: auto; font-size: .9rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
   .card-btn { align-self: flex-start; margin: auto 0 0; padding: 8px 16px; border: 1.5px solid var(--coral); border-radius: 999px;
     color: var(--coral); font-weight: 600; font-size: .9rem; text-decoration: none; }
   .card-btn:hover { background: var(--coral); color: #fff; }
@@ -95,7 +108,7 @@
   /* Days */
   .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
   .days li { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 12px; background: var(--sand); }
-  .days b { font-family: "Fraunces", serif; color: var(--sea); font-size: 1.1rem; }
+  .days b { font-family: "Fraunces", "Noto Serif KR", serif; color: var(--sea); font-size: 1.1rem; }
 
   /* Price */
   .price { background: var(--night); color: #fff; }
@@ -139,38 +152,42 @@
 </head>
 <body>
 
+<nav class="langs" aria-label="Language">
+  <a href="?lang=en" data-l="en">EN</a><a href="?lang=ko" data-l="ko">한국어</a>
+</nav>
+
 <header class="hero">
   <div class="wrap">
     <div class="brand">My Korean Friend</div>
-    <h1>Come as a guest. Leave with a Korean friend.</h1>
-    <p>Stay with a family in Busan and share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — then eat where locals actually eat.</p>
+    <h1><span lang="en">Come as a guest. Leave with a Korean friend.</span><span lang="ko">손님으로 와서, 한국인 친구가 되어 돌아가세요.</span></h1>
+    <p><span lang="en">Stay with a family in Busan and share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — then eat where locals actually eat.</span><span lang="ko">부산 가족의 집에 머물며 해안 트레킹, 대게 여행, 3쿠션 당구 같은 취미를 함께하고, 현지인이 실제로 가는 곳에서 먹어요.</span></p>
     <div class="actions">
-      <a class="btn btn-primary" href="#apply">Apply to stay</a>
-      <a class="btn btn-ghost" href="#together">See what we do</a>
+      <a class="btn btn-primary" href="#apply"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a>
+      <a class="btn btn-ghost" href="#together"><span lang="en">See what we do</span><span lang="ko">함께 할 수 있는 것</span></a>
     </div>
-    <div class="facts">1–5 days · up to 2 guests · Busan, South Korea</div>
+    <div class="facts"><span lang="en">1–5 days · up to 2 guests · Busan, South Korea</span><span lang="ko">1–5일 · 최대 2명 · 대한민국 부산</span></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2>Not a tour. Not a hotel.</h2>
-    <p class="lead">We are not guides. We are a Busan family with hobbies we love — and we'd like to share them with you.</p>
+    <h2><span lang="en">Not a tour. Not a hotel.</span><span lang="ko">투어도 아니고, 호텔도 아닙니다.</span></h2>
+    <p class="lead"><span lang="en">We are not guides. We are a Busan family with hobbies we love — and we'd like to share them with you.</span><span lang="ko">우리는 가이드가 아닙니다. 좋아하는 취미가 있는 부산의 한 가족이고, 그 취미를 함께 나누고 싶습니다.</span></p>
     <div class="grid grid-3">
       <div class="pillar">
         <div class="icon">🏠</div>
-        <h3>A real Korean home</h3>
-        <p>Stay in a private room in our family apartment and see how Koreans really live. Home-cooked dinners together, every day.</p>
+        <h3><span lang="en">A real Korean home</span><span lang="ko">진짜 한국 가정집</span></h3>
+        <p><span lang="en">Stay in a private room in our family apartment and see how Koreans really live. Home-cooked dinners together, every day.</span><span lang="ko">우리 가족이 사는 아파트의 방 하나에 머물며 한국 사람들이 실제로 어떻게 사는지 보세요. 저녁은 매일 함께 집밥을 먹어요.</span></p>
       </div>
       <div class="pillar">
         <div class="icon">🤝</div>
-        <h3>Our hobbies, your trip</h3>
-        <p>No tourist checklists. You join the things we actually do on our weekends — and we plan the days around your wishlist.</p>
+        <h3><span lang="en">Our hobbies, your trip</span><span lang="ko">우리의 취미가 당신의 여행</span></h3>
+        <p><span lang="en">No tourist checklists. You join the things we actually do on our weekends — and we plan the days around your wishlist.</span><span lang="ko">관광지 체크리스트는 없어요. 우리가 주말마다 실제로 하는 일에 함께하고, 일정은 하고 싶은 것에 맞춰 짭니다.</span></p>
       </div>
       <div class="pillar">
         <div class="icon">🍲</div>
-        <h3>Where we actually eat</h3>
-        <p>Our own list of places — every one tried, tested and loved by us. No tourist traps.</p>
+        <h3><span lang="en">Where we actually eat</span><span lang="ko">우리가 진짜 먹는 곳</span></h3>
+        <p><span lang="en">Our own list of places — every one tried, tested and loved by us. No tourist traps.</span><span lang="ko">직접 먹어 보고 좋아하게 된 곳만 모은 우리만의 목록. 관광객용 식당은 없어요.</span></p>
       </div>
     </div>
   </div>
@@ -178,74 +195,76 @@
 
 <section class="about">
   <div class="wrap">
-    <span class="pilot">Pilot · we're testing this now</span>
-    <h2>Why we're doing this</h2>
-    <p class="lead">Most travel services show you a city. We'd like you to feel it — local culture as it really is: what people here do for fun, and what they actually eat.</p>
-    <p>My Korean Friend is a small test. We're stepping away from the usual tours and packages to try something simpler and more personal.</p>
-    <p>So a host here isn't someone who lays on activities for you to consume. A host shares their own hobbies, the places they think are wonderful and the restaurants they love — and builds the trip with you, so you enjoy it together.</p>
-    <p><b>The goal: experience Busan properly, the way the people who live here do.</b></p>
+    <span class="pilot"><span lang="en">Pilot · we're testing this now</span><span lang="ko">시범 운영 중</span></span>
+    <h2><span lang="en">Why we're doing this</span><span lang="ko">우리가 이 일을 하는 이유</span></h2>
+    <p class="lead"><span lang="en">Most travel services show you a city. We'd like you to feel it — local culture as it really is: what people here do for fun, and what they actually eat.</span><span lang="ko">대부분의 여행 서비스는 도시를 보여 줍니다. 우리는 도시를 느끼게 하고 싶어요. 현지 문화를 있는 그대로 — 이곳 사람들이 무엇을 즐기고, 무엇을 먹는지를요.</span></p>
+    <p><span lang="en">My Korean Friend is a small test. We're stepping away from the usual tours and packages to try something simpler and more personal.</span><span lang="ko">My Korean Friend는 지금 작은 시험으로 진행하고 있습니다. 흔한 투어와 패키지에서 벗어나, 더 단순하고 더 사람 냄새 나는 여행을 해 보려 합니다.</span></p>
+    <p><span lang="en">So a host here isn't someone who lays on activities for you to consume. A host shares their own hobbies, the places they think are wonderful and the restaurants they love — and builds the trip with you, so you enjoy it together.</span><span lang="ko">그래서 호스트는 준비해 둔 것을 손님이 즐기기만 하게 하는 사람이 아닙니다. 자신의 취미, 멋지다고 생각하는 장소, 좋아하는 맛집을 나누고, 손님과 함께 공감하는 여행을 만드는 사람입니다.</span></p>
+    <p><b><span lang="en">The goal: experience Busan properly, the way the people who live here do.</span><span lang="ko">목표는 하나, 부산을 제대로 — 이곳에 사는 사람들처럼 — 체험하는 것입니다.</span></b></p>
   </div>
 </section>
 
 <section id="together">
   <div class="wrap">
-    <h2>What we can do together</h2>
-    <p class="lead">Pick what you like on the application form — we'll shape your days around it. <span class="todo">[TODO: 상품 구성 확정 후 수정]</span></p>
+    <h2><span lang="en">What we can do together</span><span lang="ko">함께 할 수 있는 것</span></h2>
+    <p class="lead"><span lang="en">Pick what you like on the application form — we'll shape your days around it.</span><span lang="ko">신청서에서 하고 싶은 것을 고르면, 그에 맞춰 일정을 짭니다.</span> <span class="todo">[TODO: 상품 구성 확정 후 수정]</span></p>
     <div class="grid grid-cards">
       <div class="card featured">
         <div class="emoji">🦀</div>
-        <h3>Snow crab trip to Yeongdeok</h3>
-        <div class="meta"><span class="chip">Full day</span><span class="chip">Anyone</span></div>
-        <p>Our favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</p>
+        <h3><span lang="en">Snow crab trip to Yeongdeok</span><span lang="ko">영덕 대게 여행</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
+        <p><span lang="en">Our favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</span><span lang="ko">우리가 가장 좋아하는 나들이. 동해안을 따라 올라가 시장에서 대게를 고르고, 근처 식당에서 쪄 먹어요.</span></p>
       </div>
       <div class="card featured">
         <div class="emoji">🎱</div>
-        <h3>3-cushion billiards</h3>
-        <div class="meta"><span class="chip">2–3 hours</span><span class="chip">Anyone</span></div>
-        <p>Korea is a 3-cushion powerhouse, with a billiard hall on almost every street. Play at our neighbourhood hall with premium cues.</p>
+        <h3><span lang="en">3-cushion billiards</span><span lang="ko">3쿠션 당구</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">2–3 hours</span><span lang="ko">2–3시간</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
+        <p><span lang="en">Korea is a 3-cushion powerhouse, with a billiard hall on almost every street. Play at our neighbourhood hall with premium cues.</span><span lang="ko">한국은 3쿠션 강국이라 거의 모든 동네에 당구장이 있어요. 동네 당구장에서 좋은 큐로 함께 쳐요.</span></p>
       </div>
       <div class="card featured">
         <div class="emoji">🌃</div>
-        <h3>Dawn view from Hwangnyeongsan</h3>
-        <div class="meta"><span class="chip">Early morning</span><span class="chip">Easy</span></div>
-        <p>What we think is the best view in Busan — the whole city lit up before sunrise.</p>
+        <h3><span lang="en">Dawn view from Hwangnyeongsan</span><span lang="ko">황령산 새벽 야경</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">Early morning</span><span lang="ko">이른 아침</span></span><span class="chip"><span lang="en">Easy</span><span lang="ko">쉬움</span></span></div>
+        <p><span lang="en">What we think is the best view in Busan — the whole city lit up before sunrise.</span><span lang="ko">우리가 생각하는 부산 최고의 전망 — 해 뜨기 전, 불빛으로 가득한 도시 전체.</span></p>
       </div>
       <div class="card">
         <div class="emoji">🥾</div>
-        <h3>Coastal trekking</h3>
-        <div class="meta"><span class="chip">Full day</span><span class="chip">Good fitness</span></div>
-        <p>Three coastal routes we walk ourselves.</p>
-        <p>Recommended route: <span class="todo">[TODO: 추천 코스]</span></p>
-        <a class="card-btn" href="map/?lang=en">See trekking routes →</a>
+        <h3><span lang="en">Coastal trekking</span><span lang="ko">해안 트레킹</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
+        <p><span lang="en">Three coastal routes we walk ourselves.</span><span lang="ko">우리가 직접 걷는 해안 코스 세 곳.</span></p>
+        <p><span lang="en">Recommended route:</span><span lang="ko">추천 코스:</span> <span class="todo">[TODO: 추천 코스]</span></p>
+        <a class="card-btn" lang="en" href="map/?lang=en">See trekking routes →</a>
+        <a class="card-btn" lang="ko" href="map/">트레킹 코스 보기 →</a>
       </div>
       <div class="card">
         <div class="emoji">🚴</div>
-        <h3>Cycling</h3>
-        <div class="meta"><span class="chip">Full day</span><span class="chip">Good fitness</span></div>
-        <p>Daejeo Eco Park to Taejongdae and back, or Daejeo to Mt. Muchuk in Gimhae.</p>
-        <p>Recommended route: <span class="todo">[TODO: 추천 코스]</span></p>
-        <a class="card-btn" href="map/?type=bike&amp;lang=en">See cycling routes →</a>
+        <h3><span lang="en">Cycling</span><span lang="ko">자전거</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
+        <p><span lang="en">Daejeo Eco Park to Taejongdae and back, or Daejeo to Mt. Muchuk in Gimhae.</span><span lang="ko">대저생태공원 ↔ 태종대 왕복, 또는 대저 → 김해 무척산.</span></p>
+        <p><span lang="en">Recommended route:</span><span lang="ko">추천 코스:</span> <span class="todo">[TODO: 추천 코스]</span></p>
+        <a class="card-btn" lang="en" href="map/?type=bike&amp;lang=en">See cycling routes →</a>
+        <a class="card-btn" lang="ko" href="map/?type=bike">자전거길 보기 →</a>
       </div>
       <div class="card">
         <div class="emoji">🍜</div>
-        <h3>Busan soul food</h3>
-        <div class="meta"><span class="chip">A meal</span><span class="chip">Anyone</span></div>
-        <p>Dwaeji-gukbap (pork rice soup), yang-gopchang (grilled tripe), kkomjangeo (grilled sea eel) — at our regular spots. <span class="todo">[TODO: 맛집 리스트]</span></p>
+        <h3><span lang="en">Busan soul food</span><span lang="ko">부산 소울 푸드</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">A meal</span><span lang="ko">한 끼</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
+        <p><span lang="en">Dwaeji-gukbap (pork rice soup), yang-gopchang (grilled tripe), kkomjangeo (grilled sea eel) — at our regular spots.</span><span lang="ko">돼지국밥, 양곱창, 꼼장어 — 우리 단골집에서.</span> <span class="todo">[TODO: 맛집 리스트]</span></p>
       </div>
       <div class="card">
         <div class="emoji">🏃</div>
-        <h3>Running &amp; trail running</h3>
-        <div class="meta"><span class="chip">1–3 hours</span><span class="chip">Runners</span></div>
-        <p>Coastal morning runs or Busan's mountain trails with our running host.</p>
-        <p>Recommended route: <span class="todo">[TODO: 추천 코스]</span></p>
-        <a class="card-btn" href="map/?type=run&amp;lang=en">See running &amp; trail routes →</a>
+        <h3><span lang="en">Running &amp; trail running</span><span lang="ko">러닝·트레일런</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">1–3 hours</span><span lang="ko">1–3시간</span></span><span class="chip"><span lang="en">Runners</span><span lang="ko">러너</span></span></div>
+        <p><span lang="en">Coastal morning runs or Busan's mountain trails with our running host.</span><span lang="ko">러닝 호스트와 함께하는 해안 아침 러닝, 또는 부산의 산길 트레일.</span></p>
+        <p><span lang="en">Recommended route:</span><span lang="ko">추천 코스:</span> <span class="todo">[TODO: 추천 코스]</span></p>
+        <a class="card-btn" lang="en" href="map/?type=run&amp;lang=en">See running &amp; trail routes →</a>
+        <a class="card-btn" lang="ko" href="map/?type=run">러닝·트레일런 코스 보기 →</a>
       </div>
       <div class="card">
         <div class="emoji">🍚</div>
-        <h3>Home-cooked dinners</h3>
-        <div class="meta"><span class="chip">Every day</span><span class="chip">Included</span></div>
-        <p>Korean home food at our family table. Tell us what you can't eat and we'll cook around it.</p>
-        <div class="cost">Included in your stay.</div>
+        <h3><span lang="en">Home-cooked dinners</span><span lang="ko">집밥 저녁</span></h3>
+        <div class="meta"><span class="chip"><span lang="en">Every day</span><span lang="ko">매일</span></span><span class="chip"><span lang="en">Included</span><span lang="ko">포함</span></span></div>
+        <p><span lang="en">Korean home food at our family table. Tell us what you can't eat and we'll cook around it.</span><span lang="ko">우리 가족 식탁에서 먹는 한국 집밥. 못 먹는 음식을 알려 주면 빼고 요리해요.</span></p>
       </div>
     </div>
   </div>
@@ -253,106 +272,106 @@
 
 <section style="padding-top:0">
   <div class="wrap">
-    <h2>Five days, for example</h2>
+    <h2><span lang="en">Five days, for example</span><span lang="ko">5일 일정 예시</span></h2>
     <ul class="days">
-      <li><b>Day 1</b><span>Arrive, settle into your room, walk around the neighbourhood — dinner at home.</span></li>
-      <li><b>Day 2</b><span>Dawn view from Hwangnyeongsan → pork rice soup breakfast → 3-cushion in the afternoon → grilled tripe at night.</span></li>
-      <li><b>Day 3</b><span>Coastal trekking, 20–30 km → grilled sea eel to finish the day.</span></li>
-      <li><b>Day 4</b><span>Snow crab trip to Yeongdeok.</span></li>
-      <li><b>Day 5</b><span>Morning run or a bike ride — then see you again, friend.</span></li>
+      <li><b><span lang="en">Day 1</span><span lang="ko">1일차</span></b><span><span lang="en">Arrive, settle into your room, walk around the neighbourhood — dinner at home.</span><span lang="ko">도착해서 방에 짐을 풀고 동네 산책 — 저녁은 집에서.</span></span></li>
+      <li><b><span lang="en">Day 2</span><span lang="ko">2일차</span></b><span><span lang="en">Dawn view from Hwangnyeongsan → pork rice soup breakfast → 3-cushion in the afternoon → grilled tripe at night.</span><span lang="ko">황령산 새벽 야경 → 아침은 돼지국밥 → 오후엔 3쿠션 → 밤엔 양곱창.</span></span></li>
+      <li><b><span lang="en">Day 3</span><span lang="ko">3일차</span></b><span><span lang="en">Coastal trekking, 20–30 km → grilled sea eel to finish the day.</span><span lang="ko">해안 트레킹 20–30km → 마무리는 꼼장어.</span></span></li>
+      <li><b><span lang="en">Day 4</span><span lang="ko">4일차</span></b><span><span lang="en">Snow crab trip to Yeongdeok.</span><span lang="ko">영덕 대게 여행.</span></span></li>
+      <li><b><span lang="en">Day 5</span><span lang="ko">5일차</span></b><span><span lang="en">Morning run or a bike ride — then see you again, friend.</span><span lang="ko">아침 러닝이나 자전거 — 그리고 또 만나요, 친구.</span></span></li>
     </ul>
   </div>
 </section>
 
 <section class="price" id="price">
   <div class="wrap">
-    <h2>Price</h2>
-    <p class="lead">One simple price per day. Your room, our home-cooked meals and your host's whole day are included.</p>
+    <h2><span lang="en">Price</span><span lang="ko">가격</span></h2>
+    <p class="lead"><span lang="en">One simple price per day. Your room, our home-cooked meals and your host's whole day are included.</span><span lang="ko">하루 한 가지 가격. 방, 집밥, 그리고 하루 종일 함께하는 호스트가 포함돼요.</span></p>
     <div class="tiers">
       <div class="tier">
-        <div>1 guest · per day</div>
+        <div><span lang="en">1 guest · per day</span><span lang="ko">1명 · 하루</span></div>
         <div class="amount">₩300,000</div>
-        <div class="usd">about US$217</div>
+        <div class="usd"><span lang="en">about US$217</span><span lang="ko">약 US$217</span></div>
       </div>
       <div class="tier">
-        <div>2 guests · per day</div>
+        <div><span lang="en">2 guests · per day</span><span lang="ko">2명 · 하루</span></div>
         <div class="amount">₩400,000</div>
-        <div class="usd">about US$290 — US$145 each</div>
+        <div class="usd"><span lang="en">about US$290 — US$145 each</span><span lang="ko">약 US$290 — 1인당 US$145</span></div>
       </div>
       <div class="tier launch">
-        <div><strong>Launch offer</strong> · first <span class="todo">[TODO: N]</span> guests</div>
+        <div><span lang="en"><strong>Launch offer</strong> · first</span><span lang="ko"><strong>오픈 기념가</strong> · 선착순</span> <span class="todo">[TODO: N]</span><span lang="en"> guests</span><span lang="ko">명</span></div>
         <div class="amount">₩200,000</div>
-        <div class="usd">₩300,000 for 2 guests · just leave us an honest review</div>
+        <div class="usd"><span lang="en">₩300,000 for 2 guests · just leave us an honest review</span><span lang="ko">2명은 ₩300,000 · 솔직한 후기만 남겨 주세요</span></div>
       </div>
     </div>
     <div class="inout">
       <div>
-        <h3>Included</h3>
+        <h3><span lang="en">Included</span><span lang="ko">포함</span></h3>
         <ul>
-          <li>Private room in our home</li>
-          <li>Home-cooked meals</li>
-          <li>Your host, all day</li>
-          <li>Translation by our daughter</li>
+          <li><span lang="en">Private room in our home</span><span lang="ko">우리 집의 개인 방</span></li>
+          <li><span lang="en">Home-cooked meals</span><span lang="ko">집밥</span></li>
+          <li><span lang="en">Your host, all day</span><span lang="ko">하루 종일 함께하는 호스트</span></li>
+          <li><span lang="en">Translation by our daughter</span><span lang="ko">딸의 통역</span></li>
         </ul>
       </div>
       <div>
-        <h3>You pay on the day, at cost</h3>
+        <h3><span lang="en">You pay on the day, at cost</span><span lang="ko">당일 실비로 내는 것</span></h3>
         <ul>
-          <li>Restaurants and drinks</li>
-          <li>Snow crab, billiard tables</li>
-          <li>Transport, fuel and tolls</li>
+          <li><span lang="en">Restaurants and drinks</span><span lang="ko">식당과 음료</span></li>
+          <li><span lang="en">Snow crab, billiard tables</span><span lang="ko">대게, 당구장 요금</span></li>
+          <li><span lang="en">Transport, fuel and tolls</span><span lang="ko">교통비, 기름값, 통행료</span></li>
         </ul>
       </div>
     </div>
-    <p class="note">For comparison, a private guided day in Busan usually costs US$400 or more — without a bed or dinner. US$ amounts are approximate. Stays of 1–5 days, up to 2 guests. Payment: <span class="todo">[TODO: 결제 방법]</span> · Cancellation: <span class="todo">[TODO: 취소·환불 규정]</span></p>
+    <p class="note"><span lang="en">For comparison, a private guided day in Busan usually costs US$400 or more — without a bed or dinner. US$ amounts are approximate. Stays of 1–5 days, up to 2 guests. Payment:</span><span lang="ko">참고로 부산에서 개인 가이드를 하루 쓰면 보통 US$400 이상이고, 숙소와 저녁은 포함되지 않아요. 달러 금액은 대략입니다. 1–5일, 최대 2명. 결제:</span> <span class="todo">[TODO: 결제 방법]</span> · <span lang="en">Cancellation:</span><span lang="ko">취소:</span> <span class="todo">[TODO: 취소·환불 규정]</span></p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2>How it works</h2>
+    <h2><span lang="en">How it works</span><span lang="ko">진행 방법</span></h2>
     <ol class="steps">
-      <li><h3>Apply</h3><p>Tell us your dates and your wishlist — what you'd love to do in Busan.</p></li>
-      <li><h3>Say hello</h3><p>A short video call so we can meet each other before anything is booked.</p></li>
-      <li><h3>Plan together</h3><p>We match our hobbies to your wishlist and send you a day-by-day plan.</p></li>
-      <li><h3>Come as a guest</h3><p>…and leave as a friend.</p></li>
+      <li><h3><span lang="en">Apply</span><span lang="ko">신청</span></h3><p><span lang="en">Tell us your dates and your wishlist — what you'd love to do in Busan.</span><span lang="ko">날짜와 부산에서 해 보고 싶은 것을 알려 주세요.</span></p></li>
+      <li><h3><span lang="en">Say hello</span><span lang="ko">인사</span></h3><p><span lang="en">A short video call so we can meet each other before anything is booked.</span><span lang="ko">예약하기 전에 짧은 영상 통화로 서로 얼굴을 봐요.</span></p></li>
+      <li><h3><span lang="en">Plan together</span><span lang="ko">함께 계획</span></h3><p><span lang="en">We match our hobbies to your wishlist and send you a day-by-day plan.</span><span lang="ko">우리의 취미와 하고 싶은 것을 맞춰 하루하루 일정을 보내 드려요.</span></p></li>
+      <li><h3><span lang="en">Come as a guest</span><span lang="ko">손님으로 오세요</span></h3><p><span lang="en">…and leave as a friend.</span><span lang="ko">…그리고 친구가 되어 돌아가세요.</span></p></li>
     </ol>
   </div>
 </section>
 
 <section class="trust">
   <div class="wrap">
-    <h2>Good to know</h2>
+    <h2><span lang="en">Good to know</span><span lang="ko">알아 두면 좋은 것</span></h2>
     <ul>
-      <li><h3>A family home</h3><p>Our daughter lives with us — you'll be staying with a family, not a stranger.</p></li>
-      <li><h3>Meet before you book</h3><p>We always have a video call first. If it doesn't feel right for either side, no hard feelings.</p></li>
-      <li><h3>Filming is your choice</h3><p>We love sharing our adventures on YouTube, but only with your consent. Say no and nothing changes. Faces can be blurred.</p></li>
-      <li><h3>Travel insurance</h3><p>Please bring travel insurance that covers hiking and cycling if you plan to join those days.</p></li>
+      <li><h3><span lang="en">A family home</span><span lang="ko">가족이 사는 집</span></h3><p><span lang="en">Our daughter lives with us — you'll be staying with a family, not a stranger.</span><span lang="ko">딸도 함께 살아요 — 낯선 사람이 아니라 한 가족의 집에 머무는 거예요.</span></p></li>
+      <li><h3><span lang="en">Meet before you book</span><span lang="ko">예약 전에 먼저 만나요</span></h3><p><span lang="en">We always have a video call first. If it doesn't feel right for either side, no hard feelings.</span><span lang="ko">항상 영상 통화를 먼저 해요. 어느 쪽이든 맞지 않다고 느끼면 부담 없이 그만둬요.</span></p></li>
+      <li><h3><span lang="en">Filming is your choice</span><span lang="ko">촬영은 원할 때만</span></h3><p><span lang="en">We love sharing our adventures on YouTube, but only with your consent. Say no and nothing changes. Faces can be blurred.</span><span lang="ko">우리 여행을 유튜브에 나누는 걸 좋아하지만, 동의할 때만 찍어요. 싫다고 해도 달라지는 건 없어요. 얼굴은 흐리게 처리할 수 있어요.</span></p></li>
+      <li><h3><span lang="en">Travel insurance</span><span lang="ko">여행자 보험</span></h3><p><span lang="en">Please bring travel insurance that covers hiking and cycling if you plan to join those days.</span><span lang="ko">트레킹·자전거 일정에 함께하려면 하이킹과 자전거를 보장하는 여행자 보험을 준비해 주세요.</span></p></li>
     </ul>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2>Questions</h2>
+    <h2><span lang="en">Questions</span><span lang="ko">자주 묻는 질문</span></h2>
     <details>
-      <summary>Do I need to speak Korean?</summary>
-      <p>No. Our daughter translates, and we use a translation app for the rest. Plenty of laughing helps too.</p>
+      <summary><span lang="en">Do I need to speak Korean?</span><span lang="ko">한국어를 할 줄 알아야 하나요?</span></summary>
+      <p><span lang="en">No. Our daughter translates, and we use a translation app for the rest. Plenty of laughing helps too.</span><span lang="ko">아니요. 딸이 통역하고, 나머지는 번역 앱을 써요. 많이 웃는 것도 도움이 되고요.</span></p>
     </details>
     <details>
-      <summary>How fit do I need to be?</summary>
-      <p>The trekking and cycling days need decent fitness. Everything else — crab, billiards, food, the dawn view — is for anyone.</p>
+      <summary><span lang="en">How fit do I need to be?</span><span lang="ko">체력이 얼마나 필요한가요?</span></summary>
+      <p><span lang="en">The trekking and cycling days need decent fitness. Everything else — crab, billiards, food, the dawn view — is for anyone.</span><span lang="ko">트레킹과 자전거 날은 어느 정도 체력이 필요해요. 대게, 당구, 맛집, 새벽 야경은 누구나 할 수 있어요.</span></p>
     </details>
     <details>
-      <summary>What is the room like? Where is your home?</summary>
+      <summary><span lang="en">What is the room like? Where is your home?</span><span lang="ko">방은 어떤가요? 집은 어디인가요?</span></summary>
       <p><span class="todo">[TODO: 방·침대·화장실, 동네·가까운 지하철역]</span></p>
     </details>
     <details>
-      <summary>Can I join the activities without staying?</summary>
+      <summary><span lang="en">Can I join the activities without staying?</span><span lang="ko">숙박 없이 체험만 할 수 있나요?</span></summary>
       <p><span class="todo">[TODO: 체험만 하는 손님을 받을지]</span></p>
     </details>
     <details>
-      <summary>How do I pay, and what if I need to cancel?</summary>
+      <summary><span lang="en">How do I pay, and what if I need to cancel?</span><span lang="ko">결제는 어떻게 하고, 취소하면 어떻게 되나요?</span></summary>
       <p><span class="todo">[TODO: 결제 방법·취소 규정]</span></p>
     </details>
   </div>
@@ -360,18 +379,34 @@
 
 <section class="final" id="apply">
   <div class="wrap">
-    <h2>Come as a guest. Leave as a friend.</h2>
-    <p>Tell us your dates and your wishlist. We'll get back to you within <span class="todo">[TODO: 답장 기한]</span>.</p>
-    <p style="margin-top:24px"><a class="btn btn-primary" href="FORM_URL">Apply to stay</a></p>
+    <h2><span lang="en">Come as a guest. Leave as a friend.</span><span lang="ko">손님으로 와서, 친구가 되어 돌아가세요.</span></h2>
+    <p><span lang="en">Tell us your dates and your wishlist. We'll get back to you within</span><span lang="ko">날짜와 하고 싶은 것을 알려 주세요.</span> <span class="todo">[TODO: 답장 기한]</span><span lang="en">.</span><span lang="ko"> 안에 답장 드릴게요.</span></p>
+    <p style="margin-top:24px"><a class="btn btn-primary" href="FORM_URL"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a></p>
     <p class="note"><span class="todo">[TODO: 구글 폼 링크를 FORM_URL 자리에]</span></p>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    My Korean Friend · Busan, South Korea · <span class="todo">[TODO: 이메일·인스타·유튜브]</span>
+    My Korean Friend · <span lang="en">Busan, South Korea</span><span lang="ko">대한민국 부산</span> · <span class="todo">[TODO: 이메일·인스타·유튜브]</span>
   </div>
 </footer>
 
+<script>
+  // 오른쪽 위 EN / 한국어 버튼: 새로 불러오지 않고 바꾸며, 주소의 ?lang=ko 도 같이 바꿔 링크로 공유할 수 있게 한다
+  const TITLES = { en: "My Korean Friend — Stay with a Busan family", ko: "My Korean Friend — 부산 가족 집에 머무는 여행" };
+  function setLang(l) {
+    const root = document.documentElement;
+    root.dataset.lang = l;
+    root.lang = l;
+    document.title = TITLES[l];
+    const q = new URLSearchParams(location.search);
+    l === "ko" ? q.set("lang", "ko") : q.delete("lang");
+    history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+    document.querySelectorAll(".langs a").forEach((a) => a.setAttribute("aria-current", a.dataset.l === l));
+  }
+  document.querySelectorAll(".langs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); setLang(a.dataset.l); });
+  setLang(document.documentElement.dataset.lang);
+</script>
 </body>
 </html>
