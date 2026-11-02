@@ -75,11 +75,11 @@
   .pillar { padding: 26px; border-radius: var(--radius); background: var(--sand); }
   .pillar .icon { font-size: 1.8rem; }
 
-  /* Hosts */
-  .hosts { background: var(--sand); }
-  .host { background: var(--paper); border-radius: var(--radius); padding: 26px; border: 1px solid var(--line); }
-  .avatar { width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--sea)); color: #fff; display: grid; place-items: center; font-family: "Fraunces", serif; font-size: 1.6rem; margin-bottom: 14px; }
-  .role { color: var(--coral); font-weight: 600; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+  /* About */
+  .about { background: var(--sand); }
+  .about p { max-width: 720px; }
+  .pilot { display: inline-block; margin-bottom: 14px; padding: 3px 12px; border: 1.5px solid var(--coral); border-radius: 999px;
+    color: var(--coral); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
 
   /* Activities */
   .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: #fff; display: flex; flex-direction: column; }
@@ -176,29 +176,14 @@
   </div>
 </section>
 
-<section class="hosts">
+<section class="about">
   <div class="wrap">
-    <h2>Meet your hosts</h2>
-    <div class="grid grid-3">
-      <div class="host">
-        <div class="avatar">H</div>
-        <div class="role">Your host · 47</div>
-        <h3><span class="todo">[TODO: 이름]</span></h3>
-        <p>A developer who spends weekends trekking 30 km along Busan's coast, cycling out to the mountains and playing 3-cushion billiards (average 0.8). He owns two premium cues — you're welcome to use them.</p>
-      </div>
-      <div class="host">
-        <div class="avatar">D</div>
-        <div class="role">Translator &amp; filmmaker · 25</div>
-        <h3><span class="todo">[TODO: 이름]</span></h3>
-        <p>His daughter joins your days, translates, and films the adventure for our channel — only if you want to be on camera. <span class="todo">[TODO: 딸의 취미 메뉴]</span></p>
-      </div>
-      <div class="host">
-        <div class="avatar">R</div>
-        <div class="role">Running host · 44</div>
-        <h3><span class="todo">[TODO: 이름]</span></h3>
-        <p>A developer and runner who'll take you along the coast at sunrise or up Busan's mountain trails. <span class="todo">[TODO: 러닝 코스]</span></p>
-      </div>
-    </div>
+    <span class="pilot">Pilot · we're testing this now</span>
+    <h2>Why we're doing this</h2>
+    <p class="lead">Most travel services show you a city. We'd like you to feel it — local culture as it really is: what people here do for fun, and what they actually eat.</p>
+    <p>My Korean Friend is a small test. We're stepping away from the usual tours and packages to try something simpler and more personal.</p>
+    <p>So a host here isn't someone who lays on activities for you to consume. A host shares their own hobbies, the places they think are wonderful and the restaurants they love — and builds the trip with you, so you enjoy it together.</p>
+    <p><b>The goal: experience Busan properly, the way the people who live here do.</b></p>
   </div>
 </section>
 
