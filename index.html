@@ -111,6 +111,8 @@
   .card[data-photos] { position: relative; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
   .card[data-photos]:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,30,46,.10); }
   .card .ph { position: absolute; top: 18px; right: 18px; font-size: .8rem; color: var(--muted); }
+  .card.off { opacity: .7; }
+  .chip.off { background: #fde4da; color: #b4421c; font-weight: 600; }
 
   /* Activity modal */
   dialog.act { width: min(720px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: none; border-radius: var(--radius); overflow: auto; }
@@ -374,6 +376,13 @@
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Best in autumn</span><span lang="ko">가을 추천</span></span></div>
         <p><span lang="en">In autumn the ridge at Ganwoljae turns silver with swaying silver grass. About an hour by car from Busan, in the Yeongnam Alps — a chain of peaks over 1,000 m.</span><span lang="ko">가을이면 산마루가 은빛 억새로 뒤덮이는 간월재예요. 부산에서 차로 1시간 남짓, 1,000m가 넘는 산들이 이어진 영남알프스에 있어요.</span></p>
       </div>
+      <div class="card off" data-photos="baseball">
+        <div class="emoji">⚾</div>
+        <h3><span lang="en">Lotte Giants game at Sajik Stadium</span><span lang="ko">사직야구장 롯데 자이언츠 응원</span></h3>
+        <div class="meta"><span class="chip off"><span lang="en">Off-season · not available now</span><span lang="ko">비시즌 · 지금은 신청 불가</span></span><span class="chip"><span lang="en">Evening</span><span lang="ko">저녁</span></span></div>
+        <p><span lang="en">Feel Busan's famous love of baseball up close — sing "Busan Gull" with the whole stadium and cheer for the Lotte Giants at Sajik.</span><span lang="ko">부산 사람들의 뜨거운 야구 사랑을 가장 가까이에서 느껴요. 사직야구장에서 관중 모두와 '부산 갈매기'를 부르며 롯데 자이언츠를 응원해요.</span></p>
+        <p><span lang="en">Available only during the baseball season (spring to autumn). It's the off-season now.</span><span lang="ko">프로야구 시즌(봄~가을)에만 신청할 수 있어요. 지금은 비시즌이에요.</span></p>
+      </div>
     </div>
   </div>
 </section>
@@ -512,7 +521,7 @@
   <div class="act-body"></div>
 </dialog>
 
-<script src="activities.js?v=20261103d"></script>
+<script src="activities.js?v=20261103e"></script>
 <script>
   // 오른쪽 위 EN / 한국어 버튼: 새로 불러오지 않고 바꾸며, 주소의 ?lang=ko 도 같이 바꿔 링크로 공유할 수 있게 한다
   const TITLES = { en: "My Korean Friend — Stay with a Busan family", ko: "My Korean Friend — 부산 가족 집에 머무는 여행" };

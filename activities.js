@@ -422,5 +422,28 @@ window.ACTIVITY_PHOTOS = {
     "ko": "겨울의 간월재"
    }
   }
+ ],
+ "baseball": [
+  {
+   "src": "images/activities/baseball-1.jpg",
+   "artist": "히히히",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%EB%B6%80%EC%82%B0%EB%A1%AF%EB%8D%B0.jpg",
+   "title": "File:부산롯데.jpg"
+  },
+  {
+   "src": "images/activities/baseball-2.jpg",
+   "artist": "Cheolstar",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Busan_Sajik_Stadium_20080706.JPG",
+   "title": "File:Busan Sajik Stadium 20080706.JPG"
+  },
+  {
+   "src": "images/activities/baseball-3.jpg",
+   "artist": "@Squeeze_bunt, 머엉 (meo-eong)",
+   "license": "CC BY 2.0 kr",
+   "url": "https://commons.wikimedia.org/wiki/File:20170826_Lotte_Giants_in_Sajik.jpg",
+   "title": "File:20170826 Lotte Giants in Sajik.jpg"
+  }
  ]
 };
