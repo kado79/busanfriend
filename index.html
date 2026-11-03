@@ -15,7 +15,10 @@
 <meta name="description" content="Stay with a family in Busan, Korea. Share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — and eat where locals eat. Come as a guest, leave with a Korean friend.">
 <meta property="og:title" content="My Korean Friend — Stay with a Busan family">
 <meta property="og:description" content="Come as a guest. Leave with a Korean friend. 1–5 days in Busan with a local family and their hobbies.">
-<meta property="og:image" content="images/gwangan-bridge.jpg">
+<meta property="og:image" content="https://kado79.github.io/mykoreanfriend/images/gwangan-bridge.jpg">
+<meta property="og:url" content="https://kado79.github.io/mykoreanfriend/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <script>
   // 화면을 그리기 전에 언어를 정해 두어야 영어가 잠깐 보였다 바뀌지 않는다
   document.documentElement.dataset.lang = new URLSearchParams(location.search).get("lang") === "ko" ? "ko" : "en";
@@ -530,11 +533,12 @@
   const act = document.getElementById("act");
   const actImg = act.querySelector("img"), actCredit = act.querySelector(".act-credit"), actCap = act.querySelector(".act-cap");
   const actBody = act.querySelector(".act-body"), actCount = act.querySelector(".act-count");
-  let photos = [], at = 0;
+  let photos = [], at = 0, actTitle = "";
   function showPhoto(i) {
     at = (i + photos.length) % photos.length;
     const p = photos[at];
     actImg.src = p.src;
+    actImg.alt = p.caption ? p.caption[document.documentElement.dataset.lang] : actTitle;
     actCount.textContent = `${at + 1} / ${photos.length}`;
     act.querySelectorAll(".act-nav, .act-count").forEach((el) => el.hidden = photos.length < 2);
     // 사진 설명(코스 순서 등)은 있는 사진에만, 출처는 위키미디어 사진에만 붙인다
@@ -554,9 +558,15 @@
     badge.className = "ph";
     badge.textContent = "📷 " + list.length;
     card.appendChild(badge);
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target === card) { e.preventDefault(); card.click(); }
+    });
     card.addEventListener("click", (e) => {
       if (e.target.closest("a")) return;
       photos = list;
+      actTitle = [...card.querySelectorAll("h3 > span")].find((x) => x.getClientRects().length)?.textContent || "";
       actBody.replaceChildren(...[...card.querySelectorAll(":scope > h3, :scope > .meta, :scope > p, :scope > a.card-btn")].map((n) => n.cloneNode(true)));
       showPhoto(0);
       act.showModal();
@@ -569,6 +579,12 @@
   act.querySelector(".act-next").onclick = () => showPhoto(at + 1);
   act.querySelector(".act-close").onclick = () => act.close();
   act.addEventListener("click", (e) => { if (e.target === act) act.close(); });
+  act.addEventListener("close", () => {
+    const q = new URLSearchParams(location.search);
+    if (!q.has("a")) return;
+    q.delete("a");
+    history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+  });
   act.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") showPhoto(at - 1);
     if (e.key === "ArrowRight") showPhoto(at + 1);
