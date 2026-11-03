@@ -120,6 +120,7 @@
   .act-count { position: absolute; right: 12px; bottom: 10px; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,.45); color: #fff; font-size: .8rem; }
   .act-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border: none; border-radius: 50%;
     background: rgba(255,255,255,.9); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+  .act-cap { margin: 10px 20px 0; font-weight: 600; }
   .act-credit { margin: 6px 20px 0; font-size: .75rem; color: var(--muted); }
   .act-credit a { color: var(--muted); }
   .act-body { padding: 14px 20px 22px; }
@@ -234,6 +235,7 @@
         <h3><span lang="en">Snow crab trip to Yeongdeok</span><span lang="ko">영덕 대게 여행</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Your host's favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</span><span lang="ko">호스트가 가장 좋아하는 나들이. 동해안을 따라 올라가 시장에서 대게를 고르고, 근처 식당에서 쪄 먹어요.</span></p>
+        <p><span lang="en">Course: snow crab → Haeparang Park → Hwajin Beach (Pohang)</span><span lang="ko">코스: 대게 → 해파랑공원 → 포항 화진해수욕장</span></p>
         <p><span lang="en">On the way, stop at a Korean highway rest area — a food-and-snack culture all of its own.</span><span lang="ko">한국의 휴게소를 방문해서 한국만의 휴게소 문화를 느껴 보세요.</span></p>
       </div>
       <div class="card featured" data-photos="billiards">
@@ -395,7 +397,7 @@
     <h2><span lang="en">How it works</span><span lang="ko">진행 방법</span></h2>
     <ol class="steps">
       <li><h3><span lang="en">Apply</span><span lang="ko">신청</span></h3><p><span lang="en">Use the Apply button and fill in the Google Form.</span><span lang="ko">신청하기를 통해 구글 폼에 맞게 작성해 주세요.</span></p></li>
-      <li><h3><span lang="en">Reply</span><span lang="ko">답장</span></h3><p><span lang="en">We'll check and reply by email. You can also chat with us on WhatsApp, Instagram, Telegram or KakaoTalk.</span><span lang="ko">확인 후 메일로 답변을 드려요. WhatsApp, 인스타그램, 텔레그램, 카카오톡으로 채팅 가능합니다.</span></p></li>
+      <li><h3><span lang="en">Reply</span><span lang="ko">답장</span></h3><p><span lang="en">After checking your Google Form, we'll contact you by email, WhatsApp, Instagram, Telegram, KakaoTalk or similar.</span><span lang="ko">구글 폼 확인 후 메일, WhatsApp, 인스타그램, 텔레그램, 카카오톡 등으로 연락 드립니다.</span></p></li>
       <li><h3><span lang="en">Plan together</span><span lang="ko">함께 계획</span></h3><p><span lang="en">Your host matches their hobbies to your wishlist and sends you a day-by-day plan.</span><span lang="ko">호스트의 취미와 하고 싶은 것을 맞춰 하루하루 일정을 보내 드려요.</span></p></li>
       <li><h3><span lang="en">Come as a guest</span><span lang="ko">손님으로 오세요</span></h3><p><span lang="en">…and leave as a friend.</span><span lang="ko">…그리고 친구가 되어 돌아가세요.</span></p></li>
     </ol>
@@ -462,6 +464,7 @@
     <button class="act-nav act-next" type="button" aria-label="Next photo">›</button>
     <span class="act-count"></span>
   </div>
+  <p class="act-cap"></p>
   <p class="act-credit"></p>
   <div class="act-body"></div>
 </dialog>
@@ -485,7 +488,7 @@
 
   // 메뉴 카드를 누르면 사진과 설명을 모달로 보여 준다 (카드 안의 지도 링크는 그대로 열린다)
   const act = document.getElementById("act");
-  const actImg = act.querySelector("img"), actCredit = act.querySelector(".act-credit");
+  const actImg = act.querySelector("img"), actCredit = act.querySelector(".act-credit"), actCap = act.querySelector(".act-cap");
   const actBody = act.querySelector(".act-body"), actCount = act.querySelector(".act-count");
   let photos = [], at = 0;
   function showPhoto(i) {
@@ -494,10 +497,16 @@
     actImg.src = p.src;
     actCount.textContent = `${at + 1} / ${photos.length}`;
     act.querySelectorAll(".act-nav, .act-count").forEach((el) => el.hidden = photos.length < 2);
-    const link = document.createElement("a");
-    link.href = p.url; link.target = "_blank"; link.rel = "noopener";
-    link.textContent = p.license + " · Wikimedia Commons";
-    actCredit.replaceChildren("Photo: " + p.artist + " · ", link);
+    // 사진 설명(코스 순서 등)은 있는 사진에만, 출처는 위키미디어 사진에만 붙인다
+    actCap.hidden = !p.caption;
+    actCap.replaceChildren(...(p.caption ? ["en", "ko"].map((l) => Object.assign(document.createElement("span"), { lang: l, textContent: p.caption[l] })) : []));
+    actCredit.hidden = !p.license;
+    if (p.license) {
+      const link = document.createElement("a");
+      link.href = p.url; link.target = "_blank"; link.rel = "noopener";
+      link.textContent = p.license + " · Wikimedia Commons";
+      actCredit.replaceChildren("Photo: " + p.artist + " · ", link);
+    }
   }
   document.querySelectorAll("#together .card[data-photos]").forEach((card) => {
     const list = window.ACTIVITY_PHOTOS[card.dataset.photos];

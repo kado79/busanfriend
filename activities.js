@@ -6,14 +6,33 @@ window.ACTIVITY_PHOTOS = {
    "artist": "donchili",
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Daegae-jjim_2.jpg",
-   "title": "File:Daegae-jjim 2.jpg"
+   "title": "File:Daegae-jjim 2.jpg",
+   "caption": {
+    "en": "1. Snow crab",
+    "ko": "1. 대게"
+   }
   },
   {
    "src": "images/activities/crab-2.jpg",
-   "artist": "Togabi",
-   "license": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Chionoecetes_opilio(Female)-1.JPG",
-   "title": "File:Chionoecetes opilio(Female)-1.JPG"
+   "artist": "jbl4430",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%EC%98%81%EB%8D%95_%EB%8C%80%EA%B2%8C.jpg",
+   "title": "File:영덕 대게.jpg",
+   "caption": {
+    "en": "2. Ganggu Port crab street — Haeparang Park is on this harbour",
+    "ko": "2. 강구항 대게거리 — 해파랑공원이 있는 항구"
+   }
+  },
+  {
+   "src": "images/activities/crab-3.jpg",
+   "artist": "Choi2451",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hwajin_Beach,_Pohang.jpg",
+   "title": "File:Hwajin Beach, Pohang.jpg",
+   "caption": {
+    "en": "3. Hwajin Beach, Pohang",
+    "ko": "3. 포항 화진해수욕장"
+   }
   }
  ],
  "billiards": [
@@ -41,25 +60,7 @@ window.ACTIVITY_PHOTOS = {
  ],
  "nightview": [
   {
-   "src": "images/activities/nightview-1.jpg",
-   "artist": "Chelsea Hicks",
-   "license": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:View_of_Busan_from_up_above_at_night.jpg",
-   "title": "File:View of Busan from up above at night.jpg"
-  },
-  {
-   "src": "images/activities/nightview-2.jpg",
-   "artist": "lumoplank",
-   "license": "CC0",
-   "url": "https://commons.wikimedia.org/wiki/File:Gwangan_Bridge_and_Gwangalli_Beach_-_Gwangalli2721.jpg",
-   "title": "File:Gwangan Bridge and Gwangalli Beach - Gwangalli2721.jpg"
-  },
-  {
-   "src": "images/activities/nightview-3.jpg",
-   "artist": "Fredrik Rubensson",
-   "license": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Night_in_a_part_of_Busan_by_the_mountain.jpg",
-   "title": "File:Night in a part of Busan by the mountain.jpg"
+   "src": "images/activities/nightview-1.jpg"
   }
  ],
  "trekking": [
@@ -182,24 +183,24 @@ window.ACTIVITY_PHOTOS = {
  "dinner": [
   {
    "src": "images/activities/dinner-1.jpg",
-   "artist": "Matt Scott",
-   "license": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Korean_dishes-Banchan-01.jpg",
-   "title": "File:Korean dishes-Banchan-01.jpg"
+   "artist": "revi",
+   "license": "CC BY 2.0 kr",
+   "url": "https://commons.wikimedia.org/wiki/File:%EC%82%BC%EA%B2%B9%EC%82%B4_001.jpg",
+   "title": "File:삼겹살 001.jpg"
   },
   {
    "src": "images/activities/dinner-2.jpg",
-   "artist": "by magicinprogress at Flickr",
-   "license": "CC BY 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Korean_cuisine-Banchan-12.jpg",
-   "title": "File:Korean cuisine-Banchan-12.jpg"
+   "artist": "이동원",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Samgyeopsal_table.jpg",
+   "title": "File:Samgyeopsal table.jpg"
   },
   {
    "src": "images/activities/dinner-3.jpg",
-   "artist": "stuart spivack (a flickr user)",
-   "license": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Banchans.jpg",
-   "title": "File:Banchans.jpg"
+   "artist": "대경라이프",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Samgyeopsal-gui-ssam.jpg",
+   "title": "File:Samgyeopsal-gui-ssam.jpg"
   }
  ],
  "clinic": [
