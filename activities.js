@@ -13,14 +13,14 @@ window.ACTIVITY_PHOTOS = {
    }
   },
   {
-   "src": "images/activities/crab-2.jpg",
+   "src": "images/activities/crab-haeparang-park.jpg",
    "caption": {
     "en": "Haeparang Park, Yeongdeok",
     "ko": "영덕 해파랑공원"
    }
   },
   {
-   "src": "images/activities/crab-3.jpg",
+   "src": "images/activities/crab-hwajin-beach.jpg",
    "caption": {
     "en": "Hwajin Beach, Pohang",
     "ko": "포항 화진해수욕장"
@@ -29,12 +29,12 @@ window.ACTIVITY_PHOTOS = {
  ],
  "billiards": [
   {
-   "src": "images/activities/billiards-1.jpg"
+   "src": "images/activities/billiards-hall.jpg"
   }
  ],
  "nightview": [
   {
-   "src": "images/activities/nightview-1.jpg"
+   "src": "images/activities/nightview-hwangnyeongsan.jpg"
   }
  ],
  "trekking": [
@@ -156,21 +156,21 @@ window.ACTIVITY_PHOTOS = {
  ],
  "dinner": [
   {
-   "src": "images/activities/dinner-1.jpg",
+   "src": "images/activities/dinner-samgyeopsal-1.jpg",
    "artist": "revi",
    "license": "CC BY 2.0 kr",
    "url": "https://commons.wikimedia.org/wiki/File:%EC%82%BC%EA%B2%B9%EC%82%B4_001.jpg",
    "title": "File:삼겹살 001.jpg"
   },
   {
-   "src": "images/activities/dinner-2.jpg",
+   "src": "images/activities/dinner-samgyeopsal-2.jpg",
    "artist": "이동원",
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Samgyeopsal_table.jpg",
    "title": "File:Samgyeopsal table.jpg"
   },
   {
-   "src": "images/activities/dinner-3.jpg",
+   "src": "images/activities/dinner-samgyeopsal-3.jpg",
    "artist": "대경라이프",
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Samgyeopsal-gui-ssam.jpg",
