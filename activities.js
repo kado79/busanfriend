@@ -8,54 +8,28 @@ window.ACTIVITY_PHOTOS = {
    "url": "https://commons.wikimedia.org/wiki/File:Daegae-jjim_2.jpg",
    "title": "File:Daegae-jjim 2.jpg",
    "caption": {
-    "en": "1. Snow crab",
-    "ko": "1. 대게"
+    "en": "Snow crab",
+    "ko": "대게"
    }
   },
   {
    "src": "images/activities/crab-2.jpg",
-   "artist": "jbl4430",
-   "license": "CC BY 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:%EC%98%81%EB%8D%95_%EB%8C%80%EA%B2%8C.jpg",
-   "title": "File:영덕 대게.jpg",
    "caption": {
-    "en": "2. Ganggu Port crab street — Haeparang Park is on this harbour",
-    "ko": "2. 강구항 대게거리 — 해파랑공원이 있는 항구"
+    "en": "Haeparang Park, Yeongdeok",
+    "ko": "영덕 해파랑공원"
    }
   },
   {
    "src": "images/activities/crab-3.jpg",
-   "artist": "Choi2451",
-   "license": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Hwajin_Beach,_Pohang.jpg",
-   "title": "File:Hwajin Beach, Pohang.jpg",
    "caption": {
-    "en": "3. Hwajin Beach, Pohang",
-    "ko": "3. 포항 화진해수욕장"
+    "en": "Hwajin Beach, Pohang",
+    "ko": "포항 화진해수욕장"
    }
   }
  ],
  "billiards": [
   {
-   "src": "images/activities/billiards-1.jpg",
-   "artist": "Fortepan",
-   "license": "Public domain",
-   "url": "https://commons.wikimedia.org/wiki/File:Colorful,_biliard_table,_seal_ring_Fortepan_12369.jpg",
-   "title": "File:Colorful, biliard table, seal ring Fortepan 12369.jpg"
-  },
-  {
-   "src": "images/activities/billiards-2.jpg",
-   "artist": "David Monniaux",
-   "license": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:A_carom_table_in_Caf%C3%A9_Z%C3%A9phyr,_Paris,_France,_14_January_2007.jpg",
-   "title": "File:A carom table in Café Zéphyr, Paris, France, 14 January 2007.jpg"
-  },
-  {
-   "src": "images/activities/billiards-3.jpg",
-   "artist": "LezFraniak",
-   "license": "CC BY-SA 3.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Carom_Billiards_EC_Brandenburg_Havel-GER_2013-04-20_26-Forthomme.JPG",
-   "title": "File:Carom Billiards EC Brandenburg Havel-GER 2013-04-20 26-Forthomme.JPG"
+   "src": "images/activities/billiards-1.jpg"
   }
  ],
  "nightview": [
