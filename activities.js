@@ -254,5 +254,51 @@ window.ACTIVITY_PHOTOS = {
    "url": "https://commons.wikimedia.org/wiki/File:Gukje_Market_Busan_South_Korea_02.jpg",
    "title": "File:Gukje Market Busan South Korea 02.jpg"
   }
+ ],
+ "temple": [
+  {
+   "src": "images/activities/temple-yonggungsa-1.jpg",
+   "artist": "Anna L Martin",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Haedong_Yonggungsa_Temple,_Busan,_South_Korea.jpg",
+   "title": "File:Haedong Yonggungsa Temple, Busan, South Korea.jpg",
+   "caption": {
+    "en": "Haedong Yonggungsa",
+    "ko": "해동용궁사"
+   }
+  },
+  {
+   "src": "images/activities/temple-yonggungsa-2.jpg",
+   "artist": "Christian Bolz",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Haedong_Yonggungsa_Temple_near_Busan.jpg",
+   "title": "File:Haedong Yonggungsa Temple near Busan.jpg",
+   "caption": {
+    "en": "Haedong Yonggungsa",
+    "ko": "해동용궁사"
+   }
+  },
+  {
+   "src": "images/activities/temple-samgwangsa-1.jpg",
+   "artist": "lumoplank",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Samgwangsa,_Busan_-_Samgwangsa2805.jpg",
+   "title": "File:Samgwangsa, Busan - Samgwangsa2805.jpg",
+   "caption": {
+    "en": "Samgwangsa",
+    "ko": "삼광사"
+   }
+  },
+  {
+   "src": "images/activities/temple-samgwangsa-2.jpg",
+   "artist": "Brit in Seoul",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Samgwangsa_temple,_Busan.jpg",
+   "title": "File:Samgwangsa temple, Busan.jpg",
+   "caption": {
+    "en": "Samgwangsa",
+    "ko": "삼광사"
+   }
+  }
  ]
 };
