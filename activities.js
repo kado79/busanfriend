@@ -300,5 +300,127 @@ window.ACTIVITY_PHOTOS = {
     "ko": "삼광사"
    }
   }
+ ],
+ "drone": [
+  {
+   "src": "images/activities/drone-1.jpg",
+   "artist": "lumoplank",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gwangan_Bridge_and_Gwangalli_Beach_-_Gwangalli2721.jpg",
+   "title": "File:Gwangan Bridge and Gwangalli Beach - Gwangalli2721.jpg",
+   "caption": {
+    "en": "Gwangalli Beach and Gwangan Bridge at night — where the drone show happens",
+    "ko": "밤의 광안리 해변과 광안대교 — 드론쇼가 열리는 곳"
+   }
+  },
+  {
+   "src": "images/activities/drone-2.jpg",
+   "artist": "Jeena Paradies",
+   "license": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Gwangan_Bridge_seen_Marine_City_at_Night_02.jpg",
+   "title": "File:Gwangan Bridge seen Marine City at Night 02.jpg",
+   "caption": {
+    "en": "Gwangalli Beach and Gwangan Bridge at night — where the drone show happens",
+    "ko": "밤의 광안리 해변과 광안대교 — 드론쇼가 열리는 곳"
+   }
+  }
+ ],
+ "sanseong": [
+  {
+   "src": "images/activities/sanseong-1.jpg",
+   "artist": "amanderson2",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Geumjeong_Mountain_Fortress_in_Busan.png",
+   "title": "File:Geumjeong Mountain Fortress in Busan.png",
+   "caption": {
+    "en": "Geumjeongsanseong fortress",
+    "ko": "금정산성"
+   }
+  },
+  {
+   "src": "images/activities/sanseong-2.jpg",
+   "artist": "Christophe95",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Geumjeong_Fortress_North_Gate.jpg",
+   "title": "File:Geumjeong Fortress North Gate.jpg",
+   "caption": {
+    "en": "North Gate",
+    "ko": "금정산성 북문"
+   }
+  },
+  {
+   "src": "images/activities/sanseong-3.jpg",
+   "artist": "jinho kim",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Makgeolli_4.jpg",
+   "title": "File:Makgeolli 4.jpg",
+   "caption": {
+    "en": "Makgeolli",
+    "ko": "막걸리"
+   }
+  }
+ ],
+ "unmemorial": [
+  {
+   "src": "images/activities/unmemorial-1.jpg",
+   "artist": "Gre regiment",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Flags_of_the_nations_that_participated_at_the_Korean_War_in_the_UN_Memorial_Cemetery_at_Busan_2.jpg",
+   "title": "File:Flags of the nations that participated at the Korean War in the UN Memorial Cemetery at Busan 2.jpg"
+  },
+  {
+   "src": "images/activities/unmemorial-2.jpg",
+   "artist": "Dudva",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:United_Nations_Memorial_Cemetery_in_Korea_2023_april_(4).jpg",
+   "title": "File:United Nations Memorial Cemetery in Korea 2023 april (4).jpg"
+  }
+ ],
+ "gamcheon": [
+  {
+   "src": "images/activities/gamcheon-1.jpg",
+   "artist": "Basile Morin",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Colorful_houses_in_Gamcheon_Culture_Village_at_sunset_in_Busan_South_Korea.jpg",
+   "title": "File:Colorful houses in Gamcheon Culture Village at sunset in Busan South Korea.jpg"
+  },
+  {
+   "src": "images/activities/gamcheon-2.jpg",
+   "artist": "Christophe95",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gamcheon_Culture_Village_1.jpg",
+   "title": "File:Gamcheon Culture Village 1.jpg"
+  },
+  {
+   "src": "images/activities/gamcheon-3.jpg",
+   "artist": "xiquinhosilva",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gamcheon_Culture_Village_-_55503487490.jpg",
+   "title": "File:Gamcheon Culture Village - 55503487490.jpg"
+  }
+ ],
+ "ganwoljae": [
+  {
+   "src": "images/activities/ganwoljae-1.jpg",
+   "artist": "Lcarrion88",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Yeongnam_Alps.jpg",
+   "title": "File:Yeongnam Alps.jpg",
+   "caption": {
+    "en": "Yeongnam Alps in autumn",
+    "ko": "가을의 영남알프스"
+   }
+  },
+  {
+   "src": "images/activities/ganwoljae-2.jpg",
+   "artist": "SCILLA KIM from Busan, Republic of Korea",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ganwoljae_Yeongnam_Alps_(24993988016).jpg",
+   "title": "File:Ganwoljae Yeongnam Alps (24993988016).jpg",
+   "caption": {
+    "en": "Ganwoljae in winter",
+    "ko": "겨울의 간월재"
+   }
+  }
  ]
 };
