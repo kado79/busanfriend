@@ -75,6 +75,16 @@
   .langs a { padding: 6px 12px; border-radius: 999px; font-size: .85rem; font-weight: 600; color: var(--muted); text-decoration: none; }
   .langs a[aria-current="true"] { background: var(--coral); color: #fff; }
 
+  /* 화면 아래 고정 신청 바 — 맨 아래 신청 칸이 보이면 숨긴다 */
+  .apply-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; background: rgba(15,30,46,.96);
+    box-shadow: 0 -2px 14px rgba(0,0,0,.2); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); transition: transform .25s ease; }
+  .apply-bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0; }
+  .apply-bar .note { color: #fff; font-size: .9rem; font-weight: 500; opacity: .9; }
+  .apply-bar .btn { padding: 11px 22px; white-space: nowrap; }
+  .apply-bar.off { transform: translateY(110%); }
+  @media (prefers-reduced-motion: reduce) { .apply-bar { transition: none; } }
+  body { padding-bottom: 72px; }
+
   /* Buttons */
   .btn { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; transition: transform .15s ease; }
   .btn:hover { transform: translateY(-1px); }
@@ -516,6 +526,13 @@
   </div>
 </footer>
 
+<div class="apply-bar" id="apply-bar">
+  <div class="wrap">
+    <span class="note"><span lang="en">First 3 groups · launch offer</span><span lang="ko">선착순 3팀 · 오픈 기념가</span></span>
+    <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScdpY-XMy31YSVgo-QB9ll7o360fwCY_KCjKlSM-sfYP1S_AQ/viewform" target="_blank" rel="noopener"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a>
+  </div>
+</div>
+
 <dialog class="act" id="act" aria-label="Photos">
   <button class="act-close" type="button" aria-label="Close">×</button>
   <div class="act-photo">
@@ -545,6 +562,12 @@
   }
   document.querySelectorAll(".langs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); setLang(a.dataset.l); });
   setLang(document.documentElement.dataset.lang);
+
+  // 아래 고정 신청 바: 맨 아래 신청 칸(#apply)이 화면에 보이는 동안에는 숨긴다
+  const applyBar = document.getElementById("apply-bar"), applySec = document.getElementById("apply");
+  if (applyBar && applySec && "IntersectionObserver" in window) {
+    new IntersectionObserver((es) => es.forEach((e) => applyBar.classList.toggle("off", e.isIntersecting)), { threshold: 0.2 }).observe(applySec);
+  }
 
   // 메뉴 카드를 누르면 사진과 설명을 모달로 보여 준다 (카드 안의 지도 링크는 그대로 열린다)
   const act = document.getElementById("act");
