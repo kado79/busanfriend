@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <title>Busan Friend</title>
+  <rect width="1000" height="1000" rx="220" fill="#0f1e2e"/>
+  <path d="M250 480 L500 270 L750 480" fill="none" stroke="#f6efe4" stroke-width="78" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M230 610 Q500 870 770 610" fill="none" stroke="#f2683c" stroke-width="78" stroke-linecap="round"/>
+</svg>
