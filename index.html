@@ -121,6 +121,8 @@
   /* About */
   .about { background: var(--sand); }
   .about p { max-width: 720px; }
+  .letter p { font-size: 1.08rem; }
+  .letter .sign { margin-top: 26px; font-family: "Fraunces", "Noto Serif KR", serif; font-weight: 600; font-size: 1.2rem; color: var(--sea); }
   .pilot { display: inline-block; margin-bottom: 14px; padding: 3px 12px; border: 1.5px solid var(--coral); border-radius: 999px;
     color: var(--coral); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
 
@@ -165,6 +167,8 @@
   .price { background: var(--night); color: #fff; }
   .price h2 { color: #fff; }
   .price .lead { color: rgba(255,255,255,.75); }
+  .price .why-price { font-size: 1rem; margin-top: -4px; }
+  .price .why-price a { color: #fff; }
   .tiers { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 26px; }
   .tier { border-radius: var(--radius); padding: 26px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); }
   .tier .amount { font-family: "Fraunces", serif; font-size: 2.4rem; }
@@ -225,6 +229,19 @@
   </div>
 </header>
 
+<section class="about letter" id="why">
+  <div class="wrap">
+    <span class="pilot"><span lang="en">Pilot · we're testing this now</span><span lang="ko">시범 운영 중</span></span>
+    <h2><span lang="en">Why I started Busan Friend</span><span lang="ko">제가 Busan Friend 를 시작한 이유</span></h2>
+    <p><span lang="en">I've travelled abroad a few times. The famous sights were fun, but what I really wanted to see was how people there actually live — what they eat on an ordinary day, where they spend their weekends. And the best food for the price? Only locals know those places. I always wished I had a local friend to take me.</span><span lang="ko">해외여행을 몇 번 다녀 보니, 유명한 유적지도 재미있었지만 정말 보고 싶었던 건 그곳 사람들이 사는 모습이었어요. 평소에 무엇을 먹는지, 주말엔 어디서 시간을 보내는지요. 그리고 가성비 좋은 진짜 맛집은 현지인만 알잖아요. 그런 곳에 데려가 줄 현지 친구가 한 명 있었으면 하고 늘 바랐어요.</span></p>
+    <p><span lang="en">I also wanted to play the sports local people play, share a hobby with someone, and come home with a real friend — not just photos.</span><span lang="ko">현지 사람들이 즐기는 운동도 같이 하고, 취미가 맞으면 함께 나누고, 사진만이 아니라 진짜 친구를 얻어 돌아오고 싶었어요.</span></p>
+    <p><span lang="en">So why is there a price, if this is about friendship? I thought about it for a long time. A host who spends the whole day with you can't go to work that day, and a host who can't make a living can't keep doing this. Then nobody gets the real local trip. So guests pay a modest daily fee. It lets your host take the day off and be fully with you, enjoy their own hobbies with a new friend, and keep Busan Friend going for the next traveller.</span><span lang="ko">친구를 사귀자면서 왜 돈을 받느냐고요? 저도 오래 고민했어요. 호스트가 하루 종일 함께 있으면 그날은 일을 할 수 없고, 생활이 안 되면 이 일을 계속할 수 없어요. 그러면 누구도 진짜 로컬 여행을 할 수 없죠. 그래서 소정의 하루 비용을 받기로 했어요. 그 덕분에 호스트는 하루를 온전히 비워 함께하고, 새 친구와 좋아하는 취미를 즐기며, 다음 여행자를 위해 이 일을 이어 갈 수 있어요.</span></p>
+    <p><span lang="en">I know this isn't for everyone. If it feels fair to you, I'd love to have you. I live in Busan with my family. I love 3-cushion billiards, coastal trekking and our winter snow crab trips, and I know where the good, cheap food is. I'd like to be the local friend I always wished I had.</span><span lang="ko">모두에게 맞는 방식은 아니라는 걸 알아요. 이 마음을 이해해 주신다면 꼭 오세요. 저는 가족과 함께 부산에 살고, 3쿠션 당구와 해안 트레킹, 겨울 대게 여행을 좋아하고, 싸고 맛있는 집을 알아요. 제가 늘 바랐던 그 현지 친구가 되어 드리고 싶어요.</span></p>
+    <p><span lang="en">And if this pilot goes well, I'll build a proper website and an app, so that many more hosts and guests can meet and become friends. That's my goal.</span><span lang="ko">그래서 이 파일럿 프로그램이 잘 진행되면, 웹사이트와 앱을 만들 거예요. 더 많은 호스트와 게스트가 만나 친구가 될 수 있도록요. 이게 제 목표예요.</span></p>
+    <p class="sign"><span lang="en">— Donghyun, your host in Busan</span><span lang="ko">— 부산에서, 호스트 동현</span></p>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <h2><span lang="en">Not a tour. Not a hotel.</span><span lang="ko">투어도 아니고, 호텔도 아닙니다.</span></h2>
@@ -246,17 +263,6 @@
         <p><span lang="en">Your host's own list of places — every one tried, tested and loved. No tourist traps.</span><span lang="ko">호스트가 직접 먹어 보고 좋아하게 된 곳만 모은 목록. 관광객용 식당은 없어요.</span></p>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="about">
-  <div class="wrap">
-    <span class="pilot"><span lang="en">Pilot · we're testing this now</span><span lang="ko">시범 운영 중</span></span>
-    <h2><span lang="en">Why the hosts do this</span><span lang="ko">호스트가 이 일을 하는 이유</span></h2>
-    <p class="lead"><span lang="en">Most travel services show you a city. The hosts want you to feel it — local culture as it really is: what people here do for fun, and what they actually eat.</span><span lang="ko">대부분의 여행 서비스는 도시를 보여 줍니다. 호스트는 도시를 느끼게 하고 싶어 해요. 현지 문화를 있는 그대로 — 이곳 사람들이 무엇을 즐기고, 무엇을 먹는지를요.</span></p>
-    <p><span lang="en">Busan Friend is a small test. We're stepping away from the usual tours and packages to try something simpler and more personal.</span><span lang="ko">Busan Friend는 지금 작은 시험으로 진행하고 있습니다. 흔한 투어와 패키지에서 벗어나, 더 단순하고 더 사람 냄새 나는 여행을 해 보려 합니다.</span></p>
-    <p><span lang="en">So a host here isn't someone who lays on activities for you to consume. A host shares their own hobbies, the places they think are wonderful and the restaurants they love — and builds the trip with you, so you enjoy it together.</span><span lang="ko">그래서 호스트는 준비해 둔 것을 손님이 즐기기만 하게 하는 사람이 아닙니다. 자신의 취미, 멋지다고 생각하는 장소, 좋아하는 맛집을 나누고, 손님과 함께 공감하는 여행을 만드는 사람입니다.</span></p>
-    <p><b><span lang="en">The goal: experience Busan properly, the way the people who live here do.</span><span lang="ko">목표는 하나, 부산을 제대로 — 이곳에 사는 사람들처럼 — 체험하는 것입니다.</span></b></p>
   </div>
 </section>
 
@@ -433,6 +439,7 @@
   <div class="wrap">
     <h2><span lang="en">Price</span><span lang="ko">가격</span></h2>
     <p class="lead"><span lang="en">One simple price per day. Your room and your host's whole day are included.</span><span lang="ko">하루 한 가지 가격. 방과 하루 종일 함께하는 호스트가 포함돼요.</span></p>
+    <p class="lead why-price"><span lang="en">Why is there a price? So your host can take the whole day off and spend it with you — and keep doing this for the next traveller. <a href="#why">Read why I started this</a></span><span lang="ko">왜 비용을 받을까요? 호스트가 하루를 온전히 비워 함께하고, 다음 여행자를 위해서도 이 일을 이어 갈 수 있도록요. <a href="#why">시작한 이유 읽기</a></span></p>
     <div class="tiers">
       <div class="tier">
         <div><span lang="en">1 guest · per day</span><span lang="ko">1명 · 하루</span></div>
