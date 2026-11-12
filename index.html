@@ -36,176 +36,237 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Figtree:wght@400;500;600&family=Noto+Serif+KR:wght@500;600&display=swap" rel="stylesheet">
 <style>
+  /* 디자인 기준(2026-11-12 unslop): 색은 남색·모래·종이 + 주황(coral)은 신청 버튼·오픈 기념가·서명 곡선에만.
+     간격은 4px 단위, 글자 크기는 13/15/17/18/19/20 + 제목 2개(h1, h2 — 가격 숫자도 h2 크기), 굵기 400·500(버튼만 600), 알약 모양 없음 */
   :root {
+    --h2: clamp(1.75rem, 3.6vw, 2.5rem);
     --night: #0f1e2e;
     --sea: #12355b;
-    --teal: #1f7a7a;
     --coral: #f2683c;
     --sand: #f6efe4;
     --paper: #fffdf9;
     --ink: #1c2733;
     --muted: #5b6b7b;
     --line: #e6ddd0;
+    --hair: rgba(28,39,51,.12);
     --radius: 16px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
     margin: 0;
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     color: var(--ink);
     background: var(--paper);
     line-height: 1.6;
     font-size: 17px;
   }
-  h1, h2, h3 { font-family: "Fraunces", "Noto Serif KR", Georgia, serif; line-height: 1.2; margin: 0 0 .5em; }
-  h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); color: var(--sea); }
-  h3 { font-size: 1.2rem; }
-  p { margin: 0 0 1em; }
-  a { color: var(--teal); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
-  section { padding: 72px 0; }
-  .lead { font-size: 1.1rem; color: var(--muted); max-width: 680px; }
+  h1, h2, h3 { font-family: "Fraunces", "Noto Serif KR", Georgia, serif; font-weight: 500; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: var(--h2); color: var(--sea); margin-bottom: 32px; }
+  h2:has(+ .lead) { margin-bottom: 12px; }
+  h3 { font-size: 20px; }
+  p { margin: 0 0 16px; }
+  strong { font-weight: 600; }
+  a { color: var(--sea); text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; }
+  .hero :focus-visible, .price :focus-visible, .final :focus-visible, .apply-bar :focus-visible { outline-color: #fff; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0; }
+  .lead { font-size: 19px; line-height: 30px; color: var(--muted); max-width: 680px; margin-bottom: 32px; }
+  .lead:has(+ .lead) { margin-bottom: 12px; }
   .todo { background: #ffe680; color: #5a4600; padding: 0 4px; border-radius: 4px; font-size: .9em; }
 
   /* Language */
   html:not([data-lang="ko"]) body [lang="ko"], html[data-lang="ko"] body [lang="en"] { display: none !important; }
   html[data-lang="ko"] body { word-break: keep-all; }
-  .langs { position: fixed; top: 14px; right: 14px; z-index: 50; display: flex; gap: 2px; padding: 3px;
-    border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 2px 12px rgba(0,0,0,.18); }
-  .langs a { padding: 6px 12px; border-radius: 999px; font-size: .85rem; font-weight: 600; color: var(--muted); text-decoration: none; }
-  .langs a[aria-current="true"] { background: var(--coral); color: #fff; }
+  .langs { position: fixed; top: 16px; right: 16px; z-index: 50; display: flex; gap: 4px; padding: 4px;
+    border: 1px solid var(--hair); border-radius: 10px; background: rgba(255,255,255,.94); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .langs a { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    color: var(--muted); text-decoration: none; transition: background-color 150ms var(--ease), color 150ms var(--ease); }
+  .langs a:hover { color: var(--ink); }
+  .langs a[aria-current="true"] { background: var(--night); color: #fff; }
 
-  /* 화면 아래 고정 신청 바 — 맨 아래 신청 칸이 보이면 숨긴다 */
+  /* 화면 아래 고정 신청 바 — 첫 화면이나 맨 아래 신청 칸이 보이면 숨긴다 */
   .apply-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; background: rgba(15,30,46,.96);
-    box-shadow: 0 -2px 14px rgba(0,0,0,.2); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); transition: transform .25s ease; }
+    border-top: 1px solid rgba(255,255,255,.08); padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    transition: transform 300ms var(--ease); }
   .apply-bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0; }
-  .apply-bar .note { color: #fff; font-size: .9rem; font-weight: 500; opacity: .9; }
-  .apply-bar .btn { padding: 11px 22px; white-space: nowrap; }
+  .apply-bar .note { color: rgba(255,255,255,.78); font-size: 15px; }
+  .apply-bar .btn { height: 40px; padding: 0 16px; font-size: 15px; white-space: nowrap; }
   .apply-bar .acts { display: flex; gap: 8px; }
-  .apply-bar .btn-ghost { padding: 10px 16px; }
   @media (max-width: 600px) { .apply-bar .note { display: none; } .apply-bar .acts { flex: 1; justify-content: flex-end; } }
   .apply-bar.off { transform: translateY(110%); }
   @media (prefers-reduced-motion: reduce) { .apply-bar { transition: none; } }
-  body { padding-bottom: 72px; }
+  body { padding-bottom: 64px; }
 
   /* Buttons */
-  .btn { display: inline-block; padding: 14px 26px; border-radius: 999px; font-weight: 600; text-decoration: none; transition: transform .15s ease; }
-  .btn:hover { transform: translateY(-1px); }
-  .btn-primary { background: var(--coral); color: #fff; }
-  .btn-ghost { border: 1.5px solid rgba(255,255,255,.7); color: #fff; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 20px; border: 1px solid transparent;
+    border-radius: 10px; font-weight: 600; text-decoration: none;
+    transition: background-color 150ms var(--ease), border-color 150ms var(--ease), transform 100ms var(--ease); }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: var(--coral); color: var(--night); }
+  .btn-primary:hover { background: #e85d30; }
+  .btn-ghost { border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.06); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.12); }
 
-  /* Hero */
-  .hero {
-    min-height: 92vh; display: flex; align-items: flex-end; color: #fff;
-    background: linear-gradient(180deg, rgba(15,30,46,.15) 0%, rgba(15,30,46,.55) 55%, rgba(15,30,46,.92) 100%),
-                url("images/gwangan-bridge.jpg") center/cover no-repeat, var(--night);
-  }
-  .hero .wrap { padding-bottom: 64px; padding-top: 24px; }
-  .brand { display: inline-flex; align-items: center; gap: 12px; font-family: "Fraunces", serif; font-size: 1.3rem; font-weight: 600; letter-spacing: .02em; margin-bottom: 20px; }
-  .brand img { width: 46px; height: 46px; border-radius: 11px; box-shadow: 0 0 0 1px rgba(255,255,255,.18); }
-  .hero h1 { font-size: clamp(2.3rem, 7vw, 4.2rem); max-width: 820px; }
-  .hero p { font-size: 1.15rem; max-width: 640px; opacity: .92; }
-  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 18px; }
-  .facts { font-size: .95rem; opacity: .8; }
+  /* Hero — 왼쪽 글, 오른쪽 광안대교 사진 (휴대폰은 글 아래 사진).
+     높이는 640~720: 글 덩어리 위아래가 비지 않게 하고, 화면이 크면 아래에 편지 제목이 보여 내려 보게 한다 */
+  .hero { position: relative; display: flex; flex-direction: column; background: var(--night); color: #fff;
+    min-height: clamp(640px, 100vh, 720px); min-height: clamp(640px, 100svh, 720px); }
+  .hero-photo { position: absolute; top: 0; right: 0; width: 50%; height: 100%; object-fit: cover; object-position: 65% 50%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28%); mask-image: linear-gradient(90deg, transparent 0, #000 28%); }
+  .hero .wrap { position: relative; flex: 1; display: flex; flex-direction: column; width: 100%; padding-top: 16px; padding-bottom: 80px; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; }
+  .brand img { width: 40px; height: 40px; border-radius: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,.18); }
+  .hero-text { margin: auto 0; max-width: min(500px, 40vw); padding-top: 48px; }
+  .hero h1 { font-size: clamp(2.5rem, 5.2vw, 4rem); line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 16px; }
+  html[data-lang="ko"] .hero h1 { line-height: 1.2; }
+  .hero-sub { font-size: 19px; line-height: 30px; color: rgba(255,255,255,.78); margin: 0; }
+  .facts { font-size: 15px; color: rgba(255,255,255,.64); margin: 12px 0 0; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 
   /* Three pillars */
   .grid { display: grid; gap: 20px; }
-  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
   .grid-cards { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-  .pillar { padding: 26px; border-radius: var(--radius); background: var(--sand); }
-  .pillar .icon { font-size: 1.8rem; }
+  .pillar { padding-top: 20px; border-top: 1px solid var(--line); }
+  .pillar p { margin: 0; color: var(--muted); }
 
   /* About */
   .about { background: var(--sand); }
   .about p { max-width: 720px; }
-  .letter p { font-size: 1.08rem; }
-  .letter .sign { margin-top: 26px; font-family: "Fraunces", "Noto Serif KR", serif; font-weight: 600; font-size: 1.2rem; color: var(--sea); }
-  .pilot { display: inline-block; margin-bottom: 14px; padding: 3px 12px; border: 1.5px solid var(--coral); border-radius: 999px;
-    color: var(--coral); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+  .letter p { font-size: 18px; line-height: 1.7; }
+  .letter .sign { margin: 24px 0 0; font-family: "Fraunces", "Noto Serif KR", serif; font-weight: 500; font-size: 20px; color: var(--sea); }
+  .smile { display: block; }
+  .letter .smile { margin-top: 8px; }
+  .pilot { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--muted); font-size: 13px; font-weight: 500; }
+  .pilot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
 
-  /* Activities */
-  .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: #fff; display: flex; flex-direction: column; }
-  .card .emoji { font-size: 2rem; }
-  .card.featured { border-color: var(--coral); box-shadow: 0 6px 24px rgba(242,104,60,.12); }
-  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
-  .chip { font-size: .8rem; background: var(--sand); padding: 3px 10px; border-radius: 999px; color: var(--muted); }
-  .card-btn { align-self: flex-start; margin: auto 0 0; padding: 8px 16px; border: 1.5px solid var(--coral); border-radius: 999px;
-    color: var(--coral); font-weight: 600; font-size: .9rem; text-decoration: none; }
-  .card-btn:hover { background: var(--coral); color: #fff; }
-  .card[data-photos] { position: relative; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
-  .card[data-photos]:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,30,46,.10); }
-  .card .ph { position: absolute; top: 18px; right: 18px; font-size: .8rem; color: var(--muted); }
+  /* Activities — 대표 3개는 위에 넓은 사진, 나머지는 제목 옆 정사각 사진 (사진은 activities.js 의 첫 장) */
+  .card { position: relative; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: #fff;
+    transition: border-color 150ms var(--ease); }
+  .card h3 { margin: 0; }
+  .card p { margin: 12px 0 0; }
+  .card .meta + p { margin-top: 16px; }
+  .card.featured { display: flex; flex-direction: column; }
+  .card.featured .card-photo { width: calc(100% + 40px); max-width: none; height: auto; aspect-ratio: 16 / 10; margin: -20px -20px 16px; border-radius: 15px 15px 0 0; }
+  .card:not(.featured) { display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto repeat(3, auto) 1fr auto; column-gap: 16px; }
+  .card:not(.featured) .card-photo { grid-column: 1; grid-row: 1 / span 2; width: 64px; height: 64px; border-radius: 8px; }
+  .card:not(.featured) > h3 { grid-column: 2; grid-row: 1; }
+  .card:not(.featured) > .meta { grid-column: 2; grid-row: 2; align-self: start; }
+  .card:not(.featured) > p { grid-column: 1 / -1; }
+  .card:not(.featured) > .card-btn { grid-column: 1 / -1; grid-row: 7; }
+  .card:not(.featured) > .ph { grid-column: 1 / -1; grid-row: 7; justify-self: end; align-self: center; margin-top: 16px; }
+  /* 사진이 늦게 뜨는 동안: 카드 사진 21장의 평균 색(#6b7070)을 흰색과 섞은 회색으로 자리를 채운다 */
+  .card-photo { display: block; object-fit: cover; background: #c4c6c6; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
+  .chip { font-size: 13px; line-height: 16px; background: var(--sand); padding: 4px 8px; border-radius: 6px; color: var(--muted); }
+  .card-btn { justify-self: start; align-self: flex-start; display: inline-flex; align-items: center; margin-top: 16px; padding: 8px 12px;
+    border: 1px solid rgba(28,39,51,.16); border-radius: 8px; color: var(--sea); font-weight: 500; font-size: 15px; text-decoration: none;
+    transition: background-color 150ms var(--ease); }
+  .card-btn:hover { background: var(--sand); }
+  .card[data-photos] { cursor: pointer; }
+  .card[data-photos]:hover { border-color: rgba(28,39,51,.24); }
+  .card .ph { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; line-height: 20px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .card.featured .ph { position: absolute; top: 12px; right: 12px; padding: 4px 8px; line-height: 16px; border-radius: 6px; background: rgba(15,30,46,.72); color: #fff; }
   .card.off { opacity: .7; }
-  .chip.off { background: #fde4da; color: #b4421c; font-weight: 600; }
+  .chip.off { background: #fde4da; color: #b4421c; font-weight: 500; }
 
   /* Activity modal */
   dialog.act { width: min(720px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: none; border-radius: var(--radius); overflow: auto; }
   dialog.act::backdrop { background: rgba(15,30,46,.6); }
   .act-photo { position: relative; aspect-ratio: 3 / 2; background: var(--night); }
   .act-photo img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  .act-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: none; border-radius: 50%;
-    background: rgba(255,255,255,.85); font-size: 1.4rem; line-height: 1; cursor: pointer; }
-  .act-prev { left: 10px; }
-  .act-next { right: 10px; }
-  .act-count { position: absolute; right: 12px; bottom: 10px; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,.45); color: #fff; font-size: .8rem; }
-  .act-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border: none; border-radius: 50%;
-    background: rgba(255,255,255,.9); font-size: 1.3rem; line-height: 1; cursor: pointer; }
-  .act-cap { margin: 10px 20px 0; font-weight: 600; }
-  .act-credit { margin: 6px 20px 0; font-size: .75rem; color: var(--muted); }
+  .act-nav, .act-close { position: absolute; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: none; border-radius: 50%;
+    background: rgba(255,255,255,.88); color: var(--ink); cursor: pointer; transition: background-color 150ms var(--ease); }
+  .act-nav:hover, .act-close:hover { background: #fff; }
+  .act-nav { top: 50%; transform: translateY(-50%); }
+  .act-nav[hidden] { display: none; }
+  .act-prev { left: 12px; }
+  .act-next { right: 12px; }
+  .act-close { top: 12px; right: 12px; z-index: 2; }
+  .act-count { position: absolute; right: 12px; bottom: 12px; padding: 4px 8px; border-radius: 6px; background: rgba(15,30,46,.72); color: #fff;
+    font-size: 13px; line-height: 16px; font-variant-numeric: tabular-nums; }
+  .act-cap { margin: 12px 20px 0; font-weight: 500; }
+  .act-credit { margin: 4px 20px 0; font-size: 13px; color: var(--muted); }
+  .act-cap[hidden] + .act-credit { margin-top: 12px; }
   .act-credit a { color: var(--muted); }
-  .act-body { padding: 14px 20px 22px; }
+  .act-body { padding: 16px 20px 24px; }
+  .act-body p { margin: 12px 0 0; }
+  .act-body .card-btn { margin-right: 8px; }
 
   /* Days */
   .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-  .days li { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 12px; background: var(--sand); }
-  .days b { font-family: "Fraunces", "Noto Serif KR", serif; color: var(--sea); font-size: 1.1rem; }
+  .days li { display: grid; grid-template-columns: 80px 1fr; gap: 16px; align-items: start; padding: 16px 20px; border-radius: 12px; background: var(--sand); }
+  .days b { font-family: "Fraunces", "Noto Serif KR", serif; font-weight: 500; color: var(--sea); font-size: 18px; font-variant-numeric: tabular-nums; }
 
   /* Price */
   .price { background: var(--night); color: #fff; }
   .price h2 { color: #fff; }
   .price .lead { color: rgba(255,255,255,.75); }
-  .price .why-price { font-size: 1rem; margin-top: -4px; }
+  .price .why-price { font-size: 17px; line-height: 1.6; }
   .price .why-price a { color: #fff; }
-  .tiers { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 26px; }
-  .tier { border-radius: var(--radius); padding: 26px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); }
-  .tier .amount { font-family: "Fraunces", serif; font-size: 2.4rem; }
-  .tier .usd { opacity: .7; font-size: .95rem; }
-  .launch { background: var(--coral); border: none; }
-  .launch .usd { opacity: .9; }
-  .inout { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 26px; }
+  .tiers { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .tier { border-radius: var(--radius); padding: 24px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); }
+  .tier .amount { font-family: "Fraunces", serif; font-weight: 500; font-size: var(--h2); line-height: 1.2; margin: 8px 0 4px; font-variant-numeric: tabular-nums; }
+  .tier .usd { color: rgba(255,255,255,.7); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .launch { background: rgba(242,104,60,.10); border-color: rgba(242,104,60,.55); }
+  .launch strong, .launch .amount { color: var(--coral); }
+  .launch .usd { color: rgba(255,255,255,.8); }
+  .inout { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 48px; }
   .inout ul { margin: 0; padding-left: 20px; }
-  .inout .small { margin: 8px 0 0; font-size: .9rem; opacity: .75; }
-  .note { font-size: .9rem; opacity: .75; margin-top: 22px; }
+  .inout .small { margin: 8px 0 0; font-size: 15px; color: rgba(255,255,255,.75); }
+  .note { font-size: 15px; color: rgba(255,255,255,.75); margin: 32px 0 0; }
 
   /* Steps */
-  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .steps li { counter-increment: s; padding: 22px; border-radius: var(--radius); border: 1px solid var(--line); }
-  .steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 600; margin-bottom: 10px; }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .steps li { counter-increment: s; padding-top: 20px; border-top: 1px solid var(--line); }
+  .steps li::before { content: counter(s); display: block; margin-bottom: 12px; font-family: "Fraunces", serif; font-weight: 500; font-size: 20px; line-height: 1;
+    color: var(--sea); font-variant-numeric: tabular-nums; }
+  .steps p { margin: 0; color: var(--muted); }
 
   /* Trust */
   .trust { background: var(--sand); }
-  .trust ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .trust li { background: var(--paper); padding: 20px; border-radius: 12px; }
+  .trust ul { list-style: none; padding: 0; margin: 0; display: grid; column-gap: 48px; grid-template-columns: repeat(2, 1fr); }
+  .trust li { padding: 20px 0; border-top: 1px solid var(--hair); }
+  .trust p { margin: 0; color: var(--muted); }
 
   /* FAQ */
   details { border-bottom: 1px solid var(--line); padding: 16px 0; }
-  summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
-  details p { margin: 10px 0 0; color: var(--muted); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; list-style: none; cursor: pointer; font-weight: 500; font-size: 18px; }
+  summary::-webkit-details-marker { display: none; }
+  summary svg { flex: none; color: var(--muted); transition: transform 160ms var(--ease); }
+  details[open] summary svg { transform: rotate(180deg); }
+  details p { margin: 8px 0 0; color: var(--muted); }
+  .faq-ask { margin: 24px 0 0; }
+  .faq-ask a { font-weight: 500; }
 
   /* Final CTA + footer */
-  .final { text-align: center; background: linear-gradient(180deg, var(--sea), var(--night)); color: #fff; }
+  .final { text-align: center; background: var(--night); color: #fff; }
   .final h2 { color: #fff; }
-  .ask { margin-top: 18px; font-size: .95rem; opacity: .92; }
-  .ask a { color: #fff; font-weight: 600; text-underline-offset: 3px; }
-  .faq-ask { margin-top: 18px; }
-  .faq-ask a { color: var(--teal); font-weight: 600; }
-  footer { padding: 30px 0; font-size: .9rem; color: var(--muted); text-align: center; }
+  .final .smile { margin: 0 auto 16px; }
+  .final p { color: rgba(255,255,255,.85); }
+  .ask { margin-top: 16px; font-size: 15px; }
+  .ask a { color: #fff; font-weight: 500; }
+  footer { padding: 32px 0; font-size: 15px; color: var(--muted); text-align: center; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 760px) {
     section { padding: 56px 0; }
+    .wrap { padding: 0 16px; }
+    .hero { min-height: 0; }
+    .hero-photo { position: relative; order: 2; width: 100%; height: auto; aspect-ratio: 4 / 3; margin-top: 32px;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22%); mask-image: linear-gradient(180deg, transparent 0, #000 22%); }
+    .hero .wrap { padding-bottom: 0; }
+    .hero-text { margin: 0; max-width: none; padding-top: 32px; }
+    .card:not(.featured) { grid-template-columns: 56px 1fr; }
+    .card:not(.featured) .card-photo { width: 56px; height: 56px; }
+    .trust ul { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
     .days li { grid-template-columns: 1fr; gap: 4px; }
   }
 </style>
@@ -217,15 +278,19 @@
 </nav>
 
 <header class="hero">
+  <img class="hero-photo" src="images/gwangan-bridge.jpg" width="966" height="725" fetchpriority="high"
+    alt="Gwangan Bridge lit up at night, seen from Gwangalli Beach" data-alt-en="Gwangan Bridge lit up at night, seen from Gwangalli Beach" data-alt-ko="광안리 해변에서 본 밤의 광안대교">
   <div class="wrap">
-    <div class="brand"><img src="favicon.svg" alt="" width="46" height="46">Busan Friend</div>
-    <h1><span lang="en">Come as a guest. Leave with a Korean friend.</span><span lang="ko">손님으로 와서, 한국인 친구가 되어 돌아가세요.</span></h1>
-    <p><span lang="en">Stay with a family in Busan and share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — then eat where locals actually eat.</span><span lang="ko">부산 가족의 집에 머물며 해안 트레킹, 대게 여행, 3쿠션 당구 같은 취미를 함께하고, 현지인이 실제로 가는 곳에서 먹어요.</span></p>
-    <div class="actions">
-      <a class="btn btn-primary" href="#apply"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a>
-      <a class="btn btn-ghost" href="#together"><span lang="en">See what we do</span><span lang="ko">함께 할 수 있는 것</span></a>
+    <div class="brand"><img src="favicon.svg" alt="" width="40" height="40">Busan Friend</div>
+    <div class="hero-text">
+      <h1><span lang="en">Come as a guest. Leave with a Korean friend.</span><span lang="ko">손님으로 와서, 한국인 친구가 되어 돌아가세요.</span></h1>
+      <p class="hero-sub"><span lang="en">Stay with a family in Busan and share their hobbies — coastal trekking, snow crab trips, 3-cushion billiards — then eat where locals actually eat.</span><span lang="ko">부산 가족의 집에 머물며 해안 트레킹, 대게 여행, 3쿠션 당구 같은 취미를 함께하고, 현지인이 실제로 가는 곳에서 먹어요.</span></p>
+      <p class="facts"><span lang="en">1–5 days · up to 2 guests · Busan, South Korea</span><span lang="ko">1–5일 · 최대 2명 · 대한민국 부산</span></p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#apply"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a>
+        <a class="btn btn-ghost" href="#together"><span lang="en">See what we do</span><span lang="ko">함께 할 수 있는 것</span></a>
+      </div>
     </div>
-    <div class="facts"><span lang="en">1–5 days · up to 2 guests · Busan, South Korea</span><span lang="ko">1–5일 · 최대 2명 · 대한민국 부산</span></div>
   </div>
 </header>
 
@@ -239,6 +304,7 @@
     <p><span lang="en">I know this isn't for everyone. If it feels fair to you, I'd love to have you. I live in Busan with my family. I love 3-cushion billiards, coastal trekking and our winter snow crab trips, and I know where the good, cheap food is. I'd like to be the local friend I always wished I had.</span><span lang="ko">모두에게 맞는 방식은 아니라는 걸 알아요. 이 마음을 이해해 주신다면 꼭 오세요. 저는 가족과 함께 부산에 살고, 3쿠션 당구와 해안 트레킹, 겨울 대게 여행을 좋아하고, 싸고 맛있는 집을 알아요. 제가 늘 바랐던 그 현지 친구가 되어 드리고 싶어요.</span></p>
     <p><span lang="en">And if this pilot goes well, I'll build a proper website and an app, so that many more hosts and guests can meet and become friends. That's my goal.</span><span lang="ko">그래서 이 파일럿 프로그램이 잘 진행되면, 웹사이트와 앱을 만들 거예요. 더 많은 호스트와 게스트가 만나 친구가 될 수 있도록요. 이게 제 목표예요.</span></p>
     <p class="sign"><span lang="en">— Donghyun, your host in Busan</span><span lang="ko">— 부산에서, 호스트 동현</span></p>
+    <svg class="smile" width="44" height="12" viewBox="0 0 44 12" aria-hidden="true"><path d="M2 2 Q22 14 42 2" fill="none" stroke="#f2683c" stroke-width="2.5" stroke-linecap="round"/></svg>
   </div>
 </section>
 
@@ -248,17 +314,14 @@
     <p class="lead"><span lang="en">Your hosts aren't guides. They're a Busan family with hobbies they love — and they'd like to share them with you.</span><span lang="ko">호스트는 가이드가 아닙니다. 좋아하는 취미가 있는 부산의 한 가족이고, 그 취미를 함께 나누고 싶어 합니다.</span></p>
     <div class="grid grid-3">
       <div class="pillar">
-        <div class="icon">🏠</div>
         <h3><span lang="en">A real Korean home</span><span lang="ko">진짜 한국 가정집</span></h3>
         <p><span lang="en">Stay in the home where your host's family lives, and discover what makes a Korean home different.</span><span lang="ko">호스트 가족이 사는 집에 머물며 한국 집만의 색다른 문화를 느껴 보세요.</span></p>
       </div>
       <div class="pillar">
-        <div class="icon">🤝</div>
         <h3><span lang="en">Your host's hobbies, your trip</span><span lang="ko">호스트의 취미가 당신의 여행</span></h3>
         <p><span lang="en">No tourist checklists. You join the things your host actually does at weekends — and the days are planned around your wishlist.</span><span lang="ko">관광지 체크리스트는 없어요. 호스트가 주말마다 실제로 하는 일에 함께하고, 일정은 하고 싶은 것에 맞춰 짭니다.</span></p>
       </div>
       <div class="pillar">
-        <div class="icon">🍲</div>
         <h3><span lang="en">Where your host actually eats</span><span lang="ko">호스트가 진짜 먹는 곳</span></h3>
         <p><span lang="en">Your host's own list of places — every one tried, tested and loved. No tourist traps.</span><span lang="ko">호스트가 직접 먹어 보고 좋아하게 된 곳만 모은 목록. 관광객용 식당은 없어요.</span></p>
       </div>
@@ -272,42 +335,36 @@
     <p class="lead"><span lang="en">Pick what you like on the application form — we'll shape your days around it.</span><span lang="ko">신청서에서 하고 싶은 것을 고르면, 그에 맞춰 일정을 짭니다.</span></p>
     <div class="grid grid-cards">
       <div class="card featured" data-photos="crab">
-        <div class="emoji">🦀</div>
         <h3><span lang="en">Snow crab trip to Yeongdeok</span><span lang="ko">영덕 대게 여행</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Your host's favourite day out. Drive up the east coast, choose your crabs at the market and have them steamed at a local restaurant.</span><span lang="ko">호스트가 가장 좋아하는 나들이. 동해안을 따라 올라가 시장에서 대게를 고르고, 근처 식당에서 쪄 먹어요.</span></p>
         <p><span lang="en">On the way, stop at a Korean highway rest area — a food-and-snack culture all of its own.</span><span lang="ko">한국의 휴게소를 방문해서 한국만의 휴게소 문화를 느껴 보세요.</span></p>
       </div>
       <div class="card featured" data-photos="billiards">
-        <div class="emoji">🎱</div>
         <h3><span lang="en">3-cushion billiards</span><span lang="ko">3쿠션 당구</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Korea is a 3-cushion powerhouse, with a billiard hall on almost every street. We'll set up a match for you against local players.</span><span lang="ko">한국은 3쿠션 강국이라 거의 모든 동네에 당구장이 있어요. 현지인과의 당구 대결 매칭을 주선해 줘요.</span></p>
       </div>
       <div class="card featured" data-photos="nightview">
-        <div class="emoji">🌃</div>
         <h3><span lang="en">Late-night view from Hwangnyeongsan</span><span lang="ko">황령산 야경</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Late night</span><span lang="ko">심야</span></span><span class="chip"><span lang="en">Easy</span><span lang="ko">쉬움</span></span></div>
         <p><span lang="en">What your host thinks is the best view in Busan — late at night, the whole city full of lights.</span><span lang="ko">호스트가 생각하는 부산 최고의 전망 — 심야, 불빛으로 가득한 도시 전체.</span></p>
       </div>
       <div class="card" data-photos="trekking">
-        <div class="emoji">🥾</div>
         <h3><span lang="en">Coastal trekking</span><span lang="ko">해안 트레킹</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
-        <p><span lang="en">Sea, mountains and city joined in one walk — Busan's best coastal trekking. Highly recommended!</span><span lang="ko">바다와 산, 도시가 이어지는 부산만의 최고의 해안 트레킹. 강력 추천해요!</span></p>
+        <p><span lang="en">Sea, mountains and city joined in one walk — Busan's best coastal trekking. Highly recommended.</span><span lang="ko">바다와 산, 도시가 이어지는 부산만의 최고의 해안 트레킹. 강력 추천해요.</span></p>
         <p><span lang="en">Recommended route: <a href="map/?lang=en#haeparang-1" target="_blank" rel="noopener">Haeparang Trail · Course 1</a></span><span lang="ko">추천 코스: <a href="map/#haeparang-1" target="_blank" rel="noopener">해파랑길 1코스</a></span></p>
         <a class="card-btn" lang="en" href="map/?lang=en#haeparang-1" target="_blank" rel="noopener">See trekking routes →</a>
         <a class="card-btn" lang="ko" href="map/#haeparang-1" target="_blank" rel="noopener">트레킹 코스 보기 →</a>
       </div>
       <div class="card" data-photos="hiking">
-        <div class="emoji">⛰️</div>
         <h3><span lang="en">Hiking</span><span lang="ko">등산</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Easy</span><span lang="ko">쉬움</span></span></div>
         <p><span lang="en">Climb a mountain right in the middle of the city. The paths are gentle enough for anyone, and from the top you can see Gwangan Bridge, Haeundae and the port all at once.</span><span lang="ko">도심 한가운데 있는 산에 올라요. 길이 완만해 누구나 오를 수 있고, 정상에서는 광안대교와 해운대, 부산항이 한눈에 들어와요.</span></p>
         <p><span lang="en">Recommended: Hwangnyeongsan (427 m)</span><span lang="ko">추천 코스: 황령산 (427m)</span></p>
       </div>
       <div class="card" data-photos="cycling">
-        <div class="emoji">🚴</div>
         <h3><span lang="en">Cycling</span><span lang="ko">자전거</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Good fitness</span><span lang="ko">체력 필요</span></span></div>
         <p><span lang="en">Busan's dedicated bike paths make it safe — and there's no better way to clear your head.</span><span lang="ko">자전거 전용도로가 잘되어 있어 안전하고, 기분 전환에 최고예요.</span></p>
@@ -316,13 +373,11 @@
         <a class="card-btn" lang="ko" href="map/?type=bike#migratory-bird" target="_blank" rel="noopener">자전거길 보기 →</a>
       </div>
       <div class="card" data-photos="soulfood">
-        <div class="emoji">🍜</div>
         <h3><span lang="en">Busan soul food</span><span lang="ko">부산 소울 푸드</span></h3>
         <div class="meta"><span class="chip"><span lang="en">A meal</span><span lang="ko">한 끼</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">The food Koreans think of when they hear "Busan" — dwaeji-gukbap (pork rice soup), yang-gopchang (grilled tripe), kkomjangeo (grilled sea eel) and more. Get a real taste of Busan.</span><span lang="ko">한국에서 부산 하면 떠오르는 음식 — 돼지국밥, 양곱창, 꼼장어 등으로 부산의 향기를 느껴 보세요.</span></p>
       </div>
       <div class="card" data-photos="running">
-        <div class="emoji">🏃</div>
         <h3><span lang="en">Running</span><span lang="ko">러닝</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–3 hours</span><span lang="ko">1–3시간</span></span><span class="chip"><span lang="en">Runners</span><span lang="ko">러너</span></span></div>
         <p><span lang="en">Run beside the sea between two beaches and soak up the feel of Busan — the best running route in the city.</span><span lang="ko">해수욕장 두 곳을 잇는 바다를 보며 부산의 체취를 느낄 수 있는 최고의 러닝 코스.</span></p>
@@ -331,7 +386,6 @@
         <a class="card-btn" lang="ko" href="map/?type=run#haeundae-sampo" target="_blank" rel="noopener">러닝 코스 보기 →</a>
       </div>
       <div class="card" data-photos="trail">
-        <div class="emoji">🌲</div>
         <h3><span lang="en">Trail running</span><span lang="ko">트레일런</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–3 hours</span><span lang="ko">1–3시간</span></span><span class="chip"><span lang="en">Easy pace</span><span lang="ko">가볍게</span></span></div>
         <p><span lang="en">For guests who'd like an easy run in the hills with your host.</span><span lang="ko">호스트와 함께 가볍게 산을 달리고 싶은 게스트에게 추천하는 코스.</span></p>
@@ -340,39 +394,33 @@
         <a class="card-btn" lang="ko" href="map/?type=trail#cheonmasan" target="_blank" rel="noopener">트레일런 코스 보기 →</a>
       </div>
       <div class="card" data-photos="dinner">
-        <div class="emoji">🍚</div>
         <h3><span lang="en">Home-cooked dinner</span><span lang="ko">집밥 저녁</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Once</span><span lang="ko">1회</span></span><span class="chip"><span lang="en">Included</span><span lang="ko">포함</span></span></div>
         <p><span lang="en">Korean home food at your host's family table. Tell them what you can't eat and they'll cook around it.</span><span lang="ko">호스트 가족의 식탁에서 먹는 한국 집밥. 못 먹는 음식을 알려 주면 빼고 요리해요.</span></p>
       </div>
       <div class="card" data-photos="clinic">
-        <div class="emoji">🏥</div>
         <h3><span lang="en">A visit to a Korean clinic</span><span lang="ko">한국 병원 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">On request</span><span lang="ko">희망 시</span></span></div>
         <p><span lang="en">Korean clinics — skin care, health check-ups and more — are popular with visitors. Your host goes with you, so the language barrier is nothing to worry about.</span><span lang="ko">피부과, 건강검진 등 외국인도 많이 찾는 한국 병원에 호스트가 함께 가요. 말이 통하지 않아도 걱정 없어요.</span></p>
       </div>
       <div class="card" data-photos="gyeongju">
-        <div class="emoji">👑</div>
         <h3><span lang="en">Day trip to Gyeongju</span><span lang="ko">경주 여행</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">The thousand-year capital of the Silla kingdom, about an hour from Busan — Bulguksa Temple, the royal tombs of Daereungwon and the cafés of Hwangnidan-gil.</span><span lang="ko">부산에서 한 시간 남짓 거리, 신라 천년의 수도 경주. 불국사, 대릉원, 황리단길을 둘러봐요.</span></p>
         <p><span lang="en">On the way, stop at a Korean highway rest area — a food-and-snack culture all of its own.</span><span lang="ko">한국의 휴게소를 방문해서 한국만의 휴게소 문화를 느껴 보세요.</span></p>
       </div>
       <div class="card" data-photos="oliveyoung">
-        <div class="emoji">💄</div>
         <h3><span lang="en">Olive Young visit</span><span lang="ko">올리브영 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–2 hours</span><span lang="ko">1–2시간</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Korea's favourite beauty store, loved by visitors from all over the world. The host's daughter works there, so she can show you the best-sellers and how to choose.</span><span lang="ko">외국인 관광객에게도 인기 많은 K‑뷰티 매장. 호스트의 딸이 올리브영 직원이라 인기 제품과 고르는 법을 알려 드려요.</span></p>
       </div>
       <div class="card" data-photos="market">
-        <div class="emoji">🛒</div>
         <h3><span lang="en">Traditional markets</span><span lang="ko">전통시장 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Walk through the markets where everyday Busan life happens, and try the street food as you go.</span><span lang="ko">부산 사람들의 일상이 살아 있는 전통시장을 걸으며 길거리 음식도 맛봐요.</span></p>
         <p><span lang="en">Recommended: Gukje Market, Kkangtong Market</span><span lang="ko">추천: 국제시장, 깡통시장</span></p>
       </div>
       <div class="card" data-photos="temple">
-        <div class="emoji">🪷</div>
         <h3><span lang="en">Temple visits</span><span lang="ko">사찰 방문</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Haedong Yonggungsa — a temple built on the rocks right beside the sea, a rare place to walk around to the sound of the waves.</span><span lang="ko">해동용궁사 — 바다 바로 옆 바위 위에 세워진 절. 파도 소리를 들으며 둘러보는 보기 드문 바닷가 사찰이에요.</span></p>
@@ -380,39 +428,33 @@
         <p><span lang="en">Recommended: Haedong Yonggungsa, Samgwangsa</span><span lang="ko">추천: 해동용궁사, 삼광사</span></p>
       </div>
       <div class="card" data-photos="drone">
-        <div class="emoji">✨</div>
         <h3><span lang="en">Gwangalli drone show</span><span lang="ko">광안리 드론쇼</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Saturday night</span><span lang="ko">토요일 밤</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Every Saturday night, more than a thousand drones paint pictures in the sky in front of Gwangan Bridge. Watch free from anywhere on Gwangalli Beach.</span><span lang="ko">매주 토요일 밤, 광안대교를 배경으로 천 대가 넘는 드론이 하늘에 그림을 그려요. 광안리 해변 어디서나 무료로 볼 수 있어요.</span></p>
         <p><span lang="en">Shows at 8 pm and 10 pm (March–September), 7 pm and 9 pm (October–February); cancelled in bad weather.</span><span lang="ko">공연 시간: 3~9월 저녁 8시·10시, 10~2월 저녁 7시·9시 (날씨에 따라 취소될 수 있어요).</span></p>
       </div>
       <div class="card" data-photos="sanseong">
-        <div class="emoji">🍶</div>
         <h3><span lang="en">Geumjeongsanseong makgeolli &amp; goat bulgogi</span><span lang="ko">금정산성 막걸리·염소불고기</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Hike + meal</span><span lang="ko">등산 + 식사</span></span></div>
         <p><span lang="en">Walk the walls of Geumjeongsanseong, Korea's largest mountain fortress, then finish in the fortress village with makgeolli and goat bulgogi.</span><span lang="ko">우리나라에서 가장 큰 산성인 금정산성을 따라 걷고, 산성마을에서 막걸리와 염소불고기로 마무리해요.</span></p>
         <p><span lang="en">Sanseong makgeolli, brewed with traditional nuruk, is Busan's best-known rice wine.</span><span lang="ko">금정산성 막걸리는 전통 누룩으로 빚는 부산의 대표 막걸리예요.</span></p>
       </div>
       <div class="card" data-photos="unmemorial">
-        <div class="emoji">🕊️</div>
         <h3><span lang="en">UN Memorial Cemetery</span><span lang="ko">유엔기념공원</span></h3>
         <div class="meta"><span class="chip"><span lang="en">1–2 hours</span><span lang="ko">1–2시간</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">The only UN military cemetery in the world, where soldiers from many countries who served in the Korean War are laid to rest. Especially meaningful if your country took part.</span><span lang="ko">세계에서 하나뿐인 유엔군 묘지예요. 한국전쟁에 참전한 여러 나라 장병들이 잠들어 있어요. 참전국에서 오신 손님이라면 더 특별한 곳이에요.</span></p>
       </div>
       <div class="card" data-photos="gamcheon">
-        <div class="emoji">🎨</div>
         <h3><span lang="en">Gamcheon Culture Village</span><span lang="ko">감천문화마을</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Half day</span><span lang="ko">반나절</span></span><span class="chip"><span lang="en">Anyone</span><span lang="ko">누구나</span></span></div>
         <p><span lang="en">Colourful houses stacked up a hillside like steps. Wander the alleys, murals and viewpoints — it sits right next to the Cheonmasan trail-run course.</span><span lang="ko">산비탈을 따라 알록달록한 집들이 계단처럼 이어진 마을이에요. 골목과 벽화, 전망대를 둘러봐요. 천마산 트레일런 코스 바로 옆이라 같이 즐기기 좋아요.</span></p>
       </div>
       <div class="card" data-photos="ganwoljae">
-        <div class="emoji">🌾</div>
         <h3><span lang="en">Silver grass at Ganwoljae</span><span lang="ko">영남알프스 간월재 억새</span></h3>
         <div class="meta"><span class="chip"><span lang="en">Full day</span><span lang="ko">하루 종일</span></span><span class="chip"><span lang="en">Best in autumn</span><span lang="ko">가을 추천</span></span></div>
         <p><span lang="en">In autumn the ridge at Ganwoljae turns silver with swaying silver grass. About an hour by car from Busan, in the Yeongnam Alps — a chain of peaks over 1,000 m.</span><span lang="ko">가을이면 산마루가 은빛 억새로 뒤덮이는 간월재예요. 부산에서 차로 1시간 남짓, 1,000m가 넘는 산들이 이어진 영남알프스에 있어요.</span></p>
       </div>
       <div class="card off" data-photos="baseball">
-        <div class="emoji">⚾</div>
         <h3><span lang="en">Lotte Giants game at Sajik Stadium</span><span lang="ko">사직야구장 롯데 자이언츠 응원</span></h3>
         <div class="meta"><span class="chip off"><span lang="en">Off-season · not available now</span><span lang="ko">비시즌 · 지금은 신청 불가</span></span><span class="chip"><span lang="en">Evening</span><span lang="ko">저녁</span></span></div>
         <p><span lang="en">Feel Busan's famous love of baseball up close — sing "Busan Gull" with the whole stadium and cheer for the Lotte Giants at Sajik.</span><span lang="ko">부산 사람들의 뜨거운 야구 사랑을 가장 가까이에서 느껴요. 사직야구장에서 관중 모두와 '부산 갈매기'를 부르며 롯데 자이언츠를 응원해요.</span></p>
@@ -508,23 +550,23 @@
   <div class="wrap">
     <h2><span lang="en">Questions</span><span lang="ko">자주 묻는 질문</span></h2>
     <details>
-      <summary><span lang="en">Do I need to speak Korean?</span><span lang="ko">한국어를 할 줄 알아야 하나요?</span></summary>
+      <summary><span lang="en">Do I need to speak Korean?</span><span lang="ko">한국어를 할 줄 알아야 하나요?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p><span lang="en">Translation apps are really good these days. Plenty of laughing helps too.</span><span lang="ko">요즘 번역 앱이 너무 잘되어 있어요. 많이 웃는 것도 도움이 되고요.</span></p>
     </details>
     <details>
-      <summary><span lang="en">How fit do I need to be?</span><span lang="ko">체력이 얼마나 필요한가요?</span></summary>
+      <summary><span lang="en">How fit do I need to be?</span><span lang="ko">체력이 얼마나 필요한가요?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p><span lang="en">The trekking and cycling days need decent fitness. Everything else — crab, billiards, food, the night view — is for anyone.</span><span lang="ko">트레킹과 자전거 날은 어느 정도 체력이 필요해요. 대게, 당구, 맛집, 야경은 누구나 할 수 있어요.</span></p>
     </details>
     <details>
-      <summary><span lang="en">What is the room like? Where is your home?</span><span lang="ko">방은 어떤가요? 집은 어디인가요?</span></summary>
+      <summary><span lang="en">What is the room like? Where is your home?</span><span lang="ko">방은 어떤가요? 집은 어디인가요?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p><span lang="en">You get one private room in a typical Korean residential building.</span><span lang="ko">한국의 공동주택에서 방 1개를 제공해요.</span></p>
     </details>
     <details>
-      <summary><span lang="en">Can I join the activities without staying?</span><span lang="ko">숙박 없이 체험만 할 수 있나요?</span></summary>
+      <summary><span lang="en">Can I join the activities without staying?</span><span lang="ko">숙박 없이 체험만 할 수 있나요?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p><span lang="en">Yes, you can. But this service puts the experience first, so it isn't what we recommend — and the price is the same.</span><span lang="ko">네, 가능해요. 하지만 이 서비스는 체험을 가장 중요하게 생각하기 때문에 추천하지는 않아요. 비용은 같아요.</span></p>
     </details>
     <details>
-      <summary><span lang="en">How do I pay, and what if I need to cancel?</span><span lang="ko">결제는 어떻게 하고, 취소하면 어떻게 되나요?</span></summary>
+      <summary><span lang="en">How do I pay, and what if I need to cancel?</span><span lang="ko">결제는 어떻게 하고, 취소하면 어떻게 되나요?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p><span lang="en">During this pilot, you pay when you arrive and we start from there. Once our app launches, a cancellation policy will apply. For now there's no penalty for cancelling — it all runs on mutual trust.</span><span lang="ko">지금은 파일럿 기간이라 방문하실 때 비용을 받고 시작해요. 나중에 앱을 만들면 취소 기준이 적용돼요. 현재는 취소해도 아무 제약이 없지만, 서로 간의 신뢰를 바탕으로 진행해요.</span></p>
     </details>
     <p class="faq-ask"><span lang="en">Something else on your mind?</span><span lang="ko">다른 궁금한 점이 있나요?</span> <a href="https://docs.google.com/forms/d/e/1FAIpQLSfN-pn7Iv4ffer3dcba-j3cUb1Ll0Mjx1l1lP6Ecqc8Hy7_wQ/viewform" target="_blank" rel="noopener"><span lang="en">Ask us a quick question</span><span lang="ko">질문 남기기</span></a> <span lang="en">— we reply within a day.</span><span lang="ko">— 하루 안에 답장 드려요.</span></p>
@@ -533,6 +575,7 @@
 
 <section class="final" id="apply">
   <div class="wrap">
+    <svg class="smile" width="44" height="12" viewBox="0 0 44 12" aria-hidden="true"><path d="M2 2 Q22 14 42 2" fill="none" stroke="#f2683c" stroke-width="2.5" stroke-linecap="round"/></svg>
     <h2><span lang="en">Come as a guest. Leave as a friend.</span><span lang="ko">손님으로 와서, 친구가 되어 돌아가세요.</span></h2>
     <p><span lang="en">Tell us your dates and your wishlist. We'll check and get back to you quickly.</span><span lang="ko">날짜와 하고 싶은 것을 알려 주세요. 확인 후 빠르게 답장 드릴게요.</span></p>
     <p style="margin-top:24px"><a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScdpY-XMy31YSVgo-QB9ll7o360fwCY_KCjKlSM-sfYP1S_AQ/viewform" target="_blank" rel="noopener"><span lang="en">Apply to stay</span><span lang="ko">신청하기</span></a></p>
@@ -546,7 +589,7 @@
   </div>
 </footer>
 
-<div class="apply-bar" id="apply-bar">
+<div class="apply-bar off" id="apply-bar">
   <div class="wrap">
     <span class="note"><span lang="en">First 3 groups · launch offer</span><span lang="ko">선착순 3팀 · 오픈 기념가</span></span>
     <span class="acts">
@@ -557,11 +600,11 @@
 </div>
 
 <dialog class="act" id="act" aria-label="Photos">
-  <button class="act-close" type="button" aria-label="Close">×</button>
+  <button class="act-close" type="button" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   <div class="act-photo">
     <img alt="">
-    <button class="act-nav act-prev" type="button" aria-label="Previous photo">‹</button>
-    <button class="act-nav act-next" type="button" aria-label="Next photo">›</button>
+    <button class="act-nav act-prev" type="button" aria-label="Previous photo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button class="act-nav act-next" type="button" aria-label="Next photo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
     <span class="act-count"></span>
   </div>
   <p class="act-cap"></p>
@@ -573,11 +616,15 @@
 <script>
   // 오른쪽 위 EN / 한국어 버튼: 새로 불러오지 않고 바꾸며, 주소의 ?lang=ko 도 같이 바꿔 링크로 공유할 수 있게 한다
   const TITLES = { en: "Busan Friend — Stay with a Busan family", ko: "Busan Friend — 부산 가족 집에 머무는 여행" };
+  const photoLabel = (n, l) => l === "ko" ? `사진 ${n}장` : `${n} photo${n > 1 ? "s" : ""}`;
   function setLang(l) {
     const root = document.documentElement;
     root.dataset.lang = l;
     root.lang = l;
     document.title = TITLES[l];
+    const hero = document.querySelector(".hero-photo");
+    if (hero) hero.alt = hero.dataset[l === "ko" ? "altKo" : "altEn"];
+    document.querySelectorAll(".card .ph").forEach((b) => b.setAttribute("aria-label", photoLabel(+b.dataset.n, l)));
     const q = new URLSearchParams(location.search);
     l === "ko" ? q.set("lang", "ko") : q.delete("lang");
     history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
@@ -586,10 +633,19 @@
   document.querySelectorAll(".langs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); setLang(a.dataset.l); });
   setLang(document.documentElement.dataset.lang);
 
-  // 아래 고정 신청 바: 맨 아래 신청 칸(#apply)이 화면에 보이는 동안에는 숨긴다
-  const applyBar = document.getElementById("apply-bar"), applySec = document.getElementById("apply");
-  if (applyBar && applySec && "IntersectionObserver" in window) {
-    new IntersectionObserver((es) => es.forEach((e) => applyBar.classList.toggle("off", e.isIntersecting)), { threshold: 0.2 }).observe(applySec);
+  // 아래 고정 신청 바: 첫 화면(.hero)이나 맨 아래 신청 칸(#apply)이 조금이라도 보이는 동안에는 숨긴다
+  // (첫 화면에 신청 버튼이 두 번 보이지 않게. 처음엔 class="off" 로 숨겨 두고 시작한다)
+  const applyBar = document.getElementById("apply-bar");
+  const barWatch = [document.querySelector(".hero"), document.getElementById("apply")].filter(Boolean);
+  if (applyBar && "IntersectionObserver" in window) {
+    const seen = new Map();
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => seen.set(e.target, e.isIntersecting));
+      applyBar.classList.toggle("off", [...seen.values()].some(Boolean));
+    });
+    barWatch.forEach((el) => io.observe(el));
+  } else if (applyBar) {
+    applyBar.classList.remove("off");
   }
 
   // 메뉴 카드를 누르면 사진과 설명을 모달로 보여 준다 (카드 안의 지도 링크는 그대로 열린다)
@@ -615,11 +671,23 @@
       actCredit.replaceChildren("Photo: " + p.artist + " · ", link);
     }
   }
+  // 카드 사진은 activities.js 의 첫 장을 쓴다(사진을 바꿀 때 activities.js 한 곳만 고치면 된다).
+  // h3·.meta·p·a.card-btn 은 모달에 복사되므로 카드의 직속 자식으로 둔다(사진·개수 표시는 복사되지 않음)
+  const CAMERA = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>';
   document.querySelectorAll("#together .card[data-photos]").forEach((card) => {
     const list = window.ACTIVITY_PHOTOS[card.dataset.photos];
+    const wide = card.classList.contains("featured");
+    const img = Object.assign(document.createElement("img"), {
+      className: "card-photo", src: list[0].src, alt: "", loading: "lazy", decoding: "async",
+      width: wide ? 640 : 128, height: wide ? 400 : 128,
+    });
+    card.prepend(img);
     const badge = document.createElement("span");
     badge.className = "ph";
-    badge.textContent = "📷 " + list.length;
+    badge.dataset.n = list.length;
+    badge.setAttribute("role", "img");
+    badge.setAttribute("aria-label", photoLabel(list.length, document.documentElement.dataset.lang));
+    badge.innerHTML = CAMERA + "<span>" + list.length + "</span>";
     card.appendChild(badge);
     card.tabIndex = 0;
     card.setAttribute("role", "button");
